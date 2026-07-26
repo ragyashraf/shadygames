@@ -54,13 +54,21 @@ async function createOneTimePrice(game: GamePriceInput) {
 
 /**
  * Ensure a catalog game has a matching one-time Paddle price.
- * Creates a new price when missing or when the USD amount changed.
+ * Pass `resyncAmount` when staff changes USD price so a new Paddle price is created.
  */
-export async function ensureGamePaddlePrice(game: GamePriceInput): Promise<string> {
+export async function ensureGamePaddlePrice(
+  game: GamePriceInput,
+  options?: { resyncAmount?: boolean }
+): Promise<string> {
   const amount = usdToCents(game.price_usd);
   const paddle = getPaddleServer();
+  const resync = Boolean(options?.resyncAmount);
 
-  if (game.paddle_price_id_month) {
+  if (game.paddle_price_id_month && !resync) {
+    return game.paddle_price_id_month;
+  }
+
+  if (game.paddle_price_id_month && resync) {
     try {
       const existing = await paddle.prices.get(game.paddle_price_id_month);
       if (existing.unitPrice?.amount === amount && existing.status === 'active') {
@@ -82,6 +90,10 @@ export async function ensureGamesHavePaddlePrices<T extends GamePriceInput>(
 ): Promise<T[]> {
   const out: T[] = [];
   for (const game of games) {
+    if (game.paddle_price_id_month) {
+      out.push(game);
+      continue;
+    }
     try {
       const priceId = await ensureGamePaddlePrice(game);
       out.push({ ...game, paddle_price_id_month: priceId });

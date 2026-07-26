@@ -35,13 +35,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    const priceId = await ensureGamePaddlePrice({
-      id: product.id,
-      sku: product.sku,
-      name: product.name,
-      price_usd: Number(product.price_usd) || 0,
-      paddle_price_id_month: product.paddle_price_id_month,
-    });
+    const priceId = await ensureGamePaddlePrice(
+      {
+        id: product.id,
+        sku: product.sku,
+        name: product.name,
+        price_usd: Number(product.price_usd) || 0,
+        paddle_price_id_month: product.paddle_price_id_month,
+      },
+      { resyncAmount: true }
+    );
 
     const { data: updated } = await supabase
       .from('products')
