@@ -33,7 +33,6 @@ export type StaffCopy = {
   gameVideoUrlsPh: string;
   uploadImages: string;
   uploadVideos: string;
-  paddlePriceId: string;
   mediaUploaded: string;
   remove: string;
   productCols: [string, string, string, string, string, string];
@@ -131,7 +130,6 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     gameVideoUrlsPh: 'https://youtu.be/… or https://…/clip.mp4',
     uploadImages: 'Upload images',
     uploadVideos: 'Upload videos',
-    paddlePriceId: 'Paddle price ID (one-time)',
     mediaUploaded: 'Media uploaded.',
     remove: 'Remove',
     productCols: ['Product', 'Type', 'Price', 'Stock', 'Status', ''],
@@ -243,7 +241,6 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     gameVideoUrlsPh: 'https://youtu.be/… أو https://…/clip.mp4',
     uploadImages: 'رفع صور',
     uploadVideos: 'رفع فيديو',
-    paddlePriceId: 'معرّف سعر Paddle (مرة واحدة)',
     mediaUploaded: 'تم رفع الوسائط.',
     remove: 'حذف',
     productCols: ['المنتج', 'النوع', 'السعر', 'المخزون', 'الحالة', ''],

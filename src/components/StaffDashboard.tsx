@@ -169,7 +169,6 @@ export function StaffDashboard({
   const [npDesc, setNpDesc] = useState('');
   const [npImages, setNpImages] = useState('');
   const [npVideos, setNpVideos] = useState('');
-  const [npPaddlePrice, setNpPaddlePrice] = useState('');
   const [npEditId, setNpEditId] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -311,7 +310,6 @@ export function StaffDashboard({
     setNpDesc('');
     setNpImages('');
     setNpVideos('');
-    setNpPaddlePrice('');
     setNpEditId(null);
   }
 
@@ -324,8 +322,18 @@ export function StaffDashboard({
     setNpDesc(p.description || '');
     setNpImages((p.image_urls || []).join('\n'));
     setNpVideos((p.video_urls || []).join('\n'));
-    setNpPaddlePrice(p.paddle_price_id_month || '');
     setSection(1);
+  }
+
+  async function syncGamePaddlePrice(productId: string): Promise<StaffProduct | null> {
+    const res = await fetch('/api/staff/ensure-game-price', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ productId }),
+    });
+    const body = await res.json();
+    if (!res.ok) throw new Error(body.error || 'Failed to create Paddle price');
+    return (body.product as StaffProduct) || null;
   }
 
   async function uploadProductMedia(files: FileList | null, kind: 'image' | 'video') {
@@ -367,66 +375,75 @@ export function StaffDashboard({
     const image_urls = npKind === 'game' ? parseUrlLines(npImages) : [];
     const video_urls = npKind === 'game' ? parseUrlLines(npVideos) : [];
     const description = npKind === 'game' ? npDesc.trim() || null : null;
-    const paddle_price_id_month =
-      npKind === 'game' ? npPaddlePrice.trim() || null : null;
 
-    if (npEditId) {
-      const { data, error } = await supabase
-        .from('products')
-        .update({
-          name: npName,
-          kind: npKind,
-          price_usd: Number(npPrice) || 0,
-          stock: npStock ? parseInt(npStock, 10) : null,
-          description,
-          image_urls,
-          video_urls,
-          ...(npKind === 'game' ? { paddle_price_id_month } : {}),
-        })
-        .eq('id', npEditId)
-        .select('*')
-        .single();
-      setBusy(false);
-      if (error) {
-        setMessage(error.message);
+    try {
+      if (npEditId) {
+        const { data, error } = await supabase
+          .from('products')
+          .update({
+            name: npName,
+            kind: npKind,
+            price_usd: Number(npPrice) || 0,
+            stock: npStock ? parseInt(npStock, 10) : null,
+            description,
+            image_urls,
+            video_urls,
+          })
+          .eq('id', npEditId)
+          .select('*')
+          .single();
+        if (error) throw error;
+
+        let saved = data as StaffProduct;
+        if (saved.kind === 'game') {
+          const synced = await syncGamePaddlePrice(saved.id);
+          if (synced) saved = synced;
+        }
+
+        setProducts((prev) =>
+          prev.map((p) => (p.id === npEditId ? saved : p))
+        );
+        resetProductForm();
+        setMessage(t.saved);
         return;
       }
-      setProducts((prev) =>
-        prev.map((p) => (p.id === npEditId ? (data as StaffProduct) : p))
-      );
+
+      const sku =
+        npName
+          .toUpperCase()
+          .replace(/[^A-Z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
+          .slice(0, 16) || `SKU-${Date.now()}`;
+      const row = {
+        sku,
+        name: npName,
+        kind: npKind,
+        price_usd: Number(npPrice) || 0,
+        stock: npStock ? parseInt(npStock, 10) : null,
+        live: true,
+        sort_order: products.length + 1,
+        description,
+        image_urls,
+        video_urls,
+        paddle_price_id_month: null as string | null,
+      };
+      const { data, error } = await supabase.from('products').insert(row).select('*').single();
+      if (error) throw error;
+
+      let saved = data as StaffProduct;
+      if (saved.kind === 'game') {
+        const synced = await syncGamePaddlePrice(saved.id);
+        if (synced) saved = synced;
+      }
+
+      setProducts((prev) => [...prev, saved]);
       resetProductForm();
       setMessage(t.saved);
-      return;
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Save failed');
+    } finally {
+      setBusy(false);
     }
-
-    const sku =
-      npName
-        .toUpperCase()
-        .replace(/[^A-Z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-        .slice(0, 16) || `SKU-${Date.now()}`;
-    const row = {
-      sku,
-      name: npName,
-      kind: npKind,
-      price_usd: Number(npPrice) || 0,
-      stock: npStock ? parseInt(npStock, 10) : null,
-      live: true,
-      sort_order: products.length + 1,
-      description,
-      image_urls,
-      video_urls,
-      paddle_price_id_month,
-    };
-    const { data, error } = await supabase.from('products').insert(row).select('*').single();
-    setBusy(false);
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
-    setProducts((prev) => [...prev, data as StaffProduct]);
-    resetProductForm();
-    setMessage(t.saved);
   }
 
   async function toggleProductLive(p: StaffProduct) {
@@ -454,7 +471,20 @@ export function StaffDashboard({
       .from('products')
       .update({ price_usd: p.price_usd })
       .eq('id', p.id);
-    if (error) setMessage(error.message);
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+    if (p.kind === 'game') {
+      try {
+        const synced = await syncGamePaddlePrice(p.id);
+        if (synced) {
+          setProducts((prev) => prev.map((x) => (x.id === p.id ? synced : x)));
+        }
+      } catch (err) {
+        setMessage(err instanceof Error ? err.message : 'Paddle price sync failed');
+      }
+    }
   }
 
   async function removeProduct(id: string) {
@@ -883,14 +913,6 @@ export function StaffDashboard({
                         onChange={(e) => setNpVideos(e.target.value)}
                         placeholder={t.gameVideoUrlsPh}
                         rows={2}
-                      />
-                    </label>
-                    <label className="staff-span-2">
-                      <span>{t.paddlePriceId}</span>
-                      <input
-                        value={npPaddlePrice}
-                        onChange={(e) => setNpPaddlePrice(e.target.value)}
-                        placeholder="pri_..."
                       />
                     </label>
                   </>

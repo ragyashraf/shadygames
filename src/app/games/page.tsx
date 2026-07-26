@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { SiteHeader } from '@/components/SiteHeader';
 import { GamesShop, type ShopGame } from '@/components/GamesShop';
 import { createClient } from '@/utils/supabase/server';
+import { ensureGamesHavePaddlePrices } from '@/lib/paddle/games-catalog';
 import './games.css';
 
 export const dynamic = 'force-dynamic';
@@ -32,11 +33,13 @@ export default async function GamesPage() {
     supabase.from('store_settings').select('store_open').eq('id', 1).maybeSingle(),
   ]);
 
+  const withPrices = await ensureGamesHavePaddlePrices((games as ShopGame[]) ?? []);
+
   return (
     <>
       <SiteHeader />
       <GamesShop
-        games={(games as ShopGame[]) ?? []}
+        games={withPrices}
         storeOpen={settings?.store_open !== false}
         customerEmail={user?.email ?? null}
       />
