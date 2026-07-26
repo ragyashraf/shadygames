@@ -10,6 +10,7 @@ type Mode = 'login' | 'signup';
 
 /** Callback used for OAuth + email confirmation. Must be in Supabase Redirect URLs. */
 function authCallbackUrl() {
+  // Same-origin is required for PKCE cookies. Prefer shadygames.xyz in production.
   return `${window.location.origin}/auth/callback`;
 }
 

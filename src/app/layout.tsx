@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Anton, Barlow, Cairo } from 'next/font/google';
 import { LangProvider } from '@/components/LangProvider';
 import { LANG_STORAGE_KEY } from '@/lib/i18n/copy';
+import { getPublicSiteUrl } from '@/lib/site';
 import './globals.css';
 import './pricing/pricing.css';
 
@@ -19,6 +20,7 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getPublicSiteUrl()),
   title: 'Shady',
   description: 'Unlimited GTA V subscriptions',
 };
