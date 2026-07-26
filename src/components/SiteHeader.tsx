@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
+import { SiteHeaderClient } from '@/components/SiteHeaderClient';
 
 export async function SiteHeader() {
   const jar = await cookies();
@@ -20,40 +20,10 @@ export async function SiteHeader() {
   }
 
   return (
-    <header className="site-header">
-      <Link href="/" className="brand">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/shady-logo.webp" alt="" width={40} height={40} />
-        <span>SHADY</span>
-      </Link>
-      <nav>
-        <a href="/#plans">Plans</a>
-        <Link href="/games">Games</Link>
-        {user ? <Link href="/dashboard">Dashboard</Link> : null}
-        {user ? <Link href="/account">Billing</Link> : null}
-        {isStaff ? <Link href="/staff">Staff</Link> : null}
-      </nav>
-      <div className="header-actions">
-        {user ? (
-          <>
-            <span className="user-chip">{user.email}</span>
-            <form action="/api/auth/signout" method="post">
-              <button type="submit" className="ghost-btn">
-                Sign out
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className="ghost-btn">
-              Log in
-            </Link>
-            <Link href="/signup" className="gold-btn">
-              Get access
-            </Link>
-          </>
-        )}
-      </div>
-    </header>
+    <SiteHeaderClient
+      email={user?.email ?? null}
+      isStaff={isStaff}
+      signedIn={Boolean(user)}
+    />
   );
 }

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useLang } from '@/components/LangProvider';
 
 export function PortalButton() {
+  const { t } = useLang();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -23,7 +25,7 @@ export function PortalButton() {
   return (
     <div>
       <button type="button" className="gold-btn" onClick={openPortal} disabled={busy}>
-        {busy ? 'Opening…' : 'Manage billing'}
+        {busy ? t.pleaseWait : t.manageBilling}
       </button>
       {error ? <p className="form-msg">{error}</p> : null}
     </div>

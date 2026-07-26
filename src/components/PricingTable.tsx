@@ -7,6 +7,7 @@ import {
   getPaddleClientToken,
   getPaddleJsEnvironment,
 } from '@/lib/paddle-env';
+import { useLang } from '@/components/LangProvider';
 
 type Props = {
   tiers: Tier[];
@@ -19,12 +20,19 @@ type Props = {
 
 type PriceMap = Record<string, string>;
 
+const TIER_INDEX: Record<Tier['name'], 0 | 1 | 2> = {
+  Starter: 0,
+  Pro: 1,
+  Advanced: 2,
+};
+
 export function PricingTable({
   tiers,
   countryCode,
   customerEmail,
   paddleCustomerId,
 }: Props) {
+  const { t } = useLang();
   const [billing, setBilling] = useState<BillingCycle>('month');
   const [paddle, setPaddle] = useState<Paddle | null>(null);
   const [prices, setPrices] = useState<PriceMap>({});
@@ -32,7 +40,7 @@ export function PricingTable({
   const [error, setError] = useState<string | null>(null);
 
   const activePriceIds = useMemo(
-    () => tiers.map((t) => t.priceId[billing]),
+    () => tiers.map((tier) => tier.priceId[billing]),
     [tiers, billing]
   );
 
@@ -127,14 +135,14 @@ export function PricingTable({
           className={billing === 'month' ? 'active' : ''}
           onClick={() => setBilling('month')}
         >
-          Monthly
+          {t.monthly}
         </button>
         <button
           type="button"
           className={billing === 'year' ? 'active' : ''}
           onClick={() => setBilling('year')}
         >
-          Yearly · save 25%
+          {t.yearly}
         </button>
       </div>
 
@@ -142,6 +150,7 @@ export function PricingTable({
 
       <div className="tier-grid">
         {tiers.map((tier) => {
+          const idx = TIER_INDEX[tier.name];
           const priceId = tier.priceId[billing];
           const label = loading ? '…' : prices[priceId] ?? '—';
           return (
@@ -149,17 +158,17 @@ export function PricingTable({
               key={tier.name}
               className={`tier${tier.featured ? ' featured' : ''}`}
             >
-              {tier.featured ? <div className="ribbon">Most popular</div> : null}
-              <h2>{tier.name}</h2>
-              <p className="desc">{tier.description}</p>
+              {tier.featured ? <div className="ribbon">{t.ribbonPopular}</div> : null}
+              <h2>{t.planNames[idx]}</h2>
+              <p className="desc">{t.planPitches[idx]}</p>
               <div className="price">
                 <span className="amount">{label}</span>
                 <span className="per">
-                  {billing === 'month' ? '/ month' : '/ year'}
+                  {billing === 'month' ? t.perMonth : t.perYear}
                 </span>
               </div>
               <ul>
-                {tier.features.map((f) => (
+                {t.planPerks[idx].map((f) => (
                   <li key={f}>{f}</li>
                 ))}
               </ul>
@@ -169,7 +178,7 @@ export function PricingTable({
                 disabled={!paddle || loading || !prices[priceId]}
                 onClick={() => subscribe(tier)}
               >
-                Subscribe
+                {t.subscribe}
               </button>
             </article>
           );

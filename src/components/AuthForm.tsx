@@ -4,10 +4,12 @@ import { FormEvent, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
+import { useLang } from '@/components/LangProvider';
 
 type Mode = 'login' | 'signup';
 
 export function AuthForm({ mode }: { mode: Mode }) {
+  const { t } = useLang();
   const router = useRouter();
   const searchParams = useSearchParams();
   const oauthError = useMemo(() => searchParams.get('error'), [searchParams]);
@@ -22,7 +24,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setBusy(true);
     setMessage(null);
     const supabase = createClient();
-    // Must match the browser origin (PKCE cookies). Supabase allow-list must include this URL.
     const redirectTo = `${window.location.origin}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOAuth({
@@ -37,7 +38,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
       setMessage(error.message);
       setBusy(false);
     }
-    // On success the browser redirects to Discord
   }
 
   async function onSubmit(e: FormEvent) {
@@ -85,17 +85,17 @@ export function AuthForm({ mode }: { mode: Mode }) {
         onClick={signInWithDiscord}
         disabled={busy}
       >
-        Continue with Discord
+        {t.discordContinue}
       </button>
 
       <div className="auth-divider" role="separator">
-        <span>or email</span>
+        <span>{t.orEmail}</span>
       </div>
 
       <form className="auth-form" onSubmit={onSubmit}>
         {mode === 'signup' ? (
           <label>
-            <span>Display name</span>
+            <span>{t.displayName}</span>
             <input
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
@@ -105,7 +105,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           </label>
         ) : null}
         <label>
-          <span>Email</span>
+          <span>{t.email}</span>
           <input
             type="email"
             required
@@ -116,7 +116,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           />
         </label>
         <label>
-          <span>Password</span>
+          <span>{t.password}</span>
           <input
             type="password"
             required
@@ -128,17 +128,17 @@ export function AuthForm({ mode }: { mode: Mode }) {
           />
         </label>
         <button type="submit" className="gold-btn wide" disabled={busy}>
-          {busy ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Log in'}
+          {busy ? t.pleaseWait : mode === 'signup' ? t.createAccount : t.logIn}
         </button>
         {message ? <p className="form-msg">{message}</p> : null}
         <p className="form-switch">
           {mode === 'login' ? (
             <>
-              New here? <Link href="/signup">Create an account</Link>
+              {t.newHere} <Link href="/signup">{t.createAccount}</Link>
             </>
           ) : (
             <>
-              Already have access? <Link href="/login">Log in</Link>
+              {t.alreadyHave} <Link href="/login">{t.logIn}</Link>
             </>
           )}
         </p>

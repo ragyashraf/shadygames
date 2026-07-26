@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { SiteHeader } from '@/components/SiteHeader';
 import { createClient } from '@/utils/supabase/server';
 import { StaffPanel } from '@/components/StaffPanel';
+import { StaffHeader } from '@/components/StaffHeader';
+import { StaffChat } from '@/components/StaffChat';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,23 +43,38 @@ export default async function StaffPage() {
         .limit(50),
     ]);
 
+  const productRows = products ?? [];
+  const codeRows = codes ?? [];
+  const keyRows = keys ?? [];
+  const txRows = transactions ?? [];
+
   return (
     <>
       <SiteHeader />
       <main className="staff-page">
-        <header>
-          <p className="kicker">Staff panel</p>
-          <h1>Catalog & fulfillment</h1>
-          <p className="lede left">
-            Live products, discounts, and keys mirrored from Supabase. Checkout still uses Paddle
-            price IDs on the pricing page.
-          </p>
-        </header>
+        <StaffHeader />
         <StaffPanel
-          products={products ?? []}
-          codes={codes ?? []}
-          keys={keys ?? []}
-          transactions={transactions ?? []}
+          products={productRows}
+          codes={codeRows}
+          keys={keyRows}
+          transactions={txRows}
+        />
+        <StaffChat
+          store={{
+            products: productRows.map((p) => ({
+              name: p.name,
+              price_usd: Number(p.price_usd),
+              live: Boolean(p.live),
+            })),
+            codes: codeRows.map((c) => ({
+              code: c.code,
+              percent: Number(c.percent),
+              active: Boolean(c.active),
+            })),
+            keysAvailable: keyRows.filter((k) => k.status === 'available').length,
+            keysTotal: keyRows.length,
+            recentTx: txRows.length,
+          }}
         />
       </main>
     </>
