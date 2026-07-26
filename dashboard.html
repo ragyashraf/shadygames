@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shady — Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #08070a; }
+  * { box-sizing: border-box; }
+  a { color: #f2d17a; text-decoration: none; }
+  a:hover { color: #fff3cf; }
+  input::placeholder, textarea::placeholder { color: #6f6857; }
+  select { appearance: none; }
+  @keyframes shadyGlow { 0%,100% { filter: drop-shadow(0 0 18px rgba(223,169,45,.4)); } 50% { filter: drop-shadow(0 0 40px rgba(255,214,102,.72)); } }
+  @keyframes shadyFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes shadyRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes shadySpinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes shadyClaim { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  @keyframes shadyBlink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="{{ pageStyle }}">
+
+  <header style="position: sticky; top: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 40px; border-bottom: 1px solid rgba(223,169,45,.2); background: rgba(9,8,11,.86); backdrop-filter: blur(14px)">
+    <a href="index.html" style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/shady-logo.webp" alt="Shady" style="width: 42px; height: 42px" />
+      <span style="font-family: Anton, sans-serif; font-size: 23px; letter-spacing: 3px; background: linear-gradient(180deg,#fff4d0,#e0aa32 60%,#8a5f13); -webkit-background-clip: text; background-clip: text; color: transparent">SHADY</span>
+    </a>
+    <nav style="display: flex; align-items: center; flex-wrap: wrap; gap: 26px">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
+        <button onClick="{{ tb.select }}" style="{{ tb.style }}">{{ tb.label }}</button>
+      </sc-for>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <button onClick="{{ toggleLang }}" style="padding: 10px 16px; border-radius: 10px; border: 1px solid rgba(223,169,45,.35); background: transparent; cursor: pointer; font-family: Barlow, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ langLabel }}</button>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 7px 14px 7px 7px; border-radius: 12px; border: 1px solid rgba(223,169,45,.22); background: rgba(15,13,17,.8)">
+        <div style="width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(180deg,#ffe6a0,#a5741a); display: flex; align-items: center; justify-content: center; font-family: Anton, sans-serif; font-size: 14px; color: #1a1204">N</div>
+        <div>
+          <div style="font-size: 13px; font-weight: 700; white-space: nowrap; color: #f4ecdb">nawaf_91</div>
+          <div style="font-size: 11px; white-space: nowrap; color: #dfa92d">{{ t.rankName }}</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex: 1; padding: 34px 40px 60px; max-width: 1300px; width: 100%; margin: 0 auto">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 20px; animation: shadyRise .4s ease both">
+        <div style="position: relative; overflow: hidden; display: grid; grid-template-columns: 1.3fr .7fr; gap: 34px; align-items: center; padding: 38px 40px; border-radius: 22px; border: 1px solid rgba(223,169,45,.3); background: linear-gradient(118deg, rgba(45,35,14,.95), rgba(13,12,15,.95))">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; white-space: nowrap; color: #9be7b8">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #57e08a; box-shadow: 0 0 10px #57e08a; animation: shadyBlink 2.4s ease-in-out infinite"></span>
+              {{ t.subActive }}
+            </div>
+            <h1 style="{{ h1Style }}">{{ t.rankName }}</h1>
+            <p style="margin: 12px 0 0; max-width: 520px; font-size: 16px; line-height: 1.65; color: #a9a08d">{{ t.rankBlurb }}</p>
+            <div style="margin-top: 26px">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px">
+                <span style="font-size: 13px; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ t.daysLeftLabel }}</span>
+                <span style="font-family: Anton, sans-serif; font-size: 15px; color: #f2d17a">{{ renewLine }}</span>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 8px">
+                <span style="font-family: Anton, sans-serif; font-size: 66px; line-height: 1; color: #f2d17a">{{ daysLeft }}</span>
+                <span style="font-size: 16px; color: #a9a08d">{{ t.days }}</span>
+              </div>
+              <div style="height: 9px; margin-top: 14px; border-radius: 999px; background: rgba(223,169,45,.14); overflow: hidden">
+                <div style="{{ periodBarStyle }}"></div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px">
+              <a href="index.html#plans" style="{{ ghostBtnStyle }}">{{ t.changeRank }}</a>
+              <button onClick="{{ toggleAutoRenew }}" style="{{ autoRenewStyle }}">{{ autoRenewLabel }}</button>
+            </div>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 250px">
+            <div style="position: absolute; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(223,169,45,.3), rgba(8,7,10,0) 70%)"></div>
+            <div style="position: absolute; width: 300px; height: 300px; border-radius: 50%; border: 1px dashed rgba(223,169,45,.22); animation: shadySpinSlow 44s linear infinite"></div>
+            <img src="assets/shady-logo.webp" alt="" style="position: relative; width: 220px; animation: shadyFloat 7s ease-in-out infinite, shadyGlow 5s ease-in-out infinite" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px">
+          <div style="padding: 26px; border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.86)">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap">
+              <div>
+                <div style="font-family: Anton, sans-serif; font-size: 21px; text-transform: uppercase; color: #f4ecdb">{{ t.dailyTitle }}</div>
+                <p style="margin: 8px 0 0; max-width: 380px; font-size: 14px; line-height: 1.6; color: #8b8271">{{ t.dailyBody }}</p>
+              </div>
+              <div style="text-align: end">
+                <div style="font-family: Anton, sans-serif; font-size: 40px; line-height: 1; color: #f2d17a">{{ streak }}</div>
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ t.streakLabel }}</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 22px">
+              <sc-for list="{{ dailyDays }}" as="d" hint-placeholder-count="7">
+                <div style="{{ d.style }}">
+                  <div style="font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8b8271">{{ d.label }}</div>
+                  <div style="{{ d.rewardStyle }}">{{ d.reward }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ claim }}" style="{{ claimStyle }}">{{ claimLabel }}</button>
+            <sc-if value="{{ claimMessage }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top: 12px; padding: 12px 14px; border-radius: 11px; border: 1px solid rgba(87,224,138,.4); background: rgba(87,224,138,.1); font-size: 14px; color: #9be7b8">{{ claimMessage }}</div>
+            </sc-if>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <sc-for list="{{ statCards }}" as="s" hint-placeholder-count="3">
+              <div style="padding: 20px 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.86)">
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ s.label }}</div>
+                <div style="display: flex; align-items: baseline; gap: 9px; margin-top: 8px">
+                  <span style="font-family: Anton, sans-serif; font-size: 30px; line-height: 1; color: #f2d17a">{{ s.value }}</span>
+                  <span style="font-size: 13px; color: #8b8271">{{ s.note }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="padding: 20px 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.86)">
+              <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ t.battlepass }}</div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 8px">
+                <span style="font-family: Anton, sans-serif; font-size: 26px; color: #f2d17a">{{ t.bpTier }}</span>
+                <span style="font-size: 13px; color: #8b8271">{{ t.bpXp }}</span>
+              </div>
+              <div style="height: 8px; margin-top: 12px; border-radius: 999px; background: rgba(223,169,45,.14); overflow: hidden">
+                <div style="height: 100%; width: 62%; border-radius: 999px; background: linear-gradient(90deg,#a5741a,#ffe6a0)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isKeys }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+        <div>
+          <h1 style="{{ h1Style }}">{{ t.keysTitle }}</h1>
+          <p style="margin: 10px 0 0; font-size: 16px; color: #9d9482">{{ t.keysSub }}</p>
+        </div>
+        <div style="border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.86); overflow: hidden">
+          <div style="display: grid; grid-template-columns: 1.5fr 1.3fr 1fr .9fr auto; gap: 14px; padding: 14px 24px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+            <sc-for list="{{ t.keyCols }}" as="c" hint-placeholder-count="5">
+              <div style="{{ thStyle }}">{{ c }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ myKeys }}" as="k" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 1.5fr 1.3fr 1fr .9fr auto; gap: 14px; align-items: center; padding: 17px 24px; border-bottom: 1px solid rgba(223,169,45,.09)">
+              <div style="font-size: 15px; letter-spacing: 1.5px; color: #f4ecdb">{{ k.shown }}</div>
+              <div style="font-size: 14px; color: #a9a08d">{{ k.product }}</div>
+              <div style="font-size: 13px; color: #7d7565">{{ k.date }}</div>
+              <div style="{{ k.statusStyle }}">{{ k.status }}</div>
+              <div style="display: flex; gap: 9px">
+                <button onClick="{{ k.reveal }}" style="{{ smallBtnStyle }}">{{ k.revealLabel }}</button>
+                <button onClick="{{ k.copy }}" style="{{ smallBtnStyle }}">{{ k.copyLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCar }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; animation: shadyRise .4s ease both">
+        <div style="padding: 30px; border-radius: 20px; border: 1px solid rgba(223,169,45,.24); background: rgba(15,13,17,.86)">
+          <div style="font-size: 12px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; white-space: nowrap; color: #dfa92d">{{ t.dragonOnly }}</div>
+          <h1 style="{{ h1Style }}">{{ t.carTitle }}</h1>
+          <p style="margin: 12px 0 0; max-width: 520px; font-size: 16px; line-height: 1.65; color: #9d9482">{{ t.carSub }}</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px">
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ labelStyle }}">{{ t.carBase }}</span>
+              <input value="{{ car.base }}" onChange="{{ car.setBase }}" placeholder="{{ t.carBasePh }}" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ labelStyle }}">{{ t.carPlate }}</span>
+              <input value="{{ car.plate }}" onChange="{{ car.setPlate }}" placeholder="DRAGON1" style="{{ inputStyle }}" />
+            </label>
+          </div>
+
+          <div style="margin-top: 20px">
+            <span style="{{ labelStyle }}">{{ t.carColor }}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px">
+              <sc-for list="{{ carColors }}" as="c" hint-placeholder-count="5">
+                <button onClick="{{ c.select }}" style="{{ c.style }}" title="{{ c.name }}"></button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top: 22px">
+            <span style="{{ labelStyle }}">{{ t.carMods }}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px">
+              <sc-for list="{{ carMods }}" as="m" hint-placeholder-count="6">
+                <button onClick="{{ m.toggle }}" style="{{ m.style }}">{{ m.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <label style="display: flex; flex-direction: column; gap: 7px; margin-top: 22px">
+            <span style="{{ labelStyle }}">{{ t.carNotes }}</span>
+            <textarea value="{{ car.notes }}" onChange="{{ car.setNotes }}" rows="4" placeholder="{{ t.carNotesPh }}" style="{{ textareaStyle }}"></textarea>
+          </label>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 24px">
+            <div style="font-size: 13px; color: #7d7565">{{ t.carFine }}</div>
+            <button onClick="{{ car.submit }}" style="{{ primaryBtnStyle }}">{{ t.carSubmit }}</button>
+          </div>
+          <sc-if value="{{ car.message }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ car.messageStyle }}">{{ car.message }}</div>
+          </sc-if>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div style="padding: 26px; border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.86)">
+            <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.carPreview }}</div>
+            <div style="{{ carPreviewStyle }}">
+              <div style="font-family: Anton, sans-serif; font-size: 26px; letter-spacing: 2px; text-transform: uppercase; color: rgba(12,10,8,.75)">{{ carPlateShown }}</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 18px">
+              <sc-for list="{{ carSpecs }}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 9px; border-bottom: 1px solid rgba(223,169,45,.1); font-size: 14px">
+                  <span style="color: #8b8271">{{ s.label }}</span>
+                  <span style="color: #f4ecdb; font-weight: 600; text-align: end">{{ s.value }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding: 22px; border-radius: 18px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.86)">
+            <div style="font-family: Anton, sans-serif; font-size: 18px; text-transform: uppercase; color: #f4ecdb">{{ t.carQueueTitle }}</div>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px">
+              <sc-for list="{{ carQueue }}" as="q" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="{{ q.dotStyle }}"></span>
+                  <span style="flex: 1; font-size: 14px; color: #cfc5b1">{{ q.label }}</span>
+                  <span style="font-size: 12px; white-space: nowrap; color: #7d7565">{{ q.state }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isInvoices }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap">
+          <div>
+            <h1 style="{{ h1Style }}">{{ t.invoicesTitle }}</h1>
+            <p style="margin: 10px 0 0; font-size: 16px; color: #9d9482">{{ t.invoicesSub }}</p>
+          </div>
+          <div style="font-size: 14px; color: #8b8271">{{ invoiceSummary }}</div>
+        </div>
+        <div style="border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.86); overflow: hidden">
+          <div style="display: grid; grid-template-columns: .8fr 1.6fr 1fr .9fr .9fr auto; gap: 14px; padding: 14px 24px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+            <sc-for list="{{ t.invoiceCols }}" as="c" hint-placeholder-count="6">
+              <div style="{{ thStyle }}">{{ c }}</div>
+            </sc-for>
+          </div>
+          <sc-for list="{{ invoices }}" as="v" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: .8fr 1.6fr 1fr .9fr .9fr auto; gap: 14px; align-items: center; padding: 17px 24px; border-bottom: 1px solid rgba(223,169,45,.09)">
+              <div style="font-size: 13px; color: #7d7565">{{ v.id }}</div>
+              <div style="font-size: 14px; color: #f4ecdb">{{ v.item }}</div>
+              <div style="font-size: 13px; color: #a9a08d">{{ v.date }}</div>
+              <div style="font-family: Anton, sans-serif; font-size: 19px; color: #f2d17a">{{ v.amount }}</div>
+              <div style="{{ v.statusStyle }}">{{ v.status }}</div>
+              <button onClick="{{ v.download }}" style="{{ smallBtnStyle }}">{{ t.pdf }}</button>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ invoiceMessage }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 13px 16px; border-radius: 12px; border: 1px solid rgba(223,169,45,.35); background: rgba(223,169,45,.09); font-size: 14px; color: #f2d17a">{{ invoiceMessage }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{},&quot;currency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;$&quot;,&quot;€&quot;,&quot;£&quot;],&quot;default&quot;:&quot;$&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const DASH_COPY = {
+  en: {
+    tabs: ['My rank', 'Keys', 'Custom car', 'Invoices'],
+    rankName: 'Dragon rank', subActive: 'Subscription active',
+    rankBlurb: 'Battlepass unlocked, $2,000,000 monthly payout, unlimited garage and exclusive contracts.',
+    daysLeftLabel: 'Days left this cycle', days: 'days',
+    renewLine: 'Renews 14 Aug 2026 · $25',
+    changeRank: 'Change rank', autoRenewOn: 'Auto-renew on', autoRenewOff: 'Auto-renew off',
+    dailyTitle: 'Daily reward', dailyBody: 'Claim once every 24 hours. Seven days in a row pays a bonus car voucher.',
+    streakLabel: 'Day streak',
+    claim: 'Claim today · {r}', claimed: 'Claimed — back in 24h',
+    claimToast: 'Nice. {r} added to your character.',
+    rewards: ['$25k', '$40k', '$60k', 'Crate', '$80k', '$120k', 'Voucher'],
+    stats: [
+      ['Monthly payout', '$2M', 'credited 1st'],
+      ['Garage slots', '∞', 'Dragon perk'],
+      ['Hours in city', '412', 'this season']
+    ],
+    battlepass: 'Battlepass', bpTier: 'Tier 18', bpXp: '6,200 / 10,000 XP',
+    keysTitle: 'Key history', keysSub: 'Every key delivered to you, oldest at the bottom.',
+    keyCols: ['Key', 'Product', 'Delivered', 'Status', ''],
+    reveal: 'Reveal', hide: 'Hide', copy: 'Copy', copied: 'Copied',
+    keyStatusRedeemed: 'Redeemed', keyStatusReady: 'Ready',
+    myKeys: [
+      ['UNL-4F8A-91QT-KX02', 'Dragon rank · monthly', '14 Jul 2026', 'redeemed'],
+      ['TT-8H3K-22LP-ZX10', 'Dragon Clash setup', '02 Jul 2026', 'ready'],
+      ['UNL-7C2B-88MN-PL41', 'Kingpin rank · monthly', '14 Jun 2026', 'redeemed'],
+      ['UNL-9K1L-77CV-AS23', 'Access rank · monthly', '14 May 2026', 'redeemed']
+    ],
+    dragonOnly: 'Dragon tier perk', carTitle: 'Custom car request',
+    carSub: 'Tell the build team what you want. Turnaround is 3–5 days and you get one rebuild free each month.',
+    carBase: 'Base vehicle', carBasePh: 'e.g. Elegy Retro Custom', carPlate: 'Plate text',
+    carColor: 'Paint', carMods: 'Modifications', carNotes: 'Anything else',
+    carNotesPh: 'Livery ideas, engine sound, interior colour…',
+    carFine: 'One free rebuild per month. Balance-breaking requests get rejected.',
+    carSubmit: 'Send request',
+    carSubmitted: 'Request sent. The build team replies on Discord within a day.',
+    carNeedBase: 'Pick a base vehicle first.',
+    carPreview: 'Build sheet',
+    carSpecs: ['Base', 'Paint', 'Plate', 'Mods'],
+    carQueueTitle: 'Your build queue',
+    carQueue: [['Elegy · matte gold', 'In build'], ['Sultan RS · widebody', 'Delivered'], ['Banshee · drift setup', 'Rejected']],
+    colors: ['Dragon gold', 'Obsidian', 'Blood red', 'Ice blue', 'Emerald'],
+    mods: ['Widebody', 'Turbo', 'Neon underglow', 'Custom horn', 'Bulletproof tyres', 'Livery'],
+    invoicesTitle: 'Invoices', invoicesSub: 'Every payment on this account. PDFs are generated on demand.',
+    invoiceCols: ['ID', 'Item', 'Date', 'Amount', 'Status', ''],
+    pdf: 'PDF', paid: 'Paid', refunded: 'Refunded',
+    invoiceSummary: 'Lifetime spend {sum}',
+    invoiceToast: 'Invoice {id} is downloading.',
+    invoices: [
+      ['#4191', 'Dragon rank · monthly', '14 Jul 2026', 25, 'paid'],
+      ['#4190', 'Dragon Clash setup', '02 Jul 2026', 29, 'paid'],
+      ['#4102', 'Kingpin rank · monthly', '14 Jun 2026', 15, 'paid'],
+      ['#4041', 'Access rank · monthly', '14 May 2026', 10, 'paid'],
+      ['#3998', 'Like Tower setup', '28 Apr 2026', 19, 'refunded']
+    ]
+  },
+  ar: {
+    tabs: ['رتبتي', 'المفاتيح', 'سيارة مخصصة', 'الفواتير'],
+    rankName: 'رتبة دراغون', subActive: 'الاشتراك مفعّل',
+    rankBlurb: 'الباتل باس مفتوح، وراتب شهري 2,000,000$، ومواقف سيارات غير محدودة، وعقود حصرية.',
+    daysLeftLabel: 'الأيام المتبقية في الدورة', days: 'يوماً',
+    renewLine: 'التجديد 14 أغسطس 2026 · 25$',
+    changeRank: 'تغيير الرتبة', autoRenewOn: 'التجديد التلقائي مفعّل', autoRenewOff: 'التجديد التلقائي موقوف',
+    dailyTitle: 'المكافأة اليومية', dailyBody: 'استلمها كل 24 ساعة. سبعة أيام متتالية تمنحك قسيمة سيارة.',
+    streakLabel: 'أيام متتالية',
+    claim: 'استلم اليوم · {r}', claimed: 'تم الاستلام — عد بعد 24 ساعة',
+    claimToast: 'ممتاز. أُضيفت {r} إلى شخصيتك.',
+    rewards: ['25 ألف$', '40 ألف$', '60 ألف$', 'صندوق', '80 ألف$', '120 ألف$', 'قسيمة'],
+    stats: [
+      ['الراتب الشهري', '2 مليون$', 'يُصرف أول الشهر'],
+      ['مواقف السيارات', '∞', 'ميزة دراغون'],
+      ['ساعات في المدينة', '412', 'هذا الموسم']
+    ],
+    battlepass: 'الباتل باس', bpTier: 'المستوى 18', bpXp: '6,200 / 10,000 نقطة',
+    keysTitle: 'سجل المفاتيح', keysSub: 'كل مفتاح سُلّم إليك، الأحدث في الأعلى.',
+    keyCols: ['المفتاح', 'المنتج', 'تاريخ التسليم', 'الحالة', ''],
+    reveal: 'إظهار', hide: 'إخفاء', copy: 'نسخ', copied: 'تم النسخ',
+    keyStatusRedeemed: 'مُستخدم', keyStatusReady: 'جاهز',
+    myKeys: [
+      ['UNL-4F8A-91QT-KX02', 'رتبة دراغون · شهري', '14 يوليو 2026', 'redeemed'],
+      ['TT-8H3K-22LP-ZX10', 'إعداد معركة التنانين', '02 يوليو 2026', 'ready'],
+      ['UNL-7C2B-88MN-PL41', 'رتبة كينغ بين · شهري', '14 يونيو 2026', 'redeemed'],
+      ['UNL-9K1L-77CV-AS23', 'رتبة أكسس · شهري', '14 مايو 2026', 'redeemed']
+    ],
+    dragonOnly: 'ميزة رتبة دراغون', carTitle: 'طلب سيارة مخصصة',
+    carSub: 'أخبر فريق التجهيز بما تريد. التنفيذ خلال 3–5 أيام ولك إعادة بناء مجانية كل شهر.',
+    carBase: 'السيارة الأساسية', carBasePh: 'مثلاً Elegy Retro Custom', carPlate: 'نص اللوحة',
+    carColor: 'الطلاء', carMods: 'التعديلات', carNotes: 'ملاحظات أخرى',
+    carNotesPh: 'أفكار للتصميم، صوت المحرك، لون المقصورة…',
+    carFine: 'إعادة بناء مجانية واحدة شهرياً. الطلبات المخلّة بالتوازن تُرفض.',
+    carSubmit: 'أرسل الطلب',
+    carSubmitted: 'تم إرسال الطلب. فريق التجهيز يرد على الديسكورد خلال يوم.',
+    carNeedBase: 'اختر السيارة الأساسية أولاً.',
+    carPreview: 'ورقة التجهيز',
+    carSpecs: ['الأساس', 'الطلاء', 'اللوحة', 'التعديلات'],
+    carQueueTitle: 'طلباتك',
+    carQueue: [['Elegy · ذهبي مطفي', 'قيد التجهيز'], ['Sultan RS · هيكل عريض', 'تم التسليم'], ['Banshee · إعداد درفت', 'مرفوض']],
+    colors: ['ذهبي التنين', 'أسود بركاني', 'أحمر دموي', 'أزرق جليدي', 'أخضر زمردي'],
+    mods: ['هيكل عريض', 'تيربو', 'إضاءة سفلية', 'بوق مخصص', 'إطارات مضادة للرصاص', 'تصميم خارجي'],
+    invoicesTitle: 'الفواتير', invoicesSub: 'كل عمليات الدفع على هذا الحساب. تُنشأ ملفات PDF عند الطلب.',
+    invoiceCols: ['الرقم', 'المنتج', 'التاريخ', 'المبلغ', 'الحالة', ''],
+    pdf: 'PDF', paid: 'مدفوع', refunded: 'مُسترجع',
+    invoiceSummary: 'إجمالي ما دفعته {sum}',
+    invoiceToast: 'جاري تنزيل الفاتورة {id}.',
+    invoices: [
+      ['#4191', 'رتبة دراغون · شهري', '14 يوليو 2026', 25, 'paid'],
+      ['#4190', 'إعداد معركة التنانين', '02 يوليو 2026', 29, 'paid'],
+      ['#4102', 'رتبة كينغ بين · شهري', '14 يونيو 2026', 15, 'paid'],
+      ['#4041', 'رتبة أكسس · شهري', '14 مايو 2026', 10, 'paid'],
+      ['#3998', 'إعداد برج اللايكات', '28 أبريل 2026', 19, 'refunded']
+    ]
+  }
+};
+
+const CAR_HEX = ['#dfa92d', '#15131a', '#8f1f1f', '#2f7fa8', '#1f7a4d'];
+
+class Component extends DCLogic {
+  state = {
+    lang: 'en', tab: 0, autoRenew: true,
+    streak: 4, claimedToday: false, claimMessage: '',
+    revealed: {}, copiedKey: -1,
+    carBase: '', carPlate: '', carColor: 0, carMods: [0], carNotes: '',
+    carMessage: '', carOk: true,
+    invoiceMessage: ''
+  };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('shady-lang');
+      if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
+      const claimed = localStorage.getItem('shady-claim-day');
+      const today = new Date().toDateString();
+      if (claimed === today) this.setState({ claimedToday: true });
+      const streak = parseInt(localStorage.getItem('shady-streak') || '4', 10);
+      if (!isNaN(streak)) this.setState({ streak });
+    } catch (e) {}
+  }
+
+  setLang(lang) {
+    this.setState({ lang });
+    try { localStorage.setItem('shady-lang', lang); } catch (e) {}
+  }
+
+  claim(t, reward) {
+    if (this.state.claimedToday) return;
+    const streak = Math.min(7, this.state.streak + 1);
+    this.setState({ claimedToday: true, streak, claimMessage: t.claimToast.replace('{r}', reward) });
+    try {
+      localStorage.setItem('shady-claim-day', new Date().toDateString());
+      localStorage.setItem('shady-streak', String(streak));
+    } catch (e) {}
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const t = DASH_COPY[ar ? 'ar' : 'en'];
+    const body = ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif';
+    const display = ar ? 'Cairo, sans-serif' : 'Anton, sans-serif';
+    const currency = this.props.currency ?? '$';
+    const tab = this.state.tab;
+
+    const inputStyle = {
+      width: '100%', padding: '13px 15px', borderRadius: '11px',
+      border: '1px solid rgba(223,169,45,.24)', background: 'rgba(11,10,13,.9)',
+      color: '#f4ecdb', fontFamily: body, fontSize: '15px', outline: 'none',
+      textAlign: ar ? 'right' : 'left'
+    };
+    const labelStyle = {
+      fontSize: '11px', fontWeight: 700, letterSpacing: ar ? '0' : '1.8px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap', color: '#8b8271'
+    };
+    const thStyle = Object.assign({}, labelStyle);
+    const smallBtnStyle = {
+      padding: '9px 14px', borderRadius: '9px', cursor: 'pointer',
+      border: '1px solid rgba(223,169,45,.3)', background: 'rgba(223,169,45,.07)',
+      fontFamily: body, fontSize: '12px', fontWeight: 700,
+      letterSpacing: ar ? '0' : '1.2px', textTransform: ar ? 'none' : 'uppercase',
+      whiteSpace: 'nowrap', color: '#f2d17a'
+    };
+    const primaryBtnStyle = {
+      padding: '15px 26px', borderRadius: '12px', border: 0, cursor: 'pointer',
+      background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+      fontFamily: display, fontSize: ar ? '17px' : '16px', fontWeight: ar ? 700 : 400,
+      letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+    };
+    const ghostBtnStyle = {
+      display: 'inline-block', padding: '14px 24px', borderRadius: '11px',
+      border: '1px solid rgba(223,169,45,.4)', color: '#f2d17a',
+      fontFamily: display, fontSize: ar ? '16px' : '15px', fontWeight: ar ? 700 : 400,
+      letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+    };
+
+    const tabs = t.tabs.map((label, i) => ({
+      label,
+      select: () => this.setState({ tab: i }),
+      style: {
+        padding: '10px 2px', border: 0, borderBottom: '2px solid ' + (tab === i ? '#dfa92d' : 'transparent'),
+        background: 'transparent', cursor: 'pointer',
+        fontFamily: body, fontSize: '14px', fontWeight: 700,
+        letterSpacing: ar ? '0' : '1.4px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', color: tab === i ? '#f2d17a' : '#8b8271'
+      }
+    }));
+
+    const daysLeft = 19;
+    const dayLabels = ar ? ['1', '2', '3', '4', '5', '6', '7'] : ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'];
+    const dailyDays = t.rewards.map((reward, i) => {
+      const doneDay = i < this.state.streak;
+      const isToday = i === this.state.streak - (this.state.claimedToday ? 1 : 0);
+      return {
+        label: dayLabels[i], reward,
+        style: {
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '7px',
+          padding: '13px 6px', borderRadius: '13px',
+          border: '1px solid ' + (doneDay ? 'rgba(87,224,138,.4)' : (isToday ? 'rgba(223,169,45,.55)' : 'rgba(223,169,45,.16)')),
+          background: doneDay ? 'rgba(87,224,138,.09)' : (isToday ? 'rgba(223,169,45,.12)' : 'rgba(11,10,13,.7)')
+        },
+        rewardStyle: {
+          fontFamily: display, fontSize: ar ? '13px' : '15px', fontWeight: ar ? 700 : 400,
+          whiteSpace: 'nowrap', color: doneDay ? '#9be7b8' : (isToday ? '#f2d17a' : '#8b8271')
+        }
+      };
+    });
+
+    const todayReward = t.rewards[Math.min(6, this.state.streak)];
+
+    const carMods = t.mods.map((label, i) => {
+      const on = this.state.carMods.indexOf(i) > -1;
+      return {
+        label,
+        toggle: () => {
+          const arr = this.state.carMods.slice();
+          const at = arr.indexOf(i);
+          if (at > -1) arr.splice(at, 1); else arr.push(i);
+          this.setState({ carMods: arr, carMessage: '' });
+        },
+        style: {
+          padding: '11px 16px', borderRadius: '10px', cursor: 'pointer',
+          border: '1px solid ' + (on ? 'rgba(223,169,45,.6)' : 'rgba(223,169,45,.2)'),
+          background: on ? 'rgba(223,169,45,.14)' : 'rgba(11,10,13,.7)',
+          fontFamily: body, fontSize: '13px', fontWeight: 600,
+          whiteSpace: 'nowrap', color: on ? '#f2d17a' : '#a9a08d'
+        }
+      };
+    });
+
+    const carColors = t.colors.map((name, i) => ({
+      name,
+      select: () => this.setState({ carColor: i, carMessage: '' }),
+      style: {
+        width: '44px', height: '44px', borderRadius: '12px', cursor: 'pointer',
+        background: CAR_HEX[i],
+        border: '2px solid ' + (this.state.carColor === i ? '#fff4d0' : 'rgba(223,169,45,.22)'),
+        boxShadow: this.state.carColor === i ? '0 0 0 3px rgba(223,169,45,.25)' : 'none'
+      }
+    }));
+
+    const modNames = this.state.carMods.map(i => t.mods[i]).join(', ') || '—';
+
+    const myKeys = t.myKeys.map((k, i) => {
+      const shown = this.state.revealed[i] ? k[0] : k[0].slice(0, 8) + '••••-••••';
+      return {
+        shown, product: k[1], date: k[2],
+        status: k[3] === 'redeemed' ? t.keyStatusRedeemed : t.keyStatusReady,
+        statusStyle: {
+          display: 'inline-block', padding: '6px 12px', borderRadius: '8px',
+          border: '1px solid ' + (k[3] === 'ready' ? 'rgba(87,224,138,.45)' : 'rgba(223,169,45,.2)'),
+          background: k[3] === 'ready' ? 'rgba(87,224,138,.12)' : 'rgba(223,169,45,.05)',
+          fontFamily: body, fontSize: '12px', fontWeight: 700,
+          letterSpacing: ar ? '0' : '1.2px', textTransform: ar ? 'none' : 'uppercase',
+          whiteSpace: 'nowrap', color: k[3] === 'ready' ? '#9be7b8' : '#8b8271'
+        },
+        revealLabel: this.state.revealed[i] ? t.hide : t.reveal,
+        reveal: () => {
+          const r = Object.assign({}, this.state.revealed);
+          r[i] = !r[i];
+          this.setState({ revealed: r });
+        },
+        copyLabel: this.state.copiedKey === i ? t.copied : t.copy,
+        copy: () => {
+          try { navigator.clipboard.writeText(k[0]); } catch (e) {}
+          this.setState({ copiedKey: i });
+          setTimeout(() => this.setState({ copiedKey: -1 }), 1600);
+        }
+      };
+    });
+
+    const lifetime = t.invoices.filter(v => v[4] === 'paid').reduce((a, b) => a + b[3], 0);
+    const invoices = t.invoices.map(v => ({
+      id: v[0], item: v[1], date: v[2], amount: currency + v[3],
+      status: v[4] === 'paid' ? t.paid : t.refunded,
+      statusStyle: {
+        display: 'inline-block', padding: '6px 12px', borderRadius: '8px',
+        border: '1px solid ' + (v[4] === 'paid' ? 'rgba(87,224,138,.45)' : 'rgba(255,107,107,.4)'),
+        background: v[4] === 'paid' ? 'rgba(87,224,138,.12)' : 'rgba(255,107,107,.1)',
+        fontFamily: body, fontSize: '12px', fontWeight: 700,
+        letterSpacing: ar ? '0' : '1.2px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', color: v[4] === 'paid' ? '#9be7b8' : '#ffb3b3'
+      },
+      download: () => this.setState({ invoiceMessage: t.invoiceToast.replace('{id}', v[0]) })
+    }));
+
+    return {
+      t, dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en',
+      langLabel: ar ? 'EN' : 'العربية',
+      toggleLang: () => this.setLang(ar ? 'en' : 'ar'),
+      pageStyle: {
+        display: 'flex', flexDirection: 'column', minHeight: '100vh',
+        background: '#08070a', color: '#efe7d6', fontFamily: body,
+        textAlign: ar ? 'right' : 'left'
+      },
+      h1Style: {
+        margin: '10px 0 0', fontFamily: display, fontSize: ar ? '46px' : '54px',
+        lineHeight: 1.06, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, color: '#f4ecdb'
+      },
+      tabs, isHome: tab === 0, isKeys: tab === 1, isCar: tab === 2, isInvoices: tab === 3,
+      inputStyle, labelStyle, thStyle, smallBtnStyle, primaryBtnStyle, ghostBtnStyle,
+      textareaStyle: Object.assign({}, inputStyle, { resize: 'vertical', lineHeight: 1.6, fontSize: '14px' }),
+      daysLeft: String(daysLeft), renewLine: t.renewLine,
+      periodBarStyle: {
+        height: '100%', width: Math.round((30 - daysLeft) / 30 * 100) + '%',
+        borderRadius: '999px', background: 'linear-gradient(90deg,#a5741a,#ffe6a0)'
+      },
+      autoRenewLabel: this.state.autoRenew ? t.autoRenewOn : t.autoRenewOff,
+      autoRenewStyle: {
+        padding: '14px 24px', borderRadius: '11px', cursor: 'pointer',
+        border: '1px solid ' + (this.state.autoRenew ? 'rgba(87,224,138,.45)' : 'rgba(223,169,45,.3)'),
+        background: this.state.autoRenew ? 'rgba(87,224,138,.1)' : 'rgba(11,10,13,.7)',
+        fontFamily: display, fontSize: ar ? '16px' : '15px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', color: this.state.autoRenew ? '#9be7b8' : '#a9a08d'
+      },
+      toggleAutoRenew: () => this.setState(s => ({ autoRenew: !s.autoRenew })),
+      streak: String(this.state.streak), dailyDays,
+      claimLabel: this.state.claimedToday ? t.claimed : t.claim.replace('{r}', todayReward),
+      claim: () => this.claim(t, todayReward),
+      claimMessage: this.state.claimMessage,
+      claimStyle: {
+        width: '100%', marginTop: '20px', padding: '17px 20px', borderRadius: '12px',
+        border: this.state.claimedToday ? '1px solid rgba(223,169,45,.25)' : 0,
+        cursor: this.state.claimedToday ? 'default' : 'pointer',
+        background: this.state.claimedToday ? 'rgba(223,169,45,.06)' : 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)',
+        color: this.state.claimedToday ? '#8b8271' : '#1a1204',
+        fontFamily: display, fontSize: ar ? '18px' : '17px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '2px', textTransform: ar ? 'none' : 'uppercase',
+        boxShadow: this.state.claimedToday ? 'none' : '0 14px 34px rgba(223,169,45,.26)',
+        animation: this.state.claimedToday ? 'none' : 'shadyClaim 3.6s ease-in-out infinite'
+      },
+      statCards: t.stats.map(s => ({ label: s[0], value: s[1], note: s[2] })),
+      myKeys,
+      car: {
+        base: this.state.carBase, plate: this.state.carPlate, notes: this.state.carNotes,
+        setBase: (e) => this.setState({ carBase: e.target.value, carMessage: '' }),
+        setPlate: (e) => this.setState({ carPlate: e.target.value.toUpperCase().slice(0, 8) }),
+        setNotes: (e) => this.setState({ carNotes: e.target.value }),
+        submit: () => {
+          if (!this.state.carBase) return this.setState({ carMessage: t.carNeedBase, carOk: false });
+          this.setState({ carMessage: t.carSubmitted, carOk: true });
+        },
+        message: this.state.carMessage,
+        messageStyle: {
+          marginTop: '16px', padding: '13px 15px', borderRadius: '11px', fontSize: '14px',
+          border: '1px solid ' + (this.state.carOk ? 'rgba(87,224,138,.4)' : 'rgba(255,107,107,.4)'),
+          background: this.state.carOk ? 'rgba(87,224,138,.1)' : 'rgba(255,107,107,.1)',
+          color: this.state.carOk ? '#9be7b8' : '#ffb3b3'
+        }
+      },
+      carColors, carMods,
+      carPlateShown: this.state.carPlate || 'DRAGON1',
+      carPreviewStyle: {
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        height: '150px', marginTop: '16px', borderRadius: '14px',
+        border: '1px solid rgba(223,169,45,.25)',
+        background: 'linear-gradient(140deg, ' + CAR_HEX[this.state.carColor] + ', rgba(12,11,14,.95) 130%)',
+        transition: 'background .4s ease'
+      },
+      carSpecs: [
+        { label: t.carSpecs[0], value: this.state.carBase || '—' },
+        { label: t.carSpecs[1], value: t.colors[this.state.carColor] },
+        { label: t.carSpecs[2], value: this.state.carPlate || 'DRAGON1' },
+        { label: t.carSpecs[3], value: modNames }
+      ],
+      carQueue: t.carQueue.map((q, i) => ({
+        label: q[0], state: q[1],
+        dotStyle: {
+          width: '8px', height: '8px', borderRadius: '50%', flex: 'none',
+          background: i === 0 ? '#f2d17a' : (i === 1 ? '#57e08a' : '#ff6b6b')
+        }
+      })),
+      invoices,
+      invoiceSummary: t.invoiceSummary.replace('{sum}', currency + lifetime),
+      invoiceMessage: this.state.invoiceMessage
+    };
+  }
+}
+
+</script>
+</body>
+</html>

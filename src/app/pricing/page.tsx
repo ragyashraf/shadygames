@@ -1,0 +1,62 @@
+import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { SiteHeader } from '@/components/SiteHeader';
+import { PricingTable } from '@/components/PricingTable';
+import { getRequestCountryCode } from '@/lib/country';
+import { getTiers } from '@/lib/tiers';
+import { createClient } from '@/utils/supabase/server';
+import './pricing.css';
+
+export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Shady — Plans',
+  description: 'Unlimited GTA V subscription ranks — Starter, Pro, and Advanced.',
+};
+
+export default async function PricingPage() {
+  const tiers = getTiers();
+  const countryCode = await getRequestCountryCode();
+  const jar = await cookies();
+  const supabase = createClient(jar);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let customerEmail = user?.email ?? null;
+  let paddleCustomerId: string | null = null;
+
+  if (user) {
+    await supabase.rpc('link_my_paddle_customer');
+    const { data: customer } = await supabase
+      .from('customers')
+      .select('customer_id, email')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    paddleCustomerId = customer?.customer_id ?? null;
+    customerEmail = customer?.email ?? customerEmail;
+  }
+
+  return (
+    <>
+      <SiteHeader />
+      <main className="page">
+        <header className="hero">
+          <p className="kicker">Unlimited GTA V · Shady</p>
+          <h1>Choose your rank</h1>
+          <p className="lede">
+            Country-localized prices from Paddle. Subscribe opens a one-page overlay checkout for
+            the exact price shown.
+          </p>
+        </header>
+        <PricingTable
+          tiers={tiers}
+          countryCode={countryCode}
+          customerEmail={customerEmail}
+          paddleCustomerId={paddleCustomerId}
+        />
+      </main>
+    </>
+  );
+}

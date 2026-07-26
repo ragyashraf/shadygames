@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shady — Account</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #08070a; }
+  * { box-sizing: border-box; }
+  a { color: #f2d17a; text-decoration: none; }
+  a:hover { color: #fff3cf; }
+  input::placeholder { color: #6f6857; }
+  @keyframes shadyGlow { 0%,100% { filter: drop-shadow(0 0 24px rgba(223,169,45,.45)); } 50% { filter: drop-shadow(0 0 56px rgba(255,214,102,.8)); } }
+  @keyframes shadyFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes shadySpinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes shadyPulseRing { 0% { transform: scale(.85); opacity: .5; } 70% { transform: scale(1.25); opacity: 0; } 100% { transform: scale(1.25); opacity: 0; } }
+  @keyframes shadyRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="{{ pageStyle }}">
+  <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 22% 30%, rgba(223,169,45,.18), rgba(8,7,10,0) 60%); pointer-events: none"></div>
+
+  <aside data-screen-label="Auth brand" style="position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 42px 56px 48px; border-inline-end: 1px solid rgba(223,169,45,.18); background: linear-gradient(160deg, rgba(34,27,14,.9), rgba(9,8,11,.95))">
+    <a href="index.html" style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/shady-logo.webp" alt="Shady" style="width: 44px; height: 44px" />
+      <span style="font-family: Anton, sans-serif; font-size: 24px; letter-spacing: 3px; background: linear-gradient(180deg,#fff4d0,#e0aa32 60%,#8a5f13); -webkit-background-clip: text; background-clip: text; color: transparent">SHADY</span>
+    </a>
+
+    <div style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 360px; margin: 30px 0">
+      <div style="position: absolute; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, rgba(223,169,45,.3), rgba(8,7,10,0) 68%)"></div>
+      <div style="position: absolute; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(223,169,45,.32); animation: shadyPulseRing 4.5s ease-out infinite"></div>
+      <div style="position: absolute; width: 380px; height: 380px; border-radius: 50%; border: 1px dashed rgba(223,169,45,.2); animation: shadySpinSlow 46s linear infinite"></div>
+      <img src="assets/shady-logo.webp" alt="Shady crest" style="position: relative; width: 300px; animation: shadyFloat 7s ease-in-out infinite, shadyGlow 5s ease-in-out infinite" />
+    </div>
+
+    <div>
+      <h2 style="{{ brandTitleStyle }}">{{ t.brandTitle }}</h2>
+      <p style="margin: 14px 0 0; max-width: 400px; font-size: 16px; line-height: 1.7; color: #a9a08d">{{ t.brandBody }}</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 34px; margin-top: 30px; padding-top: 26px; border-top: 1px solid rgba(223,169,45,.16)">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+          <div>
+            <div style="font-family: Anton, sans-serif; font-size: 26px; color: #f2d17a">{{ s.value }}</div>
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </aside>
+
+  <main data-screen-label="Auth form" style="position: relative; display: flex; align-items: center; justify-content: center; padding: 48px 56px">
+    <div style="width: 100%; max-width: 460px">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px">
+        <a href="index.html" style="font-size: 13px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271" style-hover="color:#f2d17a">{{ t.back }}</a>
+        <button onClick="{{ toggleLang }}" style="padding: 9px 15px; border-radius: 10px; border: 1px solid rgba(223,169,45,.35); background: transparent; cursor: pointer; font-family: Barlow, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ langLabel }}</button>
+      </div>
+
+      <div style="display: flex; gap: 26px; margin-top: 34px; border-bottom: 1px solid rgba(223,169,45,.18)">
+        <button onClick="{{ showLogin }}" style="{{ loginTabStyle }}">{{ t.login }}</button>
+        <button onClick="{{ showSignup }}" style="{{ signupTabStyle }}">{{ t.signup }}</button>
+      </div>
+
+      <h1 style="{{ formTitleStyle }}">{{ formTitle }}</h1>
+      <p style="margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: #9d9482">{{ formSub }}</p>
+
+      <div style="display: flex; flex-direction: column; gap: 18px; margin-top: 30px">
+        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="3">
+          <label style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ f.label }}</span>
+            <input type="{{ f.type }}" placeholder="{{ f.placeholder }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="{{ inputStyle }}" />
+          </label>
+        </sc-for>
+
+        <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+          <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.55; color: #a9a08d; cursor: pointer">
+            <input type="checkbox" checked="{{ agreed }}" onChange="{{ toggleAgree }}" style="width: 18px; height: 18px; margin-top: 2px; accent-color: #dfa92d; flex: none" />
+            <span>{{ t.agree }}</span>
+          </label>
+        </sc-if>
+
+        <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #a9a08d">
+            <input type="checkbox" checked="{{ remember }}" onChange="{{ toggleRemember }}" style="width: 18px; height: 18px; accent-color: #dfa92d" />
+            <span>{{ t.remember }}</span>
+          </label>
+        </sc-if>
+
+        <button onClick="{{ submit }}" style="{{ submitStyle }}">{{ submitLabel }}</button>
+
+        <sc-if value="{{ message }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ messageStyle }}">{{ message }}</div>
+        </sc-if>
+        <sc-if value="{{ showDashboardLink }}" hint-placeholder-val="{{ false }}">
+          <a href="dashboard.html" style="{{ dashLinkStyle }}">{{ t.toDashboard }}</a>
+        </sc-if>
+      </div>
+
+      <p style="margin: 26px 0 0; font-size: 13px; line-height: 1.6; color: #6f6857">{{ t.fine }}</p>
+    </div>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{}}">
+const ACCOUNT_COPY = {
+  en: {
+    back: '← Back to Shady', login: 'Log in', signup: 'Sign up',
+    loginTitle: 'Welcome back', loginSub: 'Log in to manage your Unlimited GTA V subscription and daily rewards.',
+    signupTitle: 'Create your account', signupSub: 'One account for your GTA V subscription, your rewards and your TikTok game setups.',
+    email: 'Email', emailPh: 'you@example.com',
+    username: 'In-game name', usernamePh: 'How the city knows you',
+    password: 'Password', passwordPh: 'At least 8 characters',
+    confirm: 'Confirm password', confirmPh: 'Type it again',
+    remember: 'Keep me logged in', forgot: 'Forgot password?',
+    agree: 'I agree to the Shady terms and understand subscriptions cover the GTA V server only.',
+    loginCta: 'Log in', signupCta: 'Create account',
+    or: 'or continue with', withDiscord: 'Discord', withTiktok: 'TikTok',
+    fine: 'Subscriptions are for the Unlimited GTA V server. TikTok interactive games are purchased separately.',
+    brandTitle: 'One crown, one account',
+    brandBody: 'Your subscription, your payouts, your custom car requests and your Battlepass progress — all in one dashboard.',
+    stats: [['12,400+', 'Players served'], ['220', 'City slots'], ['<60s', 'Access granted']],
+    errFields: 'Fill in every field to continue.',
+    errMatch: 'Passwords do not match.',
+    errAgree: 'Please accept the terms first.',
+    okLogin: 'Welcome back — opening your dashboard…',
+    okSignup: 'Account created. Check your email to confirm.',
+    oauthMsg: 'Redirecting to {p}…', toDashboard: 'Open my dashboard'
+  },
+  ar: {
+    back: '→ العودة إلى شادي', login: 'تسجيل الدخول', signup: 'إنشاء حساب',
+    loginTitle: 'مرحباً بعودتك', loginSub: 'سجّل الدخول لإدارة اشتراكك في سيرفر GTA V ومكافآتك اليومية.',
+    signupTitle: 'أنشئ حسابك', signupSub: 'حساب واحد لاشتراك GTA V ومكافآتك وإعدادات ألعاب تيك توك.',
+    email: 'البريد الإلكتروني', emailPh: 'you@example.com',
+    username: 'الاسم داخل اللعبة', usernamePh: 'كيف تعرفك المدينة',
+    password: 'كلمة المرور', passwordPh: '8 أحرف على الأقل',
+    confirm: 'تأكيد كلمة المرور', confirmPh: 'أعد كتابتها',
+    remember: 'أبقني مسجلاً', forgot: 'نسيت كلمة المرور؟',
+    agree: 'أوافق على شروط شادي وأعلم أن الاشتراكات تغطي سيرفر GTA V فقط.',
+    loginCta: 'تسجيل الدخول', signupCta: 'إنشاء الحساب',
+    or: 'أو تابع عبر', withDiscord: 'ديسكورد', withTiktok: 'تيك توك',
+    fine: 'الاشتراكات مخصصة لسيرفر أنليميتد GTA V. ألعاب تيك توك التفاعلية تُشترى منفصلة.',
+    brandTitle: 'تاج واحد وحساب واحد',
+    brandBody: 'اشتراكك ورواتبك وطلبات سيارتك المخصصة وتقدمك في الباتل باس — كل ذلك في لوحة واحدة.',
+    stats: [['+12,400', 'لاعب انضم'], ['220', 'مقعداً في المدينة'], ['<60 ثانية', 'تفعيل الوصول']],
+    errFields: 'يرجى تعبئة جميع الحقول للمتابعة.',
+    errMatch: 'كلمتا المرور غير متطابقتين.',
+    errAgree: 'يرجى الموافقة على الشروط أولاً.',
+    okLogin: 'مرحباً بعودتك — جاري فتح لوحة التحكم…',
+    okSignup: 'تم إنشاء الحساب. تحقق من بريدك للتأكيد.',
+    oauthMsg: 'جاري التحويل إلى {p}…', toDashboard: 'افتح لوحتي'
+  }
+};
+
+class Component extends DCLogic {
+  state = {
+    lang: 'en', mode: 'login', email: '', username: '', password: '', confirm: '',
+    remember: true, agreed: false, message: '', ok: false
+  };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('shady-lang');
+      if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
+    } catch (e) {}
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'signup') this.setState({ mode: 'signup' });
+    } catch (e) {}
+  }
+
+  setLang(lang) {
+    this.setState({ lang });
+    try { localStorage.setItem('shady-lang', lang); } catch (e) {}
+  }
+
+  tab(active, ar) {
+    return {
+      padding: '12px 2px', border: 0, borderBottom: '2px solid ' + (active ? '#dfa92d' : 'transparent'),
+      background: 'transparent', cursor: 'pointer', marginBottom: '-1px',
+      fontFamily: ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif',
+      fontSize: '15px', fontWeight: 700, letterSpacing: ar ? '0' : '1.6px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap',
+      color: active ? '#f2d17a' : '#8b8271'
+    };
+  }
+
+  submitForm(t) {
+    const s = this.state;
+    if (s.mode === 'login') {
+      if (!s.email || !s.password) return this.setState({ message: t.errFields, ok: false });
+      try {
+        localStorage.setItem('shady-session', JSON.stringify({ email: s.email, at: Date.now() }));
+      } catch (e) {}
+      this.setState({ message: t.okLogin, ok: true });
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
+      return;
+    }
+    if (!s.email || !s.username || !s.password || !s.confirm) return this.setState({ message: t.errFields, ok: false });
+    if (s.password !== s.confirm) return this.setState({ message: t.errMatch, ok: false });
+    if (!s.agreed) return this.setState({ message: t.errAgree, ok: false });
+    try {
+      localStorage.setItem('shady-session', JSON.stringify({ email: s.email, username: s.username, at: Date.now() }));
+    } catch (e) {}
+    this.setState({ message: t.okSignup, ok: true });
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const t = ACCOUNT_COPY[ar ? 'ar' : 'en'];
+    const body = ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif';
+    const display = ar ? 'Cairo, sans-serif' : 'Anton, sans-serif';
+    const login = this.state.mode === 'login';
+    const set = (k) => (e) => this.setState({ [k]: e.target.value, message: '' });
+
+    const inputStyle = {
+      width: '100%', padding: '15px 16px', borderRadius: '11px',
+      border: '1px solid rgba(223,169,45,.24)', background: 'rgba(15,13,17,.9)',
+      color: '#f4ecdb', fontFamily: body, fontSize: '16px', outline: 'none',
+      textAlign: ar ? 'right' : 'left'
+    };
+
+    const fields = login
+      ? [
+          { label: t.email, placeholder: t.emailPh, type: 'email', value: this.state.email, onChange: set('email') },
+          { label: t.password, placeholder: t.passwordPh, type: 'password', value: this.state.password, onChange: set('password') }
+        ]
+      : [
+          { label: t.email, placeholder: t.emailPh, type: 'email', value: this.state.email, onChange: set('email') },
+          { label: t.username, placeholder: t.usernamePh, type: 'text', value: this.state.username, onChange: set('username') },
+          { label: t.password, placeholder: t.passwordPh, type: 'password', value: this.state.password, onChange: set('password') },
+          { label: t.confirm, placeholder: t.confirmPh, type: 'password', value: this.state.confirm, onChange: set('confirm') }
+        ];
+
+    return {
+      t, dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en',
+      langLabel: ar ? 'EN' : 'العربية',
+      toggleLang: () => this.setLang(ar ? 'en' : 'ar'),
+      pageStyle: {
+        position: 'relative', display: 'grid',
+        gridTemplateColumns: '1fr 1fr', minHeight: '100vh',
+        background: '#08070a', color: '#efe7d6', fontFamily: body,
+        overflowX: 'hidden', textAlign: ar ? 'right' : 'left'
+      },
+      brandTitleStyle: {
+        margin: 0, fontFamily: display, fontSize: ar ? '38px' : '44px',
+        lineHeight: ar ? 1.2 : 1.05, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, color: '#f4ecdb'
+      },
+      formTitleStyle: {
+        margin: '30px 0 0', fontFamily: display, fontSize: ar ? '40px' : '46px',
+        lineHeight: ar ? 1.2 : 1.02, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, color: '#f4ecdb', animation: 'shadyRise .5s ease both'
+      },
+      formTitle: login ? t.loginTitle : t.signupTitle,
+      formSub: login ? t.loginSub : t.signupSub,
+      submitLabel: login ? t.loginCta : t.signupCta,
+      isLogin: login, isSignup: !login,
+      loginTabStyle: this.tab(login, ar),
+      signupTabStyle: this.tab(!login, ar),
+      showLogin: () => this.setState({ mode: 'login', message: '' }),
+      showSignup: () => this.setState({ mode: 'signup', message: '' }),
+      fields, inputStyle,
+      remember: this.state.remember, agreed: this.state.agreed,
+      toggleRemember: () => this.setState(s => ({ remember: !s.remember })),
+      toggleAgree: () => this.setState(s => ({ agreed: !s.agreed, message: '' })),
+      submit: () => this.submitForm(t),
+      submitStyle: {
+        marginTop: '6px', padding: '17px 20px', borderRadius: '12px', border: 0, cursor: 'pointer',
+        background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+        fontFamily: display, fontSize: ar ? '19px' : '18px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '2px', textTransform: ar ? 'none' : 'uppercase',
+        boxShadow: '0 16px 40px rgba(223,169,45,.26)', transition: 'filter .2s ease'
+      },
+      message: this.state.message,
+      showDashboardLink: this.state.ok && !!this.state.message,
+      dashLinkStyle: {
+        display: 'block', padding: '15px 20px', borderRadius: '12px', textAlign: 'center',
+        border: '1px solid rgba(223,169,45,.45)', color: '#f2d17a',
+        fontFamily: display, fontSize: ar ? '17px' : '16px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+      },
+      messageStyle: {
+        padding: '14px 16px', borderRadius: '11px', fontSize: '15px', lineHeight: 1.5,
+        border: '1px solid ' + (this.state.ok ? 'rgba(87,224,138,.45)' : 'rgba(255,107,107,.45)'),
+        background: this.state.ok ? 'rgba(87,224,138,.1)' : 'rgba(255,107,107,.1)',
+        color: this.state.ok ? '#9be7b8' : '#ffb3b3'
+      },
+      stats: t.stats.map(s => ({ value: s[0], label: s[1] }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

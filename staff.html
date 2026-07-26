@@ -1,0 +1,1042 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shady — Staff</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./paddle-catalog.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #08070a; }
+  * { box-sizing: border-box; }
+  a { color: #f2d17a; text-decoration: none; }
+  a:hover { color: #fff3cf; }
+  input::placeholder, textarea::placeholder { color: #6f6857; }
+  @keyframes shadyGlow { 0%,100% { filter: drop-shadow(0 0 16px rgba(223,169,45,.4)); } 50% { filter: drop-shadow(0 0 34px rgba(255,214,102,.7)); } }
+  @keyframes shadyRise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shadySpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes shadyBlink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="{{ pageStyle }}">
+
+  <aside style="display: flex; flex-direction: column; gap: 26px; padding: 24px 20px; border-inline-end: 1px solid rgba(223,169,45,.18); background: linear-gradient(180deg, rgba(30,24,14,.85), rgba(9,8,11,.95))">
+    <a href="index.html" style="display: flex; align-items: center; gap: 11px">
+      <img src="assets/shady-logo.webp" alt="Shady" style="width: 40px; height: 40px; animation: shadyGlow 6s ease-in-out infinite" />
+      <div>
+        <div style="font-family: Anton, sans-serif; font-size: 19px; letter-spacing: 3px; color: #f2d17a">SHADY</div>
+        <div style="font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; color: #6f6857">{{ t.staffPanel }}</div>
+      </div>
+    </a>
+
+    <nav style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.select }}" style="{{ n.style }}">
+          <span>{{ n.label }}</span>
+          <span style="{{ n.countStyle }}">{{ n.count }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.8)">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #57e08a; box-shadow: 0 0 10px #57e08a; animation: shadyBlink 2.4s ease-in-out infinite"></span>
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #f4ecdb">{{ t.serverOnline }}</div>
+          <div style="font-size: 11px; color: #7d7565">{{ onlineLabel }}</div>
+        </div>
+      </div>
+      <button onClick="{{ toggleLang }}" style="padding: 11px 14px; border-radius: 11px; border: 1px solid rgba(223,169,45,.3); background: transparent; cursor: pointer; font-family: Barlow, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ langLabel }}</button>
+      <a href="index.html" style="padding: 11px 14px; border-radius: 11px; text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271" style-hover="color:#f2d17a">{{ t.viewSite }}</a>
+    </div>
+  </aside>
+
+  <main style="position: relative; overflow: hidden; display: flex; flex-direction: column">
+    <header style="display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 32px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(9,8,11,.75)">
+      <div>
+        <h1 style="{{ pageTitleStyle }}">{{ sectionTitle }}</h1>
+        <div style="margin-top: 4px; font-size: 13px; color: #8b8271">{{ sectionSub }}</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <button onClick="{{ openAi }}" style="{{ aiBtnStyle }}">{{ t.aiSupport }}</button>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 8px; border-radius: 12px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.8)">
+          <div style="width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(180deg,#ffe6a0,#a5741a); display: flex; align-items: center; justify-content: center; font-family: Anton, sans-serif; font-size: 14px; color: #1a1204">S</div>
+          <div>
+            <div style="font-size: 13px; font-weight: 700; color: #f4ecdb">Shady</div>
+            <div style="font-size: 11px; color: #7d7565">{{ t.owner }}</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div style="flex: 1; overflow-y: auto; padding: 28px 32px 40px">
+
+      <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 22px; animation: shadyRise .4s ease both">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="padding: 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: linear-gradient(180deg, rgba(26,22,15,.9), rgba(14,12,16,.9))">
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ k.label }}</div>
+                <div style="margin-top: 10px; font-family: Anton, sans-serif; font-size: 36px; line-height: 1; color: #f2d17a">{{ k.value }}</div>
+                <div style="{{ k.deltaStyle }}">{{ k.delta }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.4fr .6fr; gap: 16px">
+            <div style="padding: 24px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+                <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.revenue7 }}</div>
+                <div style="font-size: 13px; color: #8b8271">{{ revenueTotal }}</div>
+              </div>
+              <div style="display: flex; align-items: stretch; gap: 10px; height: 170px; margin-top: 22px">
+                <sc-for list="{{ chart }}" as="c" hint-placeholder-count="7">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 8px">
+                    <div style="{{ c.barStyle }}"></div>
+                    <div style="font-size: 11px; letter-spacing: 1px; color: #7d7565">{{ c.day }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="padding: 24px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+              <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.keyHealth }}</div>
+              <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px">
+                <sc-for list="{{ keyHealth }}" as="h" hint-placeholder-count="3">
+                  <div>
+                    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 13px; color: #cfc5b1">
+                      <span>{{ h.name }}</span>
+                      <span style="{{ h.valStyle }}">{{ h.count }}</span>
+                    </div>
+                    <div style="height: 7px; margin-top: 8px; border-radius: 999px; background: rgba(223,169,45,.14); overflow: hidden">
+                      <div style="{{ h.barStyle }}"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 24px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+            <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.activity }}</div>
+            <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 16px">
+              <sc-for list="{{ activity }}" as="a" hint-placeholder-count="5">
+                <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(223,169,45,.1)">
+                  <span style="{{ a.dotStyle }}"></span>
+                  <span style="flex: 1; font-size: 14px; color: #cfc5b1">{{ a.text }}</span>
+                  <span style="font-size: 12px; white-space: nowrap; color: #7d7565">{{ a.time }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProducts }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+          <div style="display: grid; grid-template-columns: 1.4fr .8fr .7fr .6fr auto; gap: 12px; align-items: end; padding: 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.22); background: rgba(15,13,17,.85)">
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.productName }}</span>
+              <input value="{{ newProduct.name }}" onChange="{{ newProduct.setName }}" placeholder="{{ t.productNamePh }}" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.type }}</span>
+              <select value="{{ newProduct.kind }}" onChange="{{ newProduct.setKind }}" style="{{ inputStyle }}">
+                <option value="sub">{{ t.typeSub }}</option>
+                <option value="key">{{ t.typeKey }}</option>
+                <option value="game">{{ t.typeGame }}</option>
+              </select>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.price }}</span>
+              <input value="{{ newProduct.price }}" onChange="{{ newProduct.setPrice }}" placeholder="10" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.stock }}</span>
+              <input value="{{ newProduct.stock }}" onChange="{{ newProduct.setStock }}" placeholder="∞" style="{{ inputStyle }}" />
+            </label>
+            <button onClick="{{ newProduct.add }}" style="{{ primaryBtnStyle }}">{{ t.addProduct }}</button>
+          </div>
+
+          <div style="border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85); overflow: hidden">
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 12px; padding: 14px 22px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+              <sc-for list="{{ productCols }}" as="c" hint-placeholder-count="6">
+                <div style="{{ thStyle }}">{{ c }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ products }}" as="p" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: center; padding: 16px 22px; border-bottom: 1px solid rgba(223,169,45,.09)">
+                <div>
+                  <div style="font-size: 15px; font-weight: 600; color: #f4ecdb">{{ p.name }}</div>
+                  <div style="font-size: 12px; color: #7d7565">{{ p.sku }}</div>
+                </div>
+                <div style="font-size: 13px; color: #a9a08d">{{ p.kindLabel }}</div>
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <span style="font-size: 12px; color: #7d7565">{{ currency }}</span>
+                  <input value="{{ p.price }}" onChange="{{ p.setPrice }}" style="{{ priceInputStyle }}" />
+                </div>
+                <div style="font-size: 14px; color: #cfc5b1">{{ p.stockLabel }}</div>
+                <button onClick="{{ p.toggleLive }}" style="{{ p.statusStyle }}">{{ p.statusLabel }}</button>
+                <button onClick="{{ p.remove }}" style="{{ dangerBtnStyle }}">{{ t.remove }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCodes }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+          <div style="display: grid; grid-template-columns: 1fr .7fr .7fr .7fr auto; gap: 12px; align-items: end; padding: 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.22); background: rgba(15,13,17,.85)">
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.code }}</span>
+              <input value="{{ newCode.code }}" onChange="{{ newCode.setCode }}" placeholder="SHADY10" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.percentOff }}</span>
+              <input value="{{ newCode.percent }}" onChange="{{ newCode.setPercent }}" placeholder="10" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.maxUses }}</span>
+              <input value="{{ newCode.max }}" onChange="{{ newCode.setMax }}" placeholder="100" style="{{ inputStyle }}" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 7px">
+              <span style="{{ fieldLabelStyle }}">{{ t.expires }}</span>
+              <input value="{{ newCode.expires }}" onChange="{{ newCode.setExpires }}" placeholder="2026-12-31" style="{{ inputStyle }}" />
+            </label>
+            <button onClick="{{ newCode.add }}" style="{{ primaryBtnStyle }}">{{ t.addCode }}</button>
+          </div>
+
+          <div style="border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85); overflow: hidden">
+            <div style="display: grid; grid-template-columns: 1.2fr .8fr 1fr 1fr 1fr auto; gap: 12px; padding: 14px 22px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+              <sc-for list="{{ codeCols }}" as="c" hint-placeholder-count="6">
+                <div style="{{ thStyle }}">{{ c }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ codes }}" as="c" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 1.2fr .8fr 1fr 1fr 1fr auto; gap: 12px; align-items: center; padding: 16px 22px; border-bottom: 1px solid rgba(223,169,45,.09)">
+                <div style="font-family: Anton, sans-serif; font-size: 18px; letter-spacing: 2px; color: #f2d17a">{{ c.code }}</div>
+                <div style="font-size: 15px; color: #f4ecdb">{{ c.percentLabel }}</div>
+                <div style="font-size: 14px; color: #cfc5b1">{{ c.usesLabel }}</div>
+                <div style="font-size: 14px; color: #a9a08d">{{ c.expires }}</div>
+                <button onClick="{{ c.toggle }}" style="{{ c.statusStyle }}">{{ c.statusLabel }}</button>
+                <button onClick="{{ c.remove }}" style="{{ dangerBtnStyle }}">{{ t.remove }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isKeys }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+          <div style="display: grid; grid-template-columns: 1fr .9fr; gap: 16px">
+            <div style="padding: 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.22); background: rgba(15,13,17,.85)">
+              <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.addKeys }}</div>
+              <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: #8b8271">{{ t.addKeysHint }}</p>
+              <label style="display: flex; flex-direction: column; gap: 7px; margin-top: 16px">
+                <span style="{{ fieldLabelStyle }}">{{ t.forProduct }}</span>
+                <select value="{{ newKeys.product }}" onChange="{{ newKeys.setProduct }}" style="{{ inputStyle }}">
+                  <sc-for list="{{ keyProducts }}" as="kp" hint-placeholder-count="3">
+                    <option value="{{ kp.value }}">{{ kp.label }}</option>
+                  </sc-for>
+                </select>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 7px; margin-top: 14px">
+                <span style="{{ fieldLabelStyle }}">{{ t.pasteKeys }}</span>
+                <textarea value="{{ newKeys.text }}" onChange="{{ newKeys.setText }}" rows="6" placeholder="{{ t.pasteKeysPh }}" style="{{ textareaStyle }}"></textarea>
+              </label>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 16px">
+                <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: #a9a08d; cursor: pointer">
+                  <input type="checkbox" checked="{{ autoDeliver }}" onChange="{{ toggleAutoDeliver }}" style="width: 18px; height: 18px; accent-color: #dfa92d" />
+                  <span>{{ t.autoDeliver }}</span>
+                </label>
+                <button onClick="{{ newKeys.add }}" style="{{ primaryBtnStyle }}">{{ t.importKeys }}</button>
+              </div>
+              <sc-if value="{{ keyMessage }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ keyMessageStyle }}">{{ keyMessage }}</div>
+              </sc-if>
+            </div>
+
+            <div style="padding: 22px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+              <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.deliveryRules }}</div>
+              <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 18px">
+                <sc-for list="{{ deliveryRules }}" as="r" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(223,169,45,.1)">
+                    <div>
+                      <div style="font-size: 15px; font-weight: 600; color: #f4ecdb">{{ r.title }}</div>
+                      <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #8b8271">{{ r.body }}</div>
+                    </div>
+                    <button onClick="{{ r.toggle }}" style="{{ r.style }}">{{ r.label }}</button>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top: 18px; padding: 16px; border-radius: 12px; border: 1px dashed rgba(223,169,45,.3); font-size: 13px; line-height: 1.6; color: #a9a08d">{{ t.deliveryNote }}</div>
+            </div>
+          </div>
+
+          <div style="border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85); overflow: hidden">
+            <div style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1fr auto; gap: 12px; padding: 14px 22px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+              <sc-for list="{{ keyCols }}" as="c" hint-placeholder-count="5">
+                <div style="{{ thStyle }}">{{ c }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ keys }}" as="k" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1fr auto; gap: 12px; align-items: center; padding: 14px 22px; border-bottom: 1px solid rgba(223,169,45,.09)">
+                <div style="font-family: Barlow, sans-serif; font-size: 14px; letter-spacing: 1px; color: #f4ecdb">{{ k.masked }}</div>
+                <div style="font-size: 13px; color: #a9a08d">{{ k.product }}</div>
+                <div style="{{ k.statusStyle }}">{{ k.statusLabel }}</div>
+                <div style="font-size: 13px; color: #7d7565">{{ k.assignedTo }}</div>
+                <button onClick="{{ k.remove }}" style="{{ dangerBtnStyle }}">{{ t.remove }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isTransactions }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px; animation: shadyRise .4s ease both">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap">
+            <div style="display: flex; flex-wrap: wrap; gap: 26px; border-bottom: 1px solid rgba(223,169,45,.18)">
+              <sc-for list="{{ txFilters }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.select }}" style="{{ f.style }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <div style="font-size: 14px; color: #8b8271">{{ txSummary }}</div>
+          </div>
+
+          <div style="border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85); overflow: hidden">
+            <div style="display: grid; grid-template-columns: 1fr 1.4fr 1.4fr .8fr .9fr 1fr auto; gap: 12px; padding: 14px 22px; border-bottom: 1px solid rgba(223,169,45,.18); background: rgba(28,23,15,.7)">
+              <sc-for list="{{ txCols }}" as="c" hint-placeholder-count="7">
+                <div style="{{ thStyle }}">{{ c }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ transactions }}" as="x" hint-placeholder-count="7">
+              <div style="display: grid; grid-template-columns: 1fr 1.4fr 1.4fr .8fr .9fr 1fr auto; gap: 12px; align-items: center; padding: 15px 22px; border-bottom: 1px solid rgba(223,169,45,.09)">
+                <div style="font-size: 13px; color: #7d7565">{{ x.id }}</div>
+                <div style="font-size: 14px; color: #f4ecdb">{{ x.customer }}</div>
+                <div style="font-size: 13px; color: #a9a08d">{{ x.item }}</div>
+                <div style="font-family: Anton, sans-serif; font-size: 18px; color: #f2d17a">{{ x.amount }}</div>
+                <div style="{{ x.statusStyle }}">{{ x.statusLabel }}</div>
+                <div style="font-size: 13px; color: #7d7565">{{ x.time }}</div>
+                <button onClick="{{ x.action }}" style="{{ x.actionStyle }}">{{ x.actionLabel }}</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; animation: shadyRise .4s ease both">
+          <div style="padding: 24px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+            <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.storeSettings }}</div>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 18px">
+              <sc-for list="{{ toggles }}" as="s" hint-placeholder-count="5">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(223,169,45,.1)">
+                  <div>
+                    <div style="font-size: 15px; font-weight: 600; color: #f4ecdb">{{ s.title }}</div>
+                    <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #8b8271">{{ s.body }}</div>
+                  </div>
+                  <button onClick="{{ s.toggle }}" style="{{ s.style }}">{{ s.label }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding: 24px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85)">
+            <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.staffAccess }}</div>
+            <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 18px">
+              <sc-for list="{{ staff }}" as="m" hint-placeholder-count="4">
+                <div style="display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgba(223,169,45,.1)">
+                  <div style="width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: rgba(223,169,45,.16); font-family: Anton, sans-serif; font-size: 14px; color: #f2d17a">{{ m.initial }}</div>
+                  <div style="flex: 1">
+                    <div style="font-size: 14px; font-weight: 600; color: #f4ecdb">{{ m.name }}</div>
+                    <div style="font-size: 12px; color: #7d7565">{{ m.role }}</div>
+                  </div>
+                  <div style="{{ m.tagStyle }}">{{ m.tag }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <sc-if value="{{ aiOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset-block: 0; inset-inline-end: 0; width: 420px; display: flex; flex-direction: column; border-inline-start: 1px solid rgba(223,169,45,.28); background: rgba(11,10,13,.97); backdrop-filter: blur(16px); box-shadow: -30px 0 80px rgba(0,0,0,.55); animation: shadyRise .3s ease both">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 20px; border-bottom: 1px solid rgba(223,169,45,.2)">
+          <div style="display: flex; align-items: center; gap: 11px">
+            <img src="assets/shady-logo.webp" alt="" style="width: 32px; height: 32px; animation: shadyGlow 5s ease-in-out infinite" />
+            <div>
+              <div style="font-family: Anton, sans-serif; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; color: #f4ecdb">{{ t.aiTitle }}</div>
+              <div style="font-size: 11px; color: #7d7565">{{ t.aiSub }}</div>
+            </div>
+          </div>
+          <button onClick="{{ closeAi }}" style="width: 32px; height: 32px; border-radius: 9px; border: 1px solid rgba(223,169,45,.28); background: transparent; cursor: pointer; font-size: 16px; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">×</button>
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 20px">
+          <sc-for list="{{ aiMessages }}" as="m" hint-placeholder-count="1">
+            <div style="{{ m.rowStyle }}">
+              <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ aiLoading }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #8b8271">
+              <span style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(223,169,45,.3); border-top-color: #dfa92d; animation: shadySpin .8s linear infinite"></span>
+              {{ t.aiThinking }}
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="padding: 14px 20px 18px; border-top: 1px solid rgba(223,169,45,.2)">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px">
+            <sc-for list="{{ aiSuggestions }}" as="s" hint-placeholder-count="3">
+              <button onClick="{{ s.ask }}" style="{{ suggestionStyle }}">{{ s.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 10px">
+            <input value="{{ aiInput }}" onChange="{{ setAiInput }}" onKeyDown="{{ aiKeyDown }}" placeholder="{{ t.aiPlaceholder }}" style="{{ inputStyle }}" />
+            <button onClick="{{ sendAi }}" style="{{ primaryBtnStyle }}">{{ t.send }}</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{},&quot;currency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;$&quot;,&quot;€&quot;,&quot;£&quot;],&quot;default&quot;:&quot;$&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const STAFF_COPY = {
+  en: {
+    staffPanel: 'Staff panel', owner: 'Owner', viewSite: 'View site', serverOnline: 'Unlimited online',
+    nav: ['Overview', 'Products', 'Discount codes', 'Keys', 'Transactions', 'Settings'],
+    titles: ['Overview', 'Products', 'Discount codes', 'Key inventory', 'Transactions', 'Settings'],
+    subs: [
+      'Live numbers for the Unlimited GTA V server and the TikTok game shelf.',
+      'Add, remove, re-price and hide anything you sell.',
+      'Create codes, cap their uses and pull them when a promo ends.',
+      'Paste keys once — buyers get one automatically the moment payment clears.',
+      'Every payment, its key delivery, and one-click refunds.',
+      'Delivery, payouts and who on the team can touch what.'
+    ],
+    aiSupport: 'AI support', aiTitle: 'Shady AI', aiSub: 'Staff assistant', aiThinking: 'Thinking…',
+    aiPlaceholder: 'Ask about orders, keys, pricing…', send: 'Send',
+    aiGreeting: 'I can help with pricing, refunds, key delivery problems and writing customer replies. What do you need?',
+    aiSuggestions: ['A buyer did not get his key', 'Draft a refund reply', 'Suggest a promo code'],
+    aiError: 'Could not reach the assistant. Try again in a moment.',
+    kpis: [['Revenue today', 'Active subs', 'Keys left', 'Open tickets']],
+    kpiDeltas: ['+18% vs yesterday', '+34 this week', '12 low stock', '2 waiting on you'],
+    revenue7: 'Revenue · last 7 days', keyHealth: 'Key stock', activity: 'Latest activity',
+    days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    productName: 'Product name', productNamePh: 'Dragon rank · monthly',
+    type: 'Type', typeSub: 'GTA subscription', typeKey: 'Key product', typeGame: 'TikTok game',
+    price: 'Price', stock: 'Stock', addProduct: 'Add product', remove: 'Remove',
+    productCols: ['Product', 'Type', 'Price', 'Stock', 'Status', ''],
+    live: 'Live', hidden: 'Hidden', unlimitedStock: 'Unlimited',
+    code: 'Code', percentOff: '% off', maxUses: 'Max uses', expires: 'Expires', addCode: 'Add code',
+    codeCols: ['Code', 'Discount', 'Used', 'Expires', 'Status', ''],
+    active: 'Active', paused: 'Paused',
+    addKeys: 'Add keys', addKeysHint: 'One key per line. Duplicates are skipped automatically.',
+    forProduct: 'For product', pasteKeys: 'Paste keys', pasteKeysPh: 'UNL-XXXX-XXXX-XXXX',
+    autoDeliver: 'Auto-deliver on payment', importKeys: 'Import keys',
+    deliveryRules: 'Delivery rules', deliveryNote: 'When a payment clears, the next unused key for that product is reserved, emailed and posted to the buyer\'s Discord DM. If stock hits zero the product hides itself instead of overselling.',
+    rules: [
+      ['Instant delivery', 'Send the key the second the payment webhook confirms.', ],
+      ['Low-stock alert', 'Ping staff Discord when a product drops under 10 keys.'],
+      ['Fraud hold', 'Hold delivery for review on first-time crypto payments.']
+    ],
+    keyCols: ['Key', 'Product', 'Status', 'Assigned to', ''],
+    keyStatus: { available: 'Available', delivered: 'Delivered', reserved: 'Reserved' },
+    keyImported: 'Imported {n} keys.', keyEmpty: 'Paste at least one key first.',
+    txFilters: ['All', 'Paid', 'Pending', 'Refunded'],
+    txCols: ['ID', 'Customer', 'Item', 'Amount', 'Status', 'When', ''],
+    txStatus: { paid: 'Paid', pending: 'Pending', refunded: 'Refunded' },
+    refund: 'Refund', resend: 'Resend key', approve: 'Approve',
+    txSummary: '{n} transactions · {sum} collected',
+    storeSettings: 'Store settings', staffAccess: 'Staff access',
+    toggles: [
+      ['Store open', 'Turn off to stop all checkouts instantly.'],
+      ['Accept crypto', 'USDT, BTC and ETH via the payment gateway.'],
+      ['Discount codes', 'Allow codes at checkout.'],
+      ['Auto whitelist', 'Push new subscribers to the FiveM whitelist.'],
+      ['Arabic storefront', 'Show the Arabic version to new visitors from Arabic locales.']
+    ],
+    on: 'On', off: 'Off',
+    staff: [
+      ['Shady', 'Owner · full access', 'All'],
+      ['Rami', 'Admin · products & keys', 'Products'],
+      ['Layla', 'Support · transactions', 'Support'],
+      ['Kais', 'Moderator · read only', 'Read']
+    ]
+  },
+  ar: {
+    staffPanel: 'لوحة الإدارة', owner: 'المالك', viewSite: 'عرض الموقع', serverOnline: 'أنليميتد يعمل',
+    nav: ['نظرة عامة', 'المنتجات', 'أكواد الخصم', 'المفاتيح', 'المعاملات', 'الإعدادات'],
+    titles: ['نظرة عامة', 'المنتجات', 'أكواد الخصم', 'مخزون المفاتيح', 'المعاملات', 'الإعدادات'],
+    subs: [
+      'أرقام مباشرة لسيرفر أنليميتد GTA V ورف ألعاب تيك توك.',
+      'أضف أو احذف أو غيّر الأسعار وأخفِ أي منتج.',
+      'أنشئ أكواداً وحدد عدد استخداماتها وأوقفها عند انتهاء العرض.',
+      'الصق المفاتيح مرة واحدة — والمشتري يستلم مفتاحه تلقائياً بعد الدفع.',
+      'كل عملية دفع وتسليم مفتاحها والاسترجاع بضغطة واحدة.',
+      'التسليم والمدفوعات وصلاحيات فريق العمل.'
+    ],
+    aiSupport: 'مساعد الذكاء', aiTitle: 'شادي AI', aiSub: 'مساعد الفريق', aiThinking: 'جاري التفكير…',
+    aiPlaceholder: 'اسأل عن الطلبات أو المفاتيح أو الأسعار…', send: 'إرسال',
+    aiGreeting: 'أساعدك في الأسعار والاسترجاع ومشاكل تسليم المفاتيح وصياغة ردود العملاء. ما الذي تحتاجه؟',
+    aiSuggestions: ['مشتري لم يستلم مفتاحه', 'اكتب رد استرجاع', 'اقترح كود خصم'],
+    aiError: 'تعذر الوصول إلى المساعد. حاول بعد لحظات.',
+    kpis: [['إيراد اليوم', 'الاشتراكات النشطة', 'المفاتيح المتاحة', 'التذاكر المفتوحة']],
+    kpiDeltas: ['+18% عن الأمس', '+34 هذا الأسبوع', '12 منتجاً بمخزون منخفض', 'اثنتان تنتظرانك'],
+    revenue7: 'الإيرادات · آخر 7 أيام', keyHealth: 'مخزون المفاتيح', activity: 'آخر النشاطات',
+    days: ['إث', 'ثل', 'أر', 'خم', 'جم', 'سب', 'أح'],
+    productName: 'اسم المنتج', productNamePh: 'رتبة دراغون · شهري',
+    type: 'النوع', typeSub: 'اشتراك GTA', typeKey: 'منتج بمفتاح', typeGame: 'لعبة تيك توك',
+    price: 'السعر', stock: 'المخزون', addProduct: 'أضف منتجاً', remove: 'حذف',
+    productCols: ['المنتج', 'النوع', 'السعر', 'المخزون', 'الحالة', ''],
+    live: 'معروض', hidden: 'مخفي', unlimitedStock: 'غير محدود',
+    code: 'الكود', percentOff: 'نسبة الخصم', maxUses: 'حد الاستخدام', expires: 'ينتهي', addCode: 'أضف كوداً',
+    codeCols: ['الكود', 'الخصم', 'الاستخدام', 'ينتهي', 'الحالة', ''],
+    active: 'مفعّل', paused: 'موقوف',
+    addKeys: 'إضافة مفاتيح', addKeysHint: 'مفتاح واحد في كل سطر. المتكرر يُتجاهل تلقائياً.',
+    forProduct: 'للمنتج', pasteKeys: 'الصق المفاتيح', pasteKeysPh: 'UNL-XXXX-XXXX-XXXX',
+    autoDeliver: 'تسليم تلقائي بعد الدفع', importKeys: 'استيراد المفاتيح',
+    deliveryRules: 'قواعد التسليم', deliveryNote: 'عند تأكيد الدفع يُحجز أول مفتاح غير مستخدم لذلك المنتج ويُرسل بالبريد وبرسالة خاصة في الديسكورد. وإذا نفد المخزون يُخفى المنتج تلقائياً بدلاً من البيع الزائد.',
+    rules: [
+      ['تسليم فوري', 'أرسل المفتاح لحظة تأكيد الدفع.'],
+      ['تنبيه المخزون', 'أشعر الفريق في الديسكورد عند نزول المنتج تحت 10 مفاتيح.'],
+      ['تعليق للمراجعة', 'علّق التسليم للمراجعة في أول دفعة بالعملات الرقمية.']
+    ],
+    keyCols: ['المفتاح', 'المنتج', 'الحالة', 'مُسند إلى', ''],
+    keyStatus: { available: 'متاح', delivered: 'تم التسليم', reserved: 'محجوز' },
+    keyImported: 'تم استيراد {n} مفتاحاً.', keyEmpty: 'الصق مفتاحاً واحداً على الأقل.',
+    txFilters: ['الكل', 'مدفوع', 'معلّق', 'مُسترجع'],
+    txCols: ['الرقم', 'العميل', 'المنتج', 'المبلغ', 'الحالة', 'الوقت', ''],
+    txStatus: { paid: 'مدفوع', pending: 'معلّق', refunded: 'مُسترجع' },
+    refund: 'استرجاع', resend: 'إعادة إرسال', approve: 'اعتماد',
+    txSummary: '{n} معاملة · {sum} محصّلة',
+    storeSettings: 'إعدادات المتجر', staffAccess: 'صلاحيات الفريق',
+    toggles: [
+      ['المتجر مفتوح', 'أوقفه لإيقاف جميع عمليات الشراء فوراً.'],
+      ['قبول العملات الرقمية', 'USDT وBTC وETH عبر بوابة الدفع.'],
+      ['أكواد الخصم', 'السماح باستخدام الأكواد عند الدفع.'],
+      ['قائمة تلقائية', 'إضافة المشتركين الجدد إلى قائمة FiveM تلقائياً.'],
+      ['واجهة عربية', 'إظهار النسخة العربية للزوار من البلدان العربية.']
+    ],
+    on: 'مفعّل', off: 'موقوف',
+    staff: [
+      ['شادي', 'المالك · صلاحية كاملة', 'الكل'],
+      ['رامي', 'مشرف · المنتجات والمفاتيح', 'منتجات'],
+      ['ليلى', 'دعم · المعاملات', 'دعم'],
+      ['قيس', 'مراقب · قراءة فقط', 'قراءة']
+    ]
+  }
+};
+
+class Component extends DCLogic {
+  state = {
+    lang: 'en', section: 0,
+    products: [],
+    codes: [
+      { id: 'c1', code: 'SHADY10', percent: '10', used: 0, max: '100', expires: '2026-12-31', active: true },
+      { id: 'c3', code: 'DRAGON5', percent: '5', used: 0, max: '∞', expires: '—', active: true }
+    ],
+    keys: [
+      { id: 'k1', value: 'UNL-4F8A-91QT-KX02', product: 'GTA-DRAGON', status: 'delivered', to: 'nawaf_91' },
+      { id: 'k2', value: 'UNL-7C2B-88MN-PL41', product: 'GTA-KING', status: 'delivered', to: 'zayd.rp' },
+      { id: 'k3', value: 'UNL-1D9E-45RT-QW77', product: 'GTA-KING', status: 'reserved', to: 'order #4192' },
+      { id: 'k6', value: 'UNL-9K1L-77CV-AS23', product: 'GTA-ACCESS', status: 'available', to: '—' }
+    ],
+    transactions: [
+      { id: '#4192', customer: 'zayd.rp', item: 'Kingpin rank · monthly', amount: 15, status: 'pending', time: '2 min ago' },
+      { id: '#4191', customer: 'nawaf_91', item: 'Dragon rank · monthly', amount: 25, status: 'paid', time: '11 min ago' },
+      { id: '#4189', customer: 'mo7amed', item: 'Access rank · monthly', amount: 10, status: 'paid', time: '1 h ago' }
+    ],
+    npName: '', npKind: 'sub', npPrice: '', npStock: '',
+    ncCode: '', ncPercent: '', ncMax: '', ncExpires: '',
+    nkProduct: 'GTA-ACCESS', nkText: '', keyMessage: '', keyOk: true,
+    autoDeliver: true,
+    rules: [true, true, false],
+    toggles: [true, true, true, true, false],
+    txFilter: 0,
+    aiOpen: false, aiInput: '', aiLoading: false, aiMessages: null
+  };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('shady-lang');
+      if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
+    } catch (e) {}
+    const cat = window.ShadyCatalog ? window.ShadyCatalog.load() : { products: [], discounts: [] };
+    const products = (cat.products && cat.products.length)
+      ? cat.products
+      : (window.ShadyCatalog ? window.ShadyCatalog.defaultProducts() : []);
+    const codes = (cat.discounts && cat.discounts.length)
+      ? cat.discounts.map((d, i) => ({
+          id: d.id || ('c' + i),
+          code: d.code,
+          percent: String(d.percent),
+          used: d.used || 0,
+          max: d.max || '∞',
+          expires: d.expires || '—',
+          active: d.active !== false
+        }))
+      : this.state.codes;
+    this.setState({ products: products, codes: codes }, () => this.persistCatalog());
+  }
+
+  persistCatalog() {
+    if (!window.ShadyCatalog) return;
+    window.ShadyCatalog.save({
+      products: this.state.products,
+      discounts: this.state.codes.map(c => ({
+        id: c.id,
+        code: c.code,
+        percent: Number(c.percent) || 0,
+        used: c.used || 0,
+        max: c.max,
+        expires: c.expires,
+        active: c.active !== false
+      }))
+    });
+  }
+
+  setLang(lang) {
+    this.setState({ lang });
+    try { localStorage.setItem('shady-lang', lang); } catch (e) {}
+  }
+
+  tab(active, ar) {
+    return {
+      padding: '10px 2px', border: 0, borderBottom: '2px solid ' + (active ? '#dfa92d' : 'transparent'),
+      background: 'transparent', cursor: 'pointer', marginBottom: '-1px',
+      fontFamily: ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif',
+      fontSize: '14px', fontWeight: 700, letterSpacing: ar ? '0' : '1.4px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap',
+      color: active ? '#f2d17a' : '#8b8271'
+    };
+  }
+
+  chip(on, ar, onLabel, offLabel) {
+    return {
+      padding: '7px 14px', borderRadius: '8px', cursor: 'pointer',
+      border: '1px solid ' + (on ? 'rgba(87,224,138,.45)' : 'rgba(223,169,45,.25)'),
+      background: on ? 'rgba(87,224,138,.12)' : 'rgba(223,169,45,.06)',
+      fontFamily: ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif',
+      fontSize: '12px', fontWeight: 700, letterSpacing: ar ? '0' : '1.2px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap',
+      color: on ? '#9be7b8' : '#a9a08d'
+    };
+  }
+
+  addProduct() {
+    const s = this.state;
+    if (!s.npName || !s.npPrice) return;
+    const priceNum = Number(s.npPrice);
+    const tierByPrice = { 10: 'access', 15: 'kingpin', 25: 'dragon' };
+    const tier = s.npKind === 'sub' ? (tierByPrice[priceNum] || null) : null;
+    const paddle = tier && window.SHADY_PADDLE && window.SHADY_PADDLE.prices[tier]
+      ? window.SHADY_PADDLE.prices[tier]
+      : null;
+    const env = window.ShadyCatalog ? window.ShadyCatalog.env() : 'live';
+    const sku = paddle
+      ? paddle.sku
+      : s.npName.toUpperCase().replace(/[^A-Z0-9]+/g, '-').slice(0, 12);
+    this.setState({
+      products: s.products.concat([{
+        id: tier || ('p' + Date.now()),
+        tier: tier || undefined,
+        name: s.npName,
+        sku,
+        kind: s.npKind,
+        price: s.npPrice,
+        stock: s.npStock ? parseInt(s.npStock, 10) : null,
+        live: true,
+        paddlePriceId: paddle ? paddle[env] : null,
+        paddleProductId: (window.SHADY_PADDLE && window.SHADY_PADDLE.product)
+          ? window.SHADY_PADDLE.product[env]
+          : null
+      }]),
+      npName: '', npPrice: '', npStock: ''
+    }, () => this.persistCatalog());
+  }
+
+  addCode() {
+    const s = this.state;
+    if (!s.ncCode || !s.ncPercent) return;
+    this.setState({
+      codes: s.codes.concat([{
+        id: 'c' + Date.now(), code: s.ncCode.toUpperCase(), percent: s.ncPercent,
+        used: 0, max: s.ncMax || '∞', expires: s.ncExpires || '—', active: true
+      }]),
+      ncCode: '', ncPercent: '', ncMax: '', ncExpires: ''
+    }, () => this.persistCatalog());
+  }
+
+  importKeys(t) {
+    const s = this.state;
+    const lines = (s.nkText || '').split('\n').map(x => x.trim()).filter(Boolean);
+    const existing = s.keys.map(k => k.value);
+    const fresh = lines.filter((v, i) => existing.indexOf(v) === -1 && lines.indexOf(v) === i);
+    if (!fresh.length) return this.setState({ keyMessage: t.keyEmpty, keyOk: false });
+    this.setState({
+      keys: s.keys.concat(fresh.map((v, i) => ({
+        id: 'k' + Date.now() + i, value: v, product: s.nkProduct, status: 'available', to: '—'
+      }))),
+      nkText: '', keyMessage: t.keyImported.replace('{n}', fresh.length), keyOk: true
+    });
+  }
+
+  txAction(i, t) {
+    const tx = this.state.transactions.slice();
+    const row = tx[i];
+    if (row.status === 'pending') {
+      row.status = 'paid';
+      const keys = this.state.keys.slice();
+      const idx = keys.findIndex(k => k.status === 'available');
+      if (idx > -1) { keys[idx] = Object.assign({}, keys[idx], { status: 'delivered', to: row.customer }); }
+      return this.setState({ transactions: tx, keys });
+    }
+    if (row.status === 'paid') { row.status = 'refunded'; return this.setState({ transactions: tx }); }
+    this.setState({ transactions: tx });
+  }
+
+  async askAi(question, t) {
+    if (!question) return;
+    const msgs = (this.state.aiMessages || [{ role: 'assistant', text: t.aiGreeting }])
+      .concat([{ role: 'user', text: question }]);
+    this.setState({ aiMessages: msgs, aiInput: '', aiLoading: true });
+    const s = this.state;
+    const context = 'Store: Shady. Products: ' + s.products.map(p => p.name + ' $' + p.price).join('; ')
+      + '. Keys available: ' + s.keys.filter(k => k.status === 'available').length
+      + '. Pending orders: ' + s.transactions.filter(x => x.status === 'pending').length + '.';
+    try {
+      if (typeof window.claude === 'undefined' || !window.claude.complete) {
+        throw new Error('offline');
+      }
+      const reply = await window.claude.complete({
+        system: 'You are the internal staff assistant for Shady, a store selling GTA V roleplay server subscriptions ($10 Access, $15 Kingpin, $25 Dragon) and one-time TikTok interactive game setups. Answer staff operationally and briefly (max 120 words), in the language of the question. Store state: ' + context,
+        messages: [{ role: 'user', content: question }]
+      });
+      this.setState({ aiMessages: msgs.concat([{ role: 'assistant', text: reply }]), aiLoading: false });
+    } catch (e) {
+      this.setState({ aiMessages: msgs.concat([{ role: 'assistant', text: t.aiError }]), aiLoading: false });
+    }
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const t = STAFF_COPY[ar ? 'ar' : 'en'];
+    const body = ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif';
+    const display = ar ? 'Cairo, sans-serif' : 'Anton, sans-serif';
+    const currency = this.props.currency ?? '$';
+    const sec = this.state.section;
+
+    const inputStyle = {
+      width: '100%', padding: '12px 14px', borderRadius: '10px',
+      border: '1px solid rgba(223,169,45,.24)', background: 'rgba(11,10,13,.9)',
+      color: '#f4ecdb', fontFamily: body, fontSize: '14px', outline: 'none',
+      textAlign: ar ? 'right' : 'left'
+    };
+    const primaryBtnStyle = {
+      padding: '13px 22px', borderRadius: '10px', border: 0, cursor: 'pointer',
+      background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+      fontFamily: body, fontSize: '13px', fontWeight: 700,
+      letterSpacing: ar ? '0' : '1.4px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+    };
+    const dangerBtnStyle = {
+      padding: '9px 14px', borderRadius: '9px', cursor: 'pointer',
+      border: '1px solid rgba(255,107,107,.35)', background: 'rgba(255,107,107,.08)',
+      fontFamily: body, fontSize: '12px', fontWeight: 700,
+      letterSpacing: ar ? '0' : '1.2px', textTransform: ar ? 'none' : 'uppercase',
+      whiteSpace: 'nowrap', color: '#ffb3b3'
+    };
+    const thStyle = {
+      fontSize: '11px', fontWeight: 700, letterSpacing: ar ? '0' : '1.8px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap', color: '#8b8271'
+    };
+    const fieldLabelStyle = {
+      fontSize: '11px', fontWeight: 700, letterSpacing: ar ? '0' : '1.8px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap', color: '#8b8271'
+    };
+    const statusPill = (tone) => ({
+      padding: '7px 13px', borderRadius: '8px', border: '1px solid ' + tone.border,
+      background: tone.bg, cursor: 'pointer', fontFamily: body, fontSize: '12px', fontWeight: 700,
+      letterSpacing: ar ? '0' : '1.2px', textTransform: ar ? 'none' : 'uppercase',
+      whiteSpace: 'nowrap', color: tone.color, textAlign: 'center'
+    });
+    const green = { border: 'rgba(87,224,138,.45)', bg: 'rgba(87,224,138,.12)', color: '#9be7b8' };
+    const gold = { border: 'rgba(223,169,45,.4)', bg: 'rgba(223,169,45,.1)', color: '#f2d17a' };
+    const grey = { border: 'rgba(223,169,45,.2)', bg: 'rgba(223,169,45,.04)', color: '#8b8271' };
+    const red = { border: 'rgba(255,107,107,.35)', bg: 'rgba(255,107,107,.08)', color: '#ffb3b3' };
+
+    const counts = [null, this.state.products.length, this.state.codes.length, this.state.keys.filter(k => k.status === 'available').length, this.state.transactions.length, null];
+
+    const navItems = t.nav.map((label, i) => ({
+      label, count: counts[i] === null ? '' : String(counts[i]),
+      select: () => this.setState({ section: i }),
+      style: {
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',
+        padding: '12px 14px', borderRadius: '11px', border: 0, cursor: 'pointer', width: '100%',
+        background: sec === i ? 'rgba(223,169,45,.14)' : 'transparent',
+        fontFamily: body, fontSize: '14px', fontWeight: sec === i ? 700 : 500,
+        textAlign: ar ? 'right' : 'left', whiteSpace: 'nowrap',
+        color: sec === i ? '#f2d17a' : '#a9a08d',
+        transition: 'background .2s ease, color .2s ease'
+      },
+      countStyle: {
+        fontSize: '11px', fontWeight: 700, color: sec === i ? '#dfa92d' : '#6f6857'
+      }
+    }));
+
+    const kpiLabels = t.kpis[0];
+    const availableKeys = this.state.keys.filter(k => k.status === 'available').length;
+    const kpiValues = [currency + '486', '318', String(availableKeys), '2'];
+    const kpis = kpiLabels.map((label, i) => ({
+      label, value: kpiValues[i], delta: t.kpiDeltas[i],
+      deltaStyle: {
+        marginTop: '8px', fontSize: '12px',
+        color: i === 2 ? '#ffb3b3' : (i === 3 ? '#f2d17a' : '#9be7b8')
+      }
+    }));
+
+    const heights = [46, 62, 55, 78, 92, 70, 84];
+    const chart = t.days.map((day, i) => ({
+      day,
+      barStyle: {
+        width: '100%', height: heights[i] + '%', minHeight: '10px', flex: 'none',
+        borderRadius: '8px 8px 3px 3px',
+        background: i === 4 ? 'linear-gradient(180deg,#ffe6a0,#dfa92d)' : 'linear-gradient(180deg,rgba(223,169,45,.55),rgba(223,169,45,.14))',
+        transition: 'height .4s ease'
+      }
+    }));
+
+    const stockRows = this.state.products.filter(p => p.stock !== null);
+    const keyHealth = stockRows.length ? stockRows.map(p => ({
+      name: p.name, count: String(p.stock),
+      valStyle: { color: p.stock < 10 ? '#ffb3b3' : '#f2d17a', fontWeight: 700 },
+      barStyle: {
+        height: '100%', width: Math.min(100, p.stock * 2) + '%', borderRadius: '999px',
+        background: p.stock < 10 ? 'linear-gradient(90deg,#7a2222,#ff6b6b)' : 'linear-gradient(90deg,#a5741a,#ffe6a0)'
+      }
+    })) : [];
+
+    const activity = [
+      { text: ar ? 'تم تسليم مفتاح لـ nawaf_91 تلقائياً' : 'Key auto-delivered to nawaf_91', time: '11 min', tone: green },
+      { text: ar ? 'دفعة معلّقة بانتظار الاعتماد · #4192' : 'Pending payment awaiting approval · #4192', time: '2 min', tone: gold },
+      { text: ar ? 'كود RAMADAN25 وصل حد الاستخدام' : 'Code RAMADAN25 hit its usage cap', time: '1 h', tone: gold },
+      { text: ar ? 'مخزون Like Tower منخفض (8 مفاتيح)' : 'Like Tower stock low (8 keys)', time: '2 h', tone: red },
+      { text: ar ? 'تم استرجاع مبلغ khalid.v' : 'Refund issued to khalid.v', time: '3 h', tone: grey }
+    ].map(a => ({
+      text: a.text, time: a.time,
+      dotStyle: { width: '8px', height: '8px', borderRadius: '50%', background: a.tone.color, flex: 'none' }
+    }));
+
+    const kindLabel = (k) => k === 'sub' ? t.typeSub : (k === 'game' ? t.typeGame : t.typeKey);
+
+    const products = this.state.products.map((p, i) => ({
+      name: p.name, sku: p.sku, kindLabel: kindLabel(p.kind), price: p.price,
+      stockLabel: p.stock === null ? t.unlimitedStock : String(p.stock),
+      statusLabel: p.live ? t.live : t.hidden,
+      statusStyle: statusPill(p.live ? green : grey),
+      setPrice: (e) => {
+        const arr = this.state.products.slice();
+        arr[i] = Object.assign({}, arr[i], { price: e.target.value });
+        this.setState({ products: arr }, () => this.persistCatalog());
+      },
+      toggleLive: () => {
+        const arr = this.state.products.slice();
+        arr[i] = Object.assign({}, arr[i], { live: !arr[i].live });
+        this.setState({ products: arr }, () => this.persistCatalog());
+      },
+      remove: () => this.setState({ products: this.state.products.filter((_, j) => j !== i) }, () => this.persistCatalog())
+    }));
+
+    const codes = this.state.codes.map((c, i) => ({
+      code: c.code, percentLabel: c.percent + '%',
+      usesLabel: c.used + ' / ' + c.max, expires: c.expires,
+      statusLabel: c.active ? t.active : t.paused,
+      statusStyle: statusPill(c.active ? green : grey),
+      toggle: () => {
+        const arr = this.state.codes.slice();
+        arr[i] = Object.assign({}, arr[i], { active: !arr[i].active });
+        this.setState({ codes: arr }, () => this.persistCatalog());
+      },
+      remove: () => this.setState({ codes: this.state.codes.filter((_, j) => j !== i) }, () => this.persistCatalog())
+    }));
+
+    const keyProducts = this.state.products.map(p => ({ value: p.sku, label: p.name }));
+
+    const keys = this.state.keys.map((k, i) => ({
+      masked: k.status === 'available' ? k.value : k.value.slice(0, 8) + '••••-••••',
+      product: k.product, assignedTo: k.to,
+      statusLabel: t.keyStatus[k.status],
+      statusStyle: Object.assign({ display: 'inline-block' }, statusPill(
+        k.status === 'available' ? green : (k.status === 'reserved' ? gold : grey)
+      ), { cursor: 'default' }),
+      remove: () => this.setState({ keys: this.state.keys.filter((_, j) => j !== i) })
+    }));
+
+    const filterKeys = ['all', 'paid', 'pending', 'refunded'];
+    const txFilters = t.txFilters.map((label, i) => ({
+      label, style: this.tab(this.state.txFilter === i, ar),
+      select: () => this.setState({ txFilter: i })
+    }));
+
+    const shownTx = this.state.transactions
+      .map((x, i) => Object.assign({}, x, { i }))
+      .filter(x => this.state.txFilter === 0 || x.status === filterKeys[this.state.txFilter]);
+
+    const transactions = shownTx.map(x => ({
+      id: x.id, customer: x.customer, item: x.item, amount: currency + x.amount, time: x.time,
+      statusLabel: t.txStatus[x.status],
+      statusStyle: Object.assign({ display: 'inline-block' }, statusPill(
+        x.status === 'paid' ? green : (x.status === 'pending' ? gold : red)
+      ), { cursor: 'default' }),
+      actionLabel: x.status === 'pending' ? t.approve : (x.status === 'paid' ? t.refund : t.resend),
+      actionStyle: x.status === 'paid' ? dangerBtnStyle : Object.assign({}, dangerBtnStyle, {
+        border: '1px solid rgba(223,169,45,.35)', background: 'rgba(223,169,45,.08)', color: '#f2d17a'
+      }),
+      action: () => this.txAction(x.i, t)
+    }));
+
+    const paidSum = this.state.transactions.filter(x => x.status === 'paid')
+      .reduce((a, b) => a + b.amount, 0);
+
+    const rules = t.rules.map((r, i) => ({
+      title: r[0], body: r[1],
+      label: this.state.rules[i] ? t.on : t.off,
+      style: this.chip(this.state.rules[i], ar),
+      toggle: () => {
+        const arr = this.state.rules.slice();
+        arr[i] = !arr[i];
+        this.setState({ rules: arr });
+      }
+    }));
+
+    const toggles = t.toggles.map((s, i) => ({
+      title: s[0], body: s[1],
+      label: this.state.toggles[i] ? t.on : t.off,
+      style: this.chip(this.state.toggles[i], ar),
+      toggle: () => {
+        const arr = this.state.toggles.slice();
+        arr[i] = !arr[i];
+        this.setState({ toggles: arr });
+      }
+    }));
+
+    const aiMessages = (this.state.aiMessages || [{ role: 'assistant', text: t.aiGreeting }]).map(m => ({
+      text: m.text,
+      rowStyle: { display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' },
+      bubbleStyle: {
+        maxWidth: '86%', padding: '13px 15px', borderRadius: '13px',
+        fontFamily: body, fontSize: '14px', lineHeight: 1.6, whiteSpace: 'pre-wrap',
+        background: m.role === 'user' ? 'linear-gradient(180deg,#ffe6a0,#dfa92d)' : 'rgba(24,21,16,.95)',
+        border: m.role === 'user' ? '0' : '1px solid rgba(223,169,45,.22)',
+        color: m.role === 'user' ? '#1a1204' : '#e4dbc8'
+      }
+    }));
+
+    return {
+      t, dir: ar ? 'rtl' : 'ltr', currency,
+      langLabel: ar ? 'EN' : 'العربية',
+      toggleLang: () => this.setLang(ar ? 'en' : 'ar'),
+      pageStyle: {
+        display: 'grid', gridTemplateColumns: '250px 1fr', minHeight: '100vh',
+        background: '#08070a', color: '#efe7d6', fontFamily: body,
+        textAlign: ar ? 'right' : 'left'
+      },
+      pageTitleStyle: {
+        margin: 0, fontFamily: display, fontSize: ar ? '28px' : '32px',
+        lineHeight: 1.1, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, letterSpacing: ar ? '0' : '1px', color: '#f4ecdb'
+      },
+      sectionTitle: t.titles[sec], sectionSub: t.subs[sec],
+      navItems, onlineLabel: '186 / 220',
+      isOverview: sec === 0, isProducts: sec === 1, isCodes: sec === 2,
+      isKeys: sec === 3, isTransactions: sec === 4, isSettings: sec === 5,
+      inputStyle, primaryBtnStyle, dangerBtnStyle, thStyle, fieldLabelStyle,
+      priceInputStyle: Object.assign({}, inputStyle, { width: '76px', padding: '9px 10px', fontSize: '14px' }),
+      textareaStyle: Object.assign({}, inputStyle, { resize: 'vertical', lineHeight: 1.6, fontSize: '13px', letterSpacing: '.5px' }),
+      kpis, chart, keyHealth, activity,
+      revenueTotal: currency + '2,914',
+      productCols: t.productCols, codeCols: t.codeCols, keyCols: t.keyCols, txCols: t.txCols,
+      products, codes, keys, keyProducts, transactions, txFilters, rules, toggles,
+      txSummary: t.txSummary.replace('{n}', shownTx.length).replace('{sum}', currency + paidSum),
+      newProduct: {
+        name: this.state.npName, kind: this.state.npKind,
+        price: this.state.npPrice, stock: this.state.npStock,
+        setName: (e) => this.setState({ npName: e.target.value }),
+        setKind: (e) => this.setState({ npKind: e.target.value }),
+        setPrice: (e) => this.setState({ npPrice: e.target.value }),
+        setStock: (e) => this.setState({ npStock: e.target.value }),
+        add: () => this.addProduct()
+      },
+      newCode: {
+        code: this.state.ncCode, percent: this.state.ncPercent,
+        max: this.state.ncMax, expires: this.state.ncExpires,
+        setCode: (e) => this.setState({ ncCode: e.target.value }),
+        setPercent: (e) => this.setState({ ncPercent: e.target.value }),
+        setMax: (e) => this.setState({ ncMax: e.target.value }),
+        setExpires: (e) => this.setState({ ncExpires: e.target.value }),
+        add: () => this.addCode()
+      },
+      newKeys: {
+        product: this.state.nkProduct, text: this.state.nkText,
+        setProduct: (e) => this.setState({ nkProduct: e.target.value }),
+        setText: (e) => this.setState({ nkText: e.target.value }),
+        add: () => this.importKeys(t)
+      },
+      autoDeliver: this.state.autoDeliver,
+      toggleAutoDeliver: () => this.setState(s => ({ autoDeliver: !s.autoDeliver })),
+      deliveryRules: rules,
+      keyMessage: this.state.keyMessage,
+      keyMessageStyle: {
+        marginTop: '14px', padding: '12px 14px', borderRadius: '10px', fontSize: '14px',
+        border: '1px solid ' + (this.state.keyOk ? 'rgba(87,224,138,.4)' : 'rgba(255,107,107,.4)'),
+        background: this.state.keyOk ? 'rgba(87,224,138,.1)' : 'rgba(255,107,107,.1)',
+        color: this.state.keyOk ? '#9be7b8' : '#ffb3b3'
+      },
+      staff: t.staff.map(m => ({
+        initial: m[0].charAt(0), name: m[0], role: m[1], tag: m[2],
+        tagStyle: {
+          padding: '6px 11px', borderRadius: '7px', border: '1px solid rgba(223,169,45,.25)',
+          fontSize: '11px', fontWeight: 700, letterSpacing: ar ? '0' : '1.2px',
+          textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap', color: '#f2d17a'
+        }
+      })),
+      aiOpen: this.state.aiOpen, aiLoading: this.state.aiLoading,
+      aiMessages, aiInput: this.state.aiInput,
+      openAi: () => this.setState({ aiOpen: true }),
+      closeAi: () => this.setState({ aiOpen: false }),
+      setAiInput: (e) => this.setState({ aiInput: e.target.value }),
+      aiKeyDown: (e) => { if (e.key === 'Enter') this.askAi(this.state.aiInput.trim(), t); },
+      sendAi: () => this.askAi(this.state.aiInput.trim(), t),
+      aiSuggestions: t.aiSuggestions.map(label => ({
+        label, ask: () => this.askAi(label, t)
+      })),
+      suggestionStyle: {
+        padding: '8px 12px', borderRadius: '9px', cursor: 'pointer',
+        border: '1px solid rgba(223,169,45,.24)', background: 'rgba(20,17,12,.8)',
+        fontFamily: body, fontSize: '12px', whiteSpace: 'nowrap', color: '#c9bfa9'
+      },
+      aiBtnStyle: {
+        display: 'flex', alignItems: 'center', gap: '8px',
+        padding: '12px 20px', borderRadius: '11px', border: 0, cursor: 'pointer',
+        background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+        fontFamily: body, fontSize: '13px', fontWeight: 700,
+        letterSpacing: ar ? '0' : '1.4px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', boxShadow: '0 12px 30px rgba(223,169,45,.28)'
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

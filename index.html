@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shady — GTA V Unlimited subscriptions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./paddle-catalog.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #08070a; }
+  * { box-sizing: border-box; }
+  a { color: #f2d17a; text-decoration: none; }
+  a:hover { color: #fff3cf; }
+  @keyframes shadyGlow { 0%,100% { filter: drop-shadow(0 0 26px rgba(223,169,45,.45)); } 50% { filter: drop-shadow(0 0 60px rgba(255,214,102,.8)); } }
+  @keyframes shadyFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes shadySheen { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  @keyframes shadySpinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes shadyPulseRing { 0% { transform: scale(.85); opacity: .55; } 70% { transform: scale(1.25); opacity: 0; } 100% { transform: scale(1.25); opacity: 0; } }
+  @keyframes shadyEmber { 0% { opacity: 0; transform: translateY(0) scale(.6); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(-320px) scale(1.1); } }
+  @keyframes shadyTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="{{ pageStyle }}">
+
+  <header style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 40px; background: rgba(8,7,10,.82); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(223,169,45,.22)">
+    <a href="#top" style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/shady-logo.webp" alt="Shady" style="width: 44px; height: 44px" />
+      <span style="font-family: Anton, sans-serif; font-size: 24px; letter-spacing: 3px; background: linear-gradient(180deg,#fff4d0,#e0aa32 60%,#8a5f13); -webkit-background-clip: text; background-clip: text; color: transparent">SHADY</span>
+    </a>
+    <nav style="display: flex; align-items: center; flex-wrap: wrap; gap: 30px; font-size: 14px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #b8ab93">
+      <a href="#unlimited" style="color: inherit" style-hover="color:#f2d17a">{{ t.navUnlimited }}</a>
+      <a href="#plans" style="color: inherit" style-hover="color:#f2d17a">{{ t.navPlans }}</a>
+      <a href="tiktok-games.html" style="color: inherit" style-hover="color:#f2d17a">{{ t.navGames }}</a>
+      <a href="#faq" style="color: inherit" style-hover="color:#f2d17a">{{ t.navFaq }}</a>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <button onClick="{{ toggleLang }}" style="padding: 10px 16px; border-radius: 10px; border: 1px solid rgba(223,169,45,.35); background: transparent; cursor: pointer; font-family: Barlow, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ langLabel }}</button>
+      <a href="account.html" style="padding: 11px 22px; border-radius: 10px; border: 1px solid rgba(223,169,45,.45); font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ t.login }}</a>
+      <a href="account.html?mode=signup" style="padding: 11px 24px; border-radius: 10px; background: linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a); color: #1a1204; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; box-shadow: 0 10px 26px rgba(223,169,45,.3)" style-hover="filter:brightness(1.08)">{{ t.getAccess }}</a>
+    </div>
+  </header>
+
+  <section id="top" data-screen-label="Hero" style="position: relative; display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 48px; padding: 92px 40px 110px; max-width: 1400px; margin: 0 auto">
+    <div style="position: absolute; inset: -10% -20% auto -20%; height: 720px; background: radial-gradient(ellipse at 50% 40%, rgba(223,169,45,.22), rgba(8,7,10,0) 65%); pointer-events: none"></div>
+    <div style="position: relative">
+      <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; color: #f2d17a">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #57e08a; box-shadow: 0 0 10px #57e08a"></span>
+        {{ t.heroKicker }}
+      </div>
+      <h1 style="{{ h1Style }}">
+        <span style="display: block; color: #f4ecdb">{{ t.heroLine1 }}</span>
+        <span style="display: block; background: linear-gradient(100deg,#fff6d8,#e6b23a 40%,#8a5f13 70%,#ffe9b0); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shadySheen 6s linear infinite">{{ t.heroLine2 }}</span>
+        <span style="display: block; color: #f4ecdb">{{ t.heroLine3 }}</span>
+      </h1>
+      <p style="margin: 24px 0 0; max-width: 520px; font-size: 19px; line-height: 1.7; color: #a9a08d; text-wrap: pretty">{{ t.heroBody }}</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px">
+        <a href="#plans" style="{{ ctaPrimaryStyle }}">{{ t.heroCta1 }}</a>
+        <a href="tiktok-games.html" style="{{ ctaGhostStyle }}">{{ t.heroCta2 }}</a>
+      </div>
+      <div style="display: flex; gap: 44px; margin-top: 52px; padding-top: 30px; border-top: 1px solid rgba(223,169,45,.16)">
+        <sc-for list="{{ heroStats }}" as="stat" hint-placeholder-count="3">
+          <div>
+            <div style="font-family: Anton, sans-serif; font-size: 34px; color: #f2d17a">{{ stat.value }}</div>
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8b8271">{{ stat.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 560px">
+      <div style="position: absolute; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(223,169,45,.32), rgba(8,7,10,0) 68%)"></div>
+      <div style="position: absolute; width: 400px; height: 400px; border-radius: 50%; border: 1px solid rgba(223,169,45,.35); animation: shadyPulseRing 4s ease-out infinite"></div>
+      <div style="position: absolute; width: 400px; height: 400px; border-radius: 50%; border: 1px solid rgba(223,169,45,.25); animation: shadyPulseRing 4s ease-out 2s infinite"></div>
+      <div style="position: absolute; width: 520px; height: 520px; border-radius: 50%; border: 1px dashed rgba(223,169,45,.22); animation: shadySpinSlow 40s linear infinite"></div>
+      <div style="position: absolute; bottom: 40px; left: 22%; width: 4px; height: 4px; border-radius: 50%; background: #ffd76a; box-shadow: 0 0 10px #ffd76a; animation: shadyEmber 6s ease-out infinite"></div>
+      <div style="position: absolute; bottom: 40px; left: 48%; width: 3px; height: 3px; border-radius: 50%; background: #ffe9a8; box-shadow: 0 0 10px #ffd76a; animation: shadyEmber 7.5s ease-out 1.4s infinite"></div>
+      <div style="position: absolute; bottom: 40px; left: 70%; width: 5px; height: 5px; border-radius: 50%; background: #dfa92d; box-shadow: 0 0 12px #dfa92d; animation: shadyEmber 8s ease-out 2.8s infinite"></div>
+      <img src="assets/shady-logo.webp" alt="Shady dragon crest" style="position: relative; width: 100%; max-width: 520px; animation: shadyFloat 7s ease-in-out infinite, shadyGlow 5s ease-in-out infinite" />
+    </div>
+  </section>
+
+  <div style="overflow: hidden; padding: 14px 0; border-top: 1px solid rgba(223,169,45,.18); border-bottom: 1px solid rgba(223,169,45,.18); background: linear-gradient(90deg, rgba(41,32,14,.7), rgba(12,11,14,.7))">
+    <div style="display: flex; width: max-content; animation: shadyTicker 26s linear infinite">
+      <sc-for list="{{ tickerItems }}" as="ti" hint-placeholder-count="12">
+        <span style="display: flex; align-items: center; gap: 22px; padding: 0 22px; font-family: Anton, sans-serif; font-size: 16px; letter-spacing: 3px; text-transform: uppercase; color: rgba(242,209,122,.75); white-space: nowrap">
+          {{ ti }}
+          <span style="color: rgba(223,169,45,.5)">◆</span>
+        </span>
+      </sc-for>
+    </div>
+  </div>
+
+  <section id="unlimited" data-screen-label="Unlimited" style="padding: 70px 40px 96px; max-width: 1400px; margin: 0 auto">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px">
+      <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
+        <div style="padding: 28px 26px 30px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: linear-gradient(180deg, rgba(28,23,16,.9), rgba(15,13,17,.9)); transition: transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease" style-hover="transform:translateY(-8px);border-color:rgba(223,169,45,.45)">
+          <div style="font-family: Anton, sans-serif; font-size: 15px; letter-spacing: 3px; color: #dfa92d">{{ f.tag }}</div>
+          <div style="margin-top: 14px; font-family: Anton, sans-serif; font-size: 25px; letter-spacing: .5px; color: #f4ecdb; text-transform: uppercase">{{ f.title }}</div>
+          <p style="margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: #9d9482">{{ f.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="plans" data-screen-label="Plans" style="padding: 40px 40px 110px; max-width: 1400px; margin: 0 auto">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap">
+      <div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #dfa92d">{{ t.plansKicker }}</div>
+        <h2 style="{{ h2Style }}">{{ t.plansTitle }}</h2>
+        <p style="margin: 14px 0 0; max-width: 620px; font-size: 16px; line-height: 1.6; color: #9d9482">{{ t.plansNote }}</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 22px; padding-bottom: 6px">
+        <button onClick="{{ setMonthly }}" style="{{ monthlyBtnStyle }}">{{ t.monthly }}</button>
+        <button onClick="{{ setYearly }}" style="{{ yearlyBtnStyle }}">{{ t.yearly }}</button>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px">
+      <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+        <div style="{{ p.cardStyle }}">
+          <div style="{{ p.ribbonStyle }}">{{ p.ribbon }}</div>
+          <div style="font-family: Anton, sans-serif; font-size: 30px; letter-spacing: 2px; text-transform: uppercase; color: #f4ecdb">{{ p.name }}</div>
+          <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: #9d9482">{{ p.pitch }}</p>
+          <div style="display: flex; align-items: baseline; gap: 8px; margin: 26px 0 4px">
+            <span style="font-family: Anton, sans-serif; font-size: 58px; line-height: 1; color: #f2d17a">{{ p.price }}</span>
+            <span style="font-size: 15px; color: #8b8271">{{ p.per }}</span>
+          </div>
+          <div style="font-size: 13px; color: #8b8271">{{ p.note }}</div>
+          <div style="height: 1px; margin: 24px 0; background: rgba(223,169,45,.18)"></div>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <sc-for list="{{ p.perks }}" as="perk" hint-placeholder-count="5">
+              <div style="display: flex; gap: 11px; align-items: flex-start; font-size: 15px; line-height: 1.5; color: #cfc5b1">
+                <span style="flex: none; margin-top: 2px; color: #dfa92d">◆</span>
+                <span>{{ perk }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <a href="{{ p.checkoutHref }}" style="{{ p.ctaStyle }}">{{ p.cta }}</a>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top: 22px; font-size: 14px; color: #7d7565">{{ t.plansFine }}</div>
+  </section>
+
+  <section id="store" data-screen-label="TikTok games teaser" style="padding: 40px 40px 110px; max-width: 1400px; margin: 0 auto">
+    <div style="display: grid; grid-template-columns: 1fr .9fr; gap: 44px; align-items: center; padding: 48px; border-radius: 22px; border: 1px solid rgba(223,169,45,.24); background: linear-gradient(120deg, rgba(30,25,16,.95), rgba(13,12,15,.95))">
+      <div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #dfa92d">{{ t.tiktokKicker }}</div>
+        <h2 style="{{ h2Style }}">{{ t.tiktokTitle }}</h2>
+        <p style="margin: 18px 0 0; max-width: 520px; font-size: 17px; line-height: 1.7; color: #a9a08d; text-wrap: pretty">{{ t.tiktokBody }}</p>
+        <a href="tiktok-games.html" style="{{ ctaPrimaryStyle }}">{{ t.tiktokCta }}</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px">
+        <sc-for list="{{ tiktokTeasers }}" as="tt" hint-placeholder-count="4">
+          <a href="tiktok-games.html" style="padding: 20px; border-radius: 14px; border: 1px solid rgba(223,169,45,.18); background: rgba(9,8,11,.7); transition: transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease" style-hover="transform:translateY(-6px);border-color:rgba(223,169,45,.55)">
+            <div style="font-family: Anton, sans-serif; font-size: 19px; text-transform: uppercase; color: #f4ecdb">{{ tt.title }}</div>
+            <div style="margin-top: 6px; font-size: 13px; color: #8b8271">{{ tt.meta }}</div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Whitelist" style="padding: 0 40px 110px; max-width: 1400px; margin: 0 auto">
+    <div style="position: relative; overflow: hidden; display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 40px; padding: 56px; border-radius: 22px; border: 1px solid rgba(223,169,45,.3); background: linear-gradient(115deg, rgba(41,32,14,.95), rgba(14,12,16,.95))">
+      <div>
+        <h2 style="margin: 0; font-family: Anton, sans-serif; font-size: 52px; line-height: 1.06; text-transform: uppercase; color: #f4ecdb">{{ t.whitelistTitle }}</h2>
+        <p style="margin: 18px 0 0; max-width: 520px; font-size: 17px; line-height: 1.7; color: #a9a08d">{{ t.whitelistBody }}</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px">
+          <a href="checkout.html?plan=kingpin" style="{{ ctaPrimaryStyle }}">{{ t.whitelistCta1 }}</a>
+          <a href="account.html" style="{{ ctaGhostStyle }}">{{ t.whitelistCta2 }}</a>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center">
+        <img src="assets/shady-logo.webp" alt="Shady crest" style="width: 240px; animation: shadyFloat 8s ease-in-out infinite" />
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" data-screen-label="FAQ" style="padding: 0 40px 120px; max-width: 1000px; margin: 0 auto">
+    <h2 style="margin: 0 0 32px; font-family: Anton, sans-serif; font-size: 52px; text-transform: uppercase; color: #f4ecdb; text-align: center">{{ t.faqTitle }}</h2>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+        <div style="border-radius: 14px; border: 1px solid rgba(223,169,45,.18); background: rgba(18,16,20,.9); overflow: hidden">
+          <button onClick="{{ q.toggle }}" style="{{ faqBtnStyle }}">
+            <span>{{ q.question }}</span>
+            <span style="{{ q.iconStyle }}">+</span>
+          </button>
+          <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+            <p style="margin: 0; padding: 0 26px 26px; font-size: 16px; line-height: 1.7; color: #a9a08d; text-wrap: pretty">{{ q.answer }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="padding: 44px 40px; border-top: 1px solid rgba(223,169,45,.18); background: #0a090c">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; max-width: 1400px; margin: 0 auto">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <img src="assets/shady-logo.webp" alt="Shady" style="width: 38px; height: 38px" />
+        <div>
+          <div style="font-family: Anton, sans-serif; font-size: 19px; letter-spacing: 3px; color: #f2d17a">SHADY</div>
+          <div style="font-size: 12px; color: #6f6857">{{ t.footerTag }}</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 26px; font-size: 13px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271">
+        <a href="#faq" style="color: inherit" style-hover="color:#f2d17a">{{ t.footerRefunds }}</a>
+        <a href="#faq" style="color: inherit" style-hover="color:#f2d17a">{{ t.footerTerms }}</a>
+        <a href="account.html" style="color: inherit" style-hover="color:#f2d17a">{{ t.footerSupport }}</a>
+        <a href="tiktok-games.html" style="color: inherit" style-hover="color:#f2d17a">{{ t.navGames }}</a>
+        <a href="dashboard.html" style="color: inherit" style-hover="color:#f2d17a">{{ t.footerDashboard }}</a>
+      </div>
+      <div style="font-size: 12px; color: #5d5749">{{ t.footerLegal }}</div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{},&quot;currency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;$&quot;,&quot;€&quot;,&quot;£&quot;],&quot;default&quot;:&quot;$&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#dfa92d&quot;,&quot;options&quot;:[&quot;#dfa92d&quot;,&quot;#e0483a&quot;,&quot;#48c4e0&quot;,&quot;#8f6ce0&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+const SHADY_COPY = {
+  en: {
+    navUnlimited: 'Unlimited', navPlans: 'Plans', navGames: 'TikTok games', navFaq: 'FAQ',
+    login: 'Log in', getAccess: 'Get access',
+    heroKicker: 'Unlimited GTA V server · live now',
+    heroLine1: 'GTA V roleplay', heroLine2: 'subscriptions', heroLine3: 'worth the crown',
+    heroBody: 'Shady runs Unlimited — a modded GTA V roleplay server with a real economy, custom cars and zero downtime. Subscriptions are for the GTA server only.',
+    heroCta1: 'Join Unlimited', heroCta2: 'TikTok games',
+    stats: [['12,400+', 'Players served'], ['99.9%', 'Server uptime'], ['<60s', 'Access granted']],
+    ticker: ['Unlimited RP · live now', 'Daily rewards', 'Custom cars', 'Exclusive jobs', 'Battlepass season 1', 'TikTok LIVE games', '220 slots', 'No pay-to-win'],
+    features: [
+      ['01', 'Real economy', 'Jobs, rent, taxes and a player-run market that actually moves. Money means something here.'],
+      ['02', '400+ cars', 'Curated modded vehicle catalogue, tuned for balance. New drops reviewed every two weeks.'],
+      ['03', 'Active admins', 'Human moderation around the clock. Reports answered in minutes, not days.'],
+      ['04', 'No pay-to-win', 'Subscriptions buy convenience and cosmetics — never bullets, territory or immunity.']
+    ],
+    plansKicker: 'GTA V only · Unlimited roleplay', plansTitle: 'Pick your rank',
+    plansNote: 'Every subscription here is for the Unlimited GTA V server. The TikTok games are sold separately as one-time setups.',
+    monthly: 'Monthly', yearly: 'Yearly · save 25%',
+    plansFine: 'Cancel anytime from your Shady dashboard. Card, PayPal or crypto — access is granted in under a minute.',
+    planNames: ['Access', 'Kingpin', 'Dragon'],
+    planPitches: ['The key to the city. Nothing more, nothing less.', 'Access plus a monthly payout and daily login rewards.', 'Battlepass, custom car and the jobs nobody else can take.'],
+    planPerks: [
+      ['Whitelisted access to the GTA V server', 'Full roleplay economy, jobs and gangs', '2 character slots', 'Discord member role'],
+      ['Everything in Access', '$1,000,000 in-game per month', 'Daily login rewards', 'Priority queue — never wait', 'Custom plates + 5 garage slots', 'Kingpin Discord role'],
+      ['Everything in Kingpin', 'Full Battlepass access', '$2,000,000 in-game per month', 'Your own custom car, built to spec', 'Exclusive jobs and contracts', 'Unlimited garage slots', 'Direct line to the admin team']
+    ],
+    ribbonPopular: 'Most popular', ribbonCrown: 'Crown tier', ribbonSave: 'Save 25%',
+    perMonth: '/ month', perYear: '/ year',
+    noteMonth: 'Billed monthly · cancel anytime', noteYear: 'Billed once · 3 months free',
+    choose: 'Choose', ctaFeatured: 'Become Kingpin',
+    tiktokKicker: 'TikTok LIVE · sold separately', tiktokTitle: 'Interactive games shelf',
+    tiktokBody: 'Games your viewers play with gifts, likes and comments — dragon battles, gift-fed racers, live tournaments. One-time setup, no subscription.',
+    tiktokCta: 'Open the games shelf',
+    tiktokTeasers: [['Dragon Clash', 'Gifts fuel the fight'], ['Gift Racers', 'Viewers push the car'], ['Like Tower', 'Likes stack the build'], ['Comment Roulette', 'Chat picks the fate']],
+    whitelistTitle: 'Whitelist opens every Friday, 8pm',
+    whitelistBody: 'Slots on Unlimited are capped at 220 concurrent to keep the city stable. Subscribers skip the queue permanently.',
+    whitelistCta1: 'Claim a slot', whitelistCta2: 'Join the Discord',
+    faqTitle: 'Questions',
+    faqs: [
+      ['What exactly is Unlimited?', 'A heavily modded GTA V roleplay server with a custom economy, jobs, gangs and businesses. Around 220 players in the city at once, 24/7 uptime, wiped only when we announce a new season.'],
+      ['Do I need to own GTA V?', 'Yes — a legit PC copy of Grand Theft Auto V plus FiveM installed. Everything else is handled on our side.'],
+      ['What do the $15 and $25 tiers add?', '$15 (Kingpin) pays out $1,000,000 in-game every month and unlocks daily login rewards. $25 (Dragon) doubles that to $2,000,000, includes full Battlepass access, a custom car built to your spec and exclusive jobs.'],
+      ['Are the TikTok games included?', 'No. Subscriptions cover the GTA V server only. The TikTok interactive games are a separate one-time purchase on their own page.'],
+      ['What is your refund policy?', 'Full refund within 48 hours if you have not spent your in-game payout or claimed a daily reward.']
+    ],
+    footerTag: 'GTA V subscriptions · TikTok games',
+    footerRefunds: 'Refunds', footerTerms: 'Terms', footerSupport: 'Support',
+    footerDashboard: 'My account',
+    footerLegal: '© 2026 Shady. Not affiliated with Rockstar Games.'
+  },
+  ar: {
+    navUnlimited: 'أنليميتد', navPlans: 'الاشتراكات', navGames: 'ألعاب تيك توك', navFaq: 'الأسئلة',
+    login: 'تسجيل الدخول', getAccess: 'احصل على الوصول',
+    heroKicker: 'سيرفر أنليميتد GTA V · متصل الآن',
+    heroLine1: 'رول بلاي GTA V', heroLine2: 'اشتراكات', heroLine3: 'تستحق التاج',
+    heroBody: 'شادي يدير سيرفر أنليميتد — سيرفر رول بلاي معدّل لـ GTA V باقتصاد حقيقي وسيارات مخصصة وبدون انقطاع. الاشتراكات مخصصة لسيرفر GTA فقط.',
+    heroCta1: 'انضم إلى أنليميتد', heroCta2: 'ألعاب تيك توك',
+    stats: [['+12,400', 'لاعب انضم'], ['99.9%', 'استقرار السيرفر'], ['<60 ثانية', 'تفعيل الوصول']],
+    ticker: ['أنليميتد · متصل الآن', 'مكافآت يومية', 'سيارات مخصصة', 'وظائف حصرية', 'باتل باس الموسم الأول', 'ألعاب تيك توك لايف', '220 مقعداً', 'بدون دفع للفوز'],
+    features: [
+      ['01', 'اقتصاد حقيقي', 'وظائف وإيجارات وضرائب وسوق يديره اللاعبون فعلياً. المال هنا له قيمة.'],
+      ['02', '+400 سيارة', 'كتالوج سيارات معدّلة مختار بعناية ومتوازن. إضافات جديدة كل أسبوعين.'],
+      ['03', 'إدارة نشطة', 'إشراف بشري على مدار الساعة. الشكاوى تُحل في دقائق لا أيام.'],
+      ['04', 'بدون دفع للفوز', 'الاشتراك يمنحك راحة ومظهراً مميزاً — لا سلاحاً ولا أرضاً ولا حصانة.']
+    ],
+    plansKicker: 'لـ GTA V فقط · رول بلاي أنليميتد', plansTitle: 'اختر رتبتك',
+    plansNote: 'كل الاشتراكات هنا مخصصة لسيرفر أنليميتد GTA V. أما ألعاب تيك توك فتُشترى منفصلة بدفعة واحدة.',
+    monthly: 'شهري', yearly: 'سنوي · وفّر 25%',
+    plansFine: 'يمكنك الإلغاء في أي وقت من لوحة التحكم. بطاقة أو باي بال أو عملات رقمية — التفعيل في أقل من دقيقة.',
+    planNames: ['أكسس', 'كينغ بين', 'دراغون'],
+    planPitches: ['مفتاح المدينة. لا أكثر ولا أقل.', 'وصول كامل مع راتب شهري ومكافآت دخول يومية.', 'باتل باس وسيارة مخصصة ووظائف لا يصلها غيرك.'],
+    planPerks: [
+      ['وصول مُفعّل إلى سيرفر GTA V', 'اقتصاد رول بلاي كامل ووظائف وعصابات', 'شخصيتان', 'رتبة عضو في الديسكورد'],
+      ['كل ما في أكسس', '1,000,000$ داخل اللعبة شهرياً', 'مكافآت دخول يومية', 'أولوية في الطابور — بدون انتظار', 'لوحات مخصصة و5 مواقف سيارات', 'رتبة كينغ بين في الديسكورد'],
+      ['كل ما في كينغ بين', 'وصول كامل للباتل باس', '2,000,000$ داخل اللعبة شهرياً', 'سيارة مخصصة لك حسب طلبك', 'وظائف وعقود حصرية', 'مواقف سيارات غير محدودة', 'تواصل مباشر مع فريق الإدارة']
+    ],
+    ribbonPopular: 'الأكثر اختياراً', ribbonCrown: 'رتبة التاج', ribbonSave: 'وفّر 25%',
+    perMonth: '/ شهرياً', perYear: '/ سنوياً',
+    noteMonth: 'فاتورة شهرية · إلغاء في أي وقت', noteYear: 'دفعة واحدة · 3 أشهر مجاناً',
+    choose: 'اختر', ctaFeatured: 'كن كينغ بين',
+    tiktokKicker: 'تيك توك لايف · تُشترى منفصلة', tiktokTitle: 'رف الألعاب التفاعلية',
+    tiktokBody: 'ألعاب يلعبها متابعوك بالهدايا واللايكات والتعليقات — معارك تنانين وسيارات تتحرك بالهدايا وبطولات مباشرة. إعداد لمرة واحدة بدون اشتراك.',
+    tiktokCta: 'افتح رف الألعاب',
+    tiktokTeasers: [['معركة التنانين', 'الهدايا تشعل القتال'], ['سباق الهدايا', 'المتابعون يدفعون السيارة'], ['برج اللايكات', 'اللايكات تبني البرج'], ['روليت التعليقات', 'الشات يحدد المصير']],
+    whitelistTitle: 'القائمة تُفتح كل جمعة، 8 مساءً',
+    whitelistBody: 'المقاعد في أنليميتد محدودة بـ 220 لاعباً في وقت واحد للحفاظ على استقرار المدينة. المشتركون يتجاوزون الطابور دائماً.',
+    whitelistCta1: 'احجز مقعدك', whitelistCta2: 'انضم للديسكورد',
+    faqTitle: 'الأسئلة الشائعة',
+    faqs: [
+      ['ما هو سيرفر أنليميتد؟', 'سيرفر رول بلاي معدّل بالكامل لـ GTA V باقتصاد خاص ووظائف وعصابات وأعمال تجارية. حوالي 220 لاعباً في المدينة في وقت واحد، ويعمل 24/7، ولا يُصفّر إلا مع إعلان موسم جديد.'],
+      ['هل أحتاج نسخة من GTA V؟', 'نعم — نسخة أصلية للكمبيوتر من Grand Theft Auto V مع تثبيت FiveM. الباقي نتولاه نحن.'],
+      ['ما الذي تضيفه باقتا 15$ و25$؟', 'باقة 15$ (كينغ بين) تمنحك 1,000,000$ داخل اللعبة شهرياً ومكافآت دخول يومية. باقة 25$ (دراغون) تضاعفها إلى 2,000,000$ وتضيف الباتل باس كاملاً وسيارة مخصصة حسب طلبك ووظائف حصرية.'],
+      ['هل ألعاب تيك توك مشمولة؟', 'لا. الاشتراكات تغطي سيرفر GTA V فقط. ألعاب تيك توك التفاعلية تُشترى منفصلة بدفعة واحدة من صفحتها الخاصة.'],
+      ['ما هي سياسة الاسترجاع؟', 'استرجاع كامل خلال 48 ساعة إن لم تصرف راتبك داخل اللعبة ولم تستلم مكافأة يومية.']
+    ],
+    footerTag: 'اشتراكات GTA V · ألعاب تيك توك',
+    footerRefunds: 'الاسترجاع', footerTerms: 'الشروط', footerSupport: 'الدعم',
+    footerDashboard: 'حسابي',
+    footerLegal: '© 2026 شادي. لا علاقة لنا بشركة Rockstar Games.'
+  }
+};
+
+class Component extends DCLogic {
+  state = { cycle: 'monthly', openFaq: 0, lang: 'en' };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('shady-lang');
+      if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
+    } catch (e) {}
+  }
+
+  setLang(lang) {
+    this.setState({ lang });
+    try { localStorage.setItem('shady-lang', lang); } catch (e) {}
+  }
+
+  tabStyle(active, ar) {
+    return {
+      padding: '10px 2px', border: 0, borderBottom: '2px solid ' + (active ? '#dfa92d' : 'transparent'),
+      background: 'transparent', cursor: 'pointer',
+      fontFamily: ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif',
+      fontSize: '14px', fontWeight: 700, letterSpacing: ar ? '0' : '1.4px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap',
+      color: active ? '#f2d17a' : '#8b8271'
+    };
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const t = SHADY_COPY[ar ? 'ar' : 'en'];
+    const yearly = this.state.cycle === 'yearly';
+    const accent = this.props.accent ?? '#dfa92d';
+    const currency = this.props.currency ?? '$';
+    const body = ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif';
+    const display = ar ? 'Cairo, sans-serif' : 'Anton, sans-serif';
+
+    const money = (m) => currency + (yearly ? Math.round(m * 9) : m);
+    const bases = [10, 15, 25];
+    const planIds = ['access', 'kingpin', 'dragon'];
+
+    const plans = bases.map((base, i) => {
+      const featured = i === 1;
+      const ribbon = i === 1 ? t.ribbonPopular : (i === 2 ? t.ribbonCrown : (yearly ? t.ribbonSave : ''));
+      return {
+        name: t.planNames[i], pitch: t.planPitches[i], perks: t.planPerks[i], ribbon,
+        price: money(base), per: yearly ? t.perYear : t.perMonth,
+        note: yearly ? t.noteYear : t.noteMonth,
+        cta: featured ? t.ctaFeatured : t.choose + ' ' + t.planNames[i],
+        checkoutHref: 'checkout.html?plan=' + planIds[i] + '&cycle=' + (yearly ? 'yearly' : 'monthly'),
+        cardStyle: {
+          position: 'relative', display: 'flex', flexDirection: 'column',
+          padding: '34px 30px', borderRadius: '18px', fontFamily: body,
+          border: '1px solid ' + (featured ? 'rgba(223,169,45,.6)' : 'rgba(223,169,45,.18)'),
+          background: featured
+            ? 'linear-gradient(180deg, rgba(52,40,15,.95), rgba(16,14,18,.95))'
+            : 'linear-gradient(180deg, rgba(24,21,17,.9), rgba(14,12,16,.9))',
+          boxShadow: featured ? '0 26px 70px rgba(223,169,45,.18)' : 'none',
+          transform: featured ? 'translateY(-10px)' : 'none'
+        },
+        ribbonStyle: {
+          display: ribbon ? 'block' : 'none', marginBottom: '14px',
+          fontFamily: body, fontSize: '12px', fontWeight: 700,
+          letterSpacing: ar ? '0' : '2.4px', textTransform: ar ? 'none' : 'uppercase',
+          whiteSpace: 'nowrap', color: accent
+        },
+        ctaStyle: {
+          display: 'block', marginTop: '30px', paddingTop: '15px', paddingBottom: '15px',
+          borderRadius: '11px', textAlign: 'center', fontFamily: display,
+          fontSize: ar ? '16px' : '15px', fontWeight: ar ? 700 : 400,
+          letterSpacing: ar ? '0' : '2px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap',
+          background: featured ? 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)' : 'transparent',
+          border: featured ? '0' : '1px solid rgba(223,169,45,.4)',
+          color: featured ? '#1a1204' : '#f2d17a'
+        }
+      };
+    });
+
+    const ctaBase = {
+      display: 'inline-block', padding: '17px 34px', borderRadius: '12px',
+      fontFamily: display, fontSize: ar ? '18px' : '17px', fontWeight: ar ? 700 : 400,
+      letterSpacing: ar ? '0' : '2px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+    };
+
+    return {
+      t, dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en',
+      langLabel: ar ? 'EN' : 'العربية',
+      toggleLang: () => this.setLang(ar ? 'en' : 'ar'),
+      pageStyle: {
+        background: '#08070a', color: '#efe7d6', fontFamily: body,
+        minHeight: '100vh', overflowX: 'hidden',
+        textAlign: ar ? 'right' : 'left'
+      },
+      h1Style: {
+        margin: '22px 0 0', fontFamily: display,
+        fontSize: ar ? '76px' : '92px', lineHeight: ar ? 1.12 : .92,
+        letterSpacing: ar ? '0' : '1px', textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, textWrap: 'balance'
+      },
+      h2Style: {
+        margin: '12px 0 0', fontFamily: display,
+        fontSize: ar ? '52px' : '62px', lineHeight: ar ? 1.15 : 1,
+        textTransform: ar ? 'none' : 'uppercase', fontWeight: ar ? 900 : 400, color: '#f4ecdb'
+      },
+      ctaPrimaryStyle: Object.assign({}, ctaBase, {
+        marginTop: '0', background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)',
+        color: '#1a1204', boxShadow: '0 16px 40px rgba(223,169,45,.28)'
+      }),
+      ctaGhostStyle: Object.assign({}, ctaBase, {
+        border: '1px solid rgba(223,169,45,.4)', color: '#f2d17a'
+      }),
+      faqBtnStyle: {
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px',
+        width: '100%', padding: '22px 26px', background: 'none', border: 0, cursor: 'pointer',
+        textAlign: ar ? 'right' : 'left', fontFamily: display,
+        fontSize: ar ? '20px' : '21px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '.5px', textTransform: ar ? 'none' : 'uppercase', color: '#f4ecdb'
+      },
+      heroStats: t.stats.map(s => ({ value: s[0], label: s[1] })),
+      tickerItems: t.ticker.concat(t.ticker),
+      features: t.features.map(f => ({ tag: f[0], title: f[1], body: f[2] })),
+      tiktokTeasers: t.tiktokTeasers.map(x => ({ title: x[0], meta: x[1] })),
+      plans,
+      monthlyBtnStyle: this.tabStyle(!yearly, ar),
+      yearlyBtnStyle: this.tabStyle(yearly, ar),
+      setMonthly: () => this.setState({ cycle: 'monthly' }),
+      setYearly: () => this.setState({ cycle: 'yearly' }),
+      faqs: t.faqs.map((f, i) => ({
+        question: f[0], answer: f[1],
+        open: this.state.openFaq === i,
+        toggle: () => this.setState(s => ({ openFaq: s.openFaq === i ? -1 : i })),
+        iconStyle: {
+          flex: 'none', fontFamily: 'Barlow, sans-serif', fontSize: '24px', color: accent,
+          transition: 'transform .2s ease',
+          transform: this.state.openFaq === i ? 'rotate(45deg)' : 'none'
+        }
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

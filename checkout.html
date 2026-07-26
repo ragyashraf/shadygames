@@ -1,0 +1,685 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shady — Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./paddle-catalog.js"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #08070a; }
+  * { box-sizing: border-box; }
+  a { color: #f2d17a; text-decoration: none; }
+  a:hover { color: #fff3cf; }
+  input::placeholder { color: #6f6857; }
+  @keyframes shadyGlow { 0%,100% { filter: drop-shadow(0 0 20px rgba(223,169,45,.4)); } 50% { filter: drop-shadow(0 0 44px rgba(255,214,102,.75)); } }
+  @keyframes shadyFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes shadyRise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes shadySpin { to { transform: rotate(360deg); } }
+  @keyframes shadyKeyIn { 0% { opacity: 0; transform: translateY(24px) scale(.94); } 60% { transform: translateY(0) scale(1.03); } 100% { opacity: 1; transform: none; } }
+  @keyframes shadyPulseRing { 0% { transform: scale(.85); opacity: .5; } 70% { transform: scale(1.3); opacity: 0; } 100% { transform: scale(1.3); opacity: 0; } }
+</style>
+</helmet>
+<div dir="{{ dir }}" style="{{ pageStyle }}">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 40px; border-bottom: 1px solid rgba(223,169,45,.2); background: rgba(9,8,11,.8)">
+    <a href="index.html" style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/shady-logo.webp" alt="Shady" style="width: 42px; height: 42px" />
+      <span style="font-family: Anton, sans-serif; font-size: 23px; letter-spacing: 3px; background: linear-gradient(180deg,#fff4d0,#e0aa32 60%,#8a5f13); -webkit-background-clip: text; background-clip: text; color: transparent">SHADY</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 26px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+        <div style="{{ s.style }}">
+          <span style="{{ s.numStyle }}">{{ s.n }}</span>
+          {{ s.label }}
+        </div>
+      </sc-for>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <button onClick="{{ toggleLang }}" style="padding: 10px 16px; border-radius: 10px; border: 1px solid rgba(223,169,45,.35); background: transparent; cursor: pointer; font-family: Barlow, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; white-space: nowrap; color: #f2d17a" style-hover="background:rgba(223,169,45,.12)">{{ langLabel }}</button>
+      <a href="index.html#plans" style="font-size: 13px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271" style-hover="color:#f2d17a">{{ t.keepShopping }}</a>
+    </div>
+  </header>
+
+  <sc-if value="{{ isCart }}" hint-placeholder-val="{{ true }}">
+    <main data-screen-label="Checkout" style="display: grid; grid-template-columns: 1.3fr .7fr; gap: 28px; padding: 40px; max-width: 1300px; margin: 0 auto; width: 100%; animation: shadyRise .4s ease both">
+      <div style="display: flex; flex-direction: column; gap: 22px">
+        <div>
+          <h1 style="{{ h1Style }}">{{ t.title }}</h1>
+          <p style="margin: 10px 0 0; font-size: 16px; color: #9d9482">{{ t.subtitle }}</p>
+        </div>
+
+        <div style="border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.85); overflow: hidden">
+          <sc-for list="{{ cart }}" as="c" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: 64px 1fr auto auto; gap: 18px; align-items: center; padding: 20px 22px; border-bottom: 1px solid rgba(223,169,45,.1)">
+              <div style="{{ c.iconStyle }}">{{ c.icon }}</div>
+              <div>
+                <div style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ c.name }}</div>
+                <div style="margin-top: 4px; font-size: 13px; color: #8b8271">{{ c.meta }}</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px">
+                <button onClick="{{ c.dec }}" style="{{ qtyBtnStyle }}">−</button>
+                <span style="min-width: 22px; text-align: center; font-family: Anton, sans-serif; font-size: 18px; color: #f4ecdb">{{ c.qty }}</span>
+                <button onClick="{{ c.inc }}" style="{{ qtyBtnStyle }}">+</button>
+              </div>
+              <div style="text-align: end; min-width: 90px">
+                <div style="font-family: Anton, sans-serif; font-size: 24px; color: #f2d17a">{{ c.lineTotal }}</div>
+                <button onClick="{{ c.remove }}" style="margin-top: 4px; padding: 0; border: 0; background: none; cursor: pointer; font-family: Barlow, sans-serif; font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; color: #7d7565" style-hover="color:#ffb3b3">{{ t.remove }}</button>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 40px 22px; text-align: center; font-size: 15px; color: #8b8271">{{ t.empty }}</div>
+          </sc-if>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+          <div style="padding: 24px; border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.85)">
+            <div style="font-family: Anton, sans-serif; font-size: 19px; text-transform: uppercase; color: #f4ecdb">{{ t.account }}</div>
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px">
+              <label style="display: flex; flex-direction: column; gap: 7px">
+                <span style="{{ labelStyle }}">{{ t.email }}</span>
+                <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="{{ inputStyle }}" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 7px">
+                <span style="{{ labelStyle }}">{{ t.ign }}</span>
+                <input value="{{ ign }}" onChange="{{ setIgn }}" placeholder="{{ t.ignPh }}" style="{{ inputStyle }}" />
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 7px">
+                <span style="{{ labelStyle }}">{{ t.discord }}</span>
+                <input value="{{ discord }}" onChange="{{ setDiscord }}" placeholder="shady#0001" style="{{ inputStyle }}" />
+              </label>
+            </div>
+          </div>
+
+          <div style="padding: 24px; border-radius: 18px; border: 1px solid rgba(223,169,45,.2); background: rgba(15,13,17,.85)">
+            <div style="font-family: Anton, sans-serif; font-size: 19px; text-transform: uppercase; color: #f4ecdb">{{ t.payment }}</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px">
+              <sc-for list="{{ methods }}" as="m" hint-placeholder-count="3">
+                <button onClick="{{ m.select }}" style="{{ m.style }}">
+                  <span style="{{ m.radioStyle }}"></span>
+                  <span style="flex: 1; text-align: start">
+                    <span style="display: block; font-size: 15px; font-weight: 700; color: #f4ecdb">{{ m.name }}</span>
+                    <span style="display: block; margin-top: 2px; font-size: 12px; color: #8b8271">{{ m.note }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside style="position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 16px; padding: 26px; border-radius: 18px; border: 1px solid rgba(223,169,45,.28); background: linear-gradient(180deg, rgba(38,30,14,.95), rgba(13,12,15,.95))">
+        <div style="font-family: Anton, sans-serif; font-size: 21px; text-transform: uppercase; color: #f4ecdb">{{ t.summary }}</div>
+
+        <div style="display: flex; flex-direction: column; gap: 9px">
+          <label style="{{ labelStyle }}">{{ t.discountCode }}</label>
+          <div style="display: flex; gap: 9px">
+            <input value="{{ codeInput }}" onChange="{{ setCode }}" onKeyDown="{{ codeKeyDown }}" placeholder="{{ t.codePh }}" style="{{ codeInputStyle }}" />
+            <button onClick="{{ applyCode }}" style="{{ applyBtnStyle }}">{{ t.apply }}</button>
+          </div>
+          <sc-if value="{{ codeMessage }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ codeMessageStyle }}">{{ codeMessage }}</div>
+          </sc-if>
+          <div style="font-size: 12px; color: #6f6857">{{ t.codeHint }}</div>
+        </div>
+
+        <div style="height: 1px; background: rgba(223,169,45,.18)"></div>
+
+        <div style="display: flex; flex-direction: column; gap: 11px">
+          <sc-for list="{{ totals }}" as="r" hint-placeholder-count="3">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 15px">
+              <span style="{{ r.labelStyle }}">{{ r.label }}</span>
+              <span style="{{ r.valueStyle }}">{{ r.value }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="height: 1px; background: rgba(223,169,45,.18)"></div>
+
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+          <span style="font-family: Anton, sans-serif; font-size: 20px; text-transform: uppercase; color: #f4ecdb">{{ t.total }}</span>
+          <span style="font-family: Anton, sans-serif; font-size: 42px; line-height: 1; color: #f2d17a">{{ total }}</span>
+        </div>
+
+        <button onClick="{{ pay }}" style="{{ payBtnStyle }}">
+          <sc-if value="{{ paying }}" hint-placeholder-val="{{ false }}">
+            <span style="display: inline-block; width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(26,18,4,.35); border-top-color: #1a1204; animation: shadySpin .8s linear infinite"></span>
+          </sc-if>
+          {{ payLabel }}
+        </button>
+
+        <sc-if value="{{ payError }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 12px 14px; border-radius: 11px; border: 1px solid rgba(255,107,107,.4); background: rgba(255,107,107,.1); font-size: 14px; color: #ffb3b3">{{ payError }}</div>
+        </sc-if>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; line-height: 1.6; color: #7d7565">
+          <div>{{ t.guarantee1 }}</div>
+          <div>{{ t.guarantee2 }}</div>
+        </div>
+      </aside>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Key delivered" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 70px 40px; max-width: 780px; margin: 0 auto; text-align: center; animation: shadyRise .45s ease both">
+      <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 220px; height: 220px">
+        <div style="position: absolute; width: 180px; height: 180px; border-radius: 50%; border: 1px solid rgba(87,224,138,.4); animation: shadyPulseRing 3.4s ease-out infinite"></div>
+        <div style="position: absolute; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(223,169,45,.3), rgba(8,7,10,0) 70%)"></div>
+        <img src="assets/shady-logo.webp" alt="Shady" style="position: relative; width: 175px; animation: shadyFloat 6s ease-in-out infinite, shadyGlow 5s ease-in-out infinite" />
+      </div>
+
+      <div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; color: #9be7b8">{{ t.paidLabel }}</div>
+        <h1 style="{{ doneTitleStyle }}">{{ t.doneTitle }}</h1>
+        <p style="margin: 14px auto 0; max-width: 540px; font-size: 17px; line-height: 1.7; color: #a9a08d">{{ doneBody }}</p>
+      </div>
+
+      <div style="width: 100%; padding: 26px; border-radius: 18px; border: 1px solid rgba(223,169,45,.32); background: linear-gradient(140deg, rgba(41,32,14,.95), rgba(13,12,15,.95)); animation: shadyKeyIn .6s cubic-bezier(.22,1,.36,1) .15s both">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; white-space: nowrap; color: #8b8271">{{ t.yourKey }}</div>
+        <div style="margin-top: 14px; font-family: Anton, sans-serif; font-size: 34px; letter-spacing: 4px; color: #f2d17a; word-break: break-all">{{ deliveredKey }}</div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px">
+          <button onClick="{{ copyKey }}" style="{{ copyBtnStyle }}">{{ copyLabel }}</button>
+          <a href="dashboard.html" style="{{ ghostBtnStyle }}">{{ t.toDashboard }}</a>
+        </div>
+        <div style="margin-top: 18px; font-size: 13px; line-height: 1.6; color: #8b8271">{{ t.keyNote }}</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%">
+        <sc-for list="{{ nextSteps }}" as="n" hint-placeholder-count="3">
+          <div style="padding: 20px; border-radius: 16px; border: 1px solid rgba(223,169,45,.18); background: rgba(15,13,17,.85); text-align: start">
+            <div style="font-family: Anton, sans-serif; font-size: 15px; letter-spacing: 2px; color: #dfa92d">{{ n.n }}</div>
+            <div style="margin-top: 8px; font-size: 15px; font-weight: 700; color: #f4ecdb">{{ n.title }}</div>
+            <div style="margin-top: 6px; font-size: 13px; line-height: 1.55; color: #8b8271">{{ n.body }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="font-size: 13px; color: #6f6857">{{ orderLine }}</div>
+    </main>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{},&quot;currency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;$&quot;,&quot;€&quot;,&quot;£&quot;],&quot;default&quot;:&quot;$&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const CO_COPY = {
+  en: {
+    keepShopping: 'Keep shopping',
+    steps: ['Cart', 'Payment', 'Delivery'],
+    title: 'Checkout', subtitle: 'Ranks activate the moment payment clears. Keys are delivered automatically.',
+    remove: 'Remove', empty: 'Your cart is empty. Pick a rank on the plans page.',
+    account: 'Your details', email: 'Email', ign: 'In-game name', ignPh: 'How the city knows you', discord: 'Discord tag',
+    payment: 'Payment method',
+    methods: [
+      ['Card', 'Visa, Mastercard, Mada'],
+      ['PayPal', 'Redirects to PayPal'],
+      ['Crypto', 'USDT, BTC, ETH · first payment held for review']
+    ],
+    summary: 'Order summary', discountCode: 'Discount code', apply: 'Apply',
+    codePh: 'Enter code', codeHint: 'Codes from the staff panel work here (e.g. SHADY10, DRAGON5).',
+    subtotal: 'Subtotal', discount: 'Discount', fee: 'Processing', total: 'Total',
+    pay: 'Pay with Paddle', paying: 'Opening checkout…',
+    payErrorFields: 'Add your email and in-game name first.',
+    payErrorPaddle: 'This item is not linked to Paddle yet.',
+    payErrorPaddleInit: 'Paddle is still loading. Try again in a moment.',
+    codeOk: 'Code {c} applied — {p}% off.',
+    codeBad: 'That code does not exist.',
+    codeExpired: 'Code {c} has expired.',
+    codeUsed: 'Code {c} has hit its usage limit.',
+    codeAlready: 'That code is already applied.',
+    guarantee1: 'Instant delivery by email and Discord DM.',
+    guarantee2: '48-hour refund if you have not spent your in-game payout.',
+    paidLabel: 'Payment confirmed',
+    doneTitle: 'Your key is ready',
+    doneBody: 'Welcome to Unlimited, {n}. Your {r} is active and your key was sent to {e} and your Discord DMs.',
+    yourKey: 'Your access key', copy: 'Copy key', copied: 'Copied',
+    toDashboard: 'Open my dashboard',
+    keyNote: 'Redeem it in FiveM: connect to Unlimited, open the phone, Settings → Redeem key.',
+    nextSteps: [
+      ['01', 'Install FiveM', 'Point it at your legit GTA V copy, then search the server list for Unlimited.'],
+      ['02', 'Redeem the key', 'Paste it once — your rank, payout and garage slots unlock instantly.'],
+      ['03', 'Claim daily', 'Log in every day from the dashboard to keep your reward streak alive.']
+    ],
+    orderLine: 'Order {id} · {sum} paid · receipt sent to {e}'
+  },
+  ar: {
+    keepShopping: 'مواصلة التسوق',
+    steps: ['السلة', 'الدفع', 'التسليم'],
+    title: 'إتمام الشراء', subtitle: 'الرتبة تُفعّل لحظة تأكيد الدفع، والمفاتيح تُسلّم تلقائياً.',
+    remove: 'حذف', empty: 'سلتك فارغة. اختر رتبة من صفحة الاشتراكات.',
+    account: 'بياناتك', email: 'البريد الإلكتروني', ign: 'الاسم داخل اللعبة', ignPh: 'كيف تعرفك المدينة', discord: 'حساب الديسكورد',
+    payment: 'طريقة الدفع',
+    methods: [
+      ['بطاقة', 'فيزا، ماستركارد، مدى'],
+      ['باي بال', 'تحويل إلى باي بال'],
+      ['عملات رقمية', 'USDT وBTC وETH · أول دفعة تُراجع']
+    ],
+    summary: 'ملخص الطلب', discountCode: 'كود الخصم', apply: 'تطبيق',
+    codePh: 'أدخل الكود', codeHint: 'الأكواد من لوحة الإدارة تعمل هنا (مثل SHADY10 وDRAGON5).',
+    subtotal: 'المجموع', discount: 'الخصم', fee: 'رسوم المعالجة', total: 'الإجمالي',
+    pay: 'ادفع عبر Paddle', paying: 'جاري فتح الدفع…',
+    payErrorFields: 'أضف بريدك واسمك داخل اللعبة أولاً.',
+    payErrorPaddle: 'هذا المنتج غير مربوط بـ Paddle بعد.',
+    payErrorPaddleInit: 'Paddle لا يزال يتحمّل. حاول بعد لحظات.',
+    codeOk: 'تم تطبيق الكود {c} — خصم {p}%.',
+    codeBad: 'هذا الكود غير موجود.',
+    codeExpired: 'انتهت صلاحية الكود {c}.',
+    codeUsed: 'الكود {c} وصل حد الاستخدام.',
+    codeAlready: 'هذا الكود مطبَّق بالفعل.',
+    guarantee1: 'تسليم فوري بالبريد ورسالة خاصة في الديسكورد.',
+    guarantee2: 'استرجاع خلال 48 ساعة إن لم تصرف راتبك داخل اللعبة.',
+    paidLabel: 'تم تأكيد الدفع',
+    doneTitle: 'مفتاحك جاهز',
+    doneBody: 'أهلاً بك في أنليميتد، {n}. رتبة {r} مفعّلة وأُرسل مفتاحك إلى {e} وإلى رسائلك في الديسكورد.',
+    yourKey: 'مفتاح الوصول', copy: 'انسخ المفتاح', copied: 'تم النسخ',
+    toDashboard: 'افتح لوحتي',
+    keyNote: 'لتفعيله في FiveM: اتصل بسيرفر أنليميتد، افتح الهاتف، الإعدادات ← تفعيل مفتاح.',
+    nextSteps: [
+      ['01', 'ثبّت FiveM', 'وجّهه إلى نسختك الأصلية من GTA V ثم ابحث عن سيرفر أنليميتد.'],
+      ['02', 'فعّل المفتاح', 'الصقه مرة واحدة — تُفتح رتبتك وراتبك ومواقف سيارتك فوراً.'],
+      ['03', 'استلم يومياً', 'سجّل الدخول كل يوم من اللوحة للحفاظ على سلسلة مكافآتك.']
+    ],
+    orderLine: 'الطلب {id} · تم دفع {sum} · أُرسل الإيصال إلى {e}'
+  }
+};
+
+const CO_CODES = {};
+
+class Component extends DCLogic {
+  state = {
+    lang: 'en', stage: 'cart',
+    items: [],
+    email: '', ign: '', discord: '', method: 0,
+    codeInput: '', code: null, codeMessage: '', codeOk: false,
+    paying: false, payError: '', copied: false,
+    deliveredKey: '', orderId: '', rankLabel: '', paddleReady: false
+  };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('shady-lang');
+      if (saved === 'ar' || saved === 'en') this.setState({ lang: saved });
+    } catch (e) {}
+    this.setState({ items: this.resolveCartFromUrl() });
+    this.initPaddle();
+  }
+
+  initPaddle() {
+    if (typeof Paddle === 'undefined' || !window.ShadyCatalog) return;
+    const token = window.ShadyCatalog.clientToken();
+    if (!token) return;
+    const opts = { token: token };
+    try {
+      const session = JSON.parse(localStorage.getItem('shady-session') || 'null');
+      if (session && session.paddleCustomerId) {
+        opts.pwCustomer = { id: session.paddleCustomerId };
+      }
+    } catch (e) {}
+    if (window.ShadyCatalog.env() === 'sandbox') {
+      Paddle.Environment.set('sandbox');
+    }
+    Paddle.Initialize(opts);
+    this.setState({ paddleReady: true });
+  }
+
+  resolveCartFromUrl() {
+    let params;
+    try { params = new URLSearchParams(window.location.search); } catch (e) { params = new URLSearchParams(); }
+    const plan = (params.get('plan') || '').toLowerCase();
+    const game = (params.get('game') || '').toLowerCase();
+    const items = [];
+    const catalog = window.ShadyCatalog ? window.ShadyCatalog.load() : { products: [] };
+
+    if (plan) {
+      const product = (window.ShadyCatalog && window.ShadyCatalog.productByPlan(plan))
+        || catalog.products.find(p => p.tier === plan || p.id === plan);
+      if (product && product.live !== false) {
+        items.push({
+          id: product.tier || product.id,
+          key: product.tier || product.id,
+          kind: 'plan',
+          sku: product.sku,
+          price: Number(product.price) || 0,
+          qty: 1,
+          paddlePriceId: product.paddlePriceId || (window.ShadyCatalog && window.ShadyCatalog.priceId(plan)),
+          name: product.name
+        });
+      }
+    }
+
+    if (game) {
+      const product = catalog.products.find(p =>
+        p.live !== false && (p.id === game || p.tier === game || (p.sku && p.sku.toLowerCase().indexOf(game) !== -1))
+      );
+      if (product) {
+        items.push({
+          id: product.id,
+          key: product.id,
+          kind: 'game',
+          sku: product.sku,
+          price: Number(product.price) || 0,
+          qty: 1,
+          paddlePriceId: product.paddlePriceId || null,
+          name: product.name
+        });
+      }
+    }
+
+    if (!items.length) {
+      const fallback = (window.ShadyCatalog && window.ShadyCatalog.productByPlan('kingpin'))
+        || catalog.products.find(p => p.tier === 'kingpin');
+      if (fallback) {
+        items.push({
+          id: 'kingpin', key: 'kingpin', kind: 'plan', sku: fallback.sku,
+          price: Number(fallback.price) || 15, qty: 1,
+          paddlePriceId: fallback.paddlePriceId || (window.ShadyCatalog && window.ShadyCatalog.priceId('kingpin')),
+          name: fallback.name
+        });
+      }
+    }
+    return items;
+  }
+
+  setLang(lang) {
+    this.setState({ lang });
+    try { localStorage.setItem('shady-lang', lang); } catch (e) {}
+  }
+
+  itemCopy(ar) {
+    return ar
+      ? {
+          access: ['رتبة أكسس', 'اشتراك شهري · سيرفر GTA V', '◆'],
+          kingpin: ['رتبة كينغ بين', 'اشتراك شهري · سيرفر GTA V', '👑'],
+          dragon: ['رتبة دراغون', 'اشتراك شهري · سيرفر GTA V', '🐉'],
+          clash: ['إعداد معركة التنانين', 'لعبة تيك توك · دفعة واحدة', '★'],
+          racers: ['إعداد سباق الهدايا', 'لعبة تيك توك · دفعة واحدة', '★'],
+          tower: ['إعداد برج اللايكات', 'لعبة تيك توك · دفعة واحدة', '★'],
+          roulette: ['إعداد روليت التعليقات', 'لعبة تيك توك · دفعة واحدة', '★'],
+          emoji: ['إعداد معركة الإيموجي', 'لعبة تيك توك · دفعة واحدة', '★'],
+          crown: ['إعداد الدفاع عن التاج', 'لعبة تيك توك · دفعة واحدة', '★']
+        }
+      : {
+          access: ['Access rank', 'Monthly subscription · GTA V server', '◆'],
+          kingpin: ['Kingpin rank', 'Monthly subscription · GTA V server', '👑'],
+          dragon: ['Dragon rank', 'Monthly subscription · GTA V server', '🐉'],
+          clash: ['Dragon Clash setup', 'TikTok game · one-time', '★'],
+          racers: ['Gift Racers setup', 'TikTok game · one-time', '★'],
+          tower: ['Like Tower setup', 'TikTok game · one-time', '★'],
+          roulette: ['Comment Roulette setup', 'TikTok game · one-time', '★'],
+          emoji: ['Emoji Battle setup', 'TikTok game · one-time', '★'],
+          crown: ['Crown Defence setup', 'TikTok game · one-time', '★']
+        };
+  }
+
+  applyCode(t) {
+    const raw = (this.state.codeInput || '').trim().toUpperCase();
+    if (!raw) return;
+    if (this.state.code && this.state.code.code === raw) {
+      return this.setState({ codeMessage: t.codeAlready, codeOk: false });
+    }
+    const fromStaff = window.ShadyCatalog && window.ShadyCatalog.activeDiscount(raw);
+    if (fromStaff) {
+      const percent = Number(fromStaff.percent) || 0;
+      return this.setState({
+        code: { code: raw, percent: percent },
+        codeMessage: t.codeOk.replace('{c}', raw).replace('{p}', percent),
+        codeOk: true, codeInput: ''
+      });
+    }
+    const found = CO_CODES[raw];
+    if (!found) return this.setState({ codeMessage: t.codeBad, codeOk: false });
+    if (!found.ok) {
+      const msg = found.reason === 'expired' ? t.codeExpired : t.codeUsed;
+      return this.setState({ codeMessage: msg.replace('{c}', raw), codeOk: false, code: null });
+    }
+    this.setState({
+      code: { code: raw, percent: found.percent },
+      codeMessage: t.codeOk.replace('{c}', raw).replace('{p}', found.percent),
+      codeOk: true, codeInput: ''
+    });
+  }
+
+  pay(t) {
+    if (!this.state.email || !this.state.ign) return this.setState({ payError: t.payErrorFields });
+    const paddleItems = this.state.items
+      .filter(it => it.paddlePriceId)
+      .map(it => ({ priceId: it.paddlePriceId, quantity: it.qty }));
+    if (!paddleItems.length) {
+      return this.setState({ payError: t.payErrorPaddle || 'This item is not linked to Paddle yet. Add it from the staff catalog with a live price.' });
+    }
+    if (typeof Paddle === 'undefined' || !this.state.paddleReady) {
+      return this.setState({ payError: t.payErrorPaddleInit || 'Paddle is still loading. Try again in a moment.' });
+    }
+
+    this.setState({ paying: true, payError: '' });
+    const names = this.itemCopy(this.state.lang === 'ar');
+    const primary = this.state.items[0];
+    const rankLabel = (primary && primary.name)
+      || (primary && names[primary.key] ? names[primary.key][0] : (this.state.lang === 'ar' ? 'اشتراكك' : 'your plan'));
+
+    const open = {
+      items: paddleItems,
+      customer: { email: this.state.email },
+      customData: {
+        ign: this.state.ign,
+        discord: this.state.discord || '',
+        sku: primary && primary.sku ? primary.sku : ''
+      },
+      settings: {
+        successUrl: new URL('dashboard.html?paid=1', window.location.href).toString(),
+        allowLogout: false
+      }
+    };
+    if (this.state.code && this.state.code.code) open.discountCode = this.state.code.code;
+
+    Paddle.Checkout.open(open);
+    this.setState({ paying: false, rankLabel: rankLabel });
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const t = CO_COPY[ar ? 'ar' : 'en'];
+    const body = ar ? 'Cairo, sans-serif' : 'Barlow, sans-serif';
+    const display = ar ? 'Cairo, sans-serif' : 'Anton, sans-serif';
+    const currency = this.props.currency ?? '$';
+    const names = this.itemCopy(ar);
+    const done = this.state.stage === 'done';
+
+    const inputStyle = {
+      width: '100%', padding: '13px 15px', borderRadius: '11px',
+      border: '1px solid rgba(223,169,45,.24)', background: 'rgba(11,10,13,.9)',
+      color: '#f4ecdb', fontFamily: body, fontSize: '15px', outline: 'none',
+      textAlign: ar ? 'right' : 'left'
+    };
+    const labelStyle = {
+      fontSize: '11px', fontWeight: 700, letterSpacing: ar ? '0' : '1.8px',
+      textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap', color: '#8b8271'
+    };
+
+    const subtotal = this.state.items.reduce((a, b) => a + b.price * b.qty, 0);
+    const discount = this.state.code ? Math.round(subtotal * this.state.code.percent) / 100 : 0;
+    const fee = 0;
+    const total = Math.max(0, Math.round((subtotal - discount + fee) * 100) / 100);
+
+    const cart = this.state.items.map((it, i) => {
+      const copy = names[it.key] || [it.name || it.key, it.kind === 'game' ? (ar ? 'دفعة واحدة' : 'One-time') : (ar ? 'اشتراك شهري · سيرفر GTA V' : 'Monthly subscription · GTA V server'), '◆'];
+      const meta = it.kind === 'plan' && it.cycle === 'yearly'
+        ? (ar ? 'اشتراك سنوي · سيرفر GTA V' : 'Yearly subscription · GTA V server')
+        : copy[1];
+      return {
+        name: it.name || copy[0], meta, icon: copy[2],
+        qty: String(it.qty), lineTotal: currency + Math.round(it.price * it.qty * 100) / 100,
+        iconStyle: {
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '64px', height: '64px', borderRadius: '14px', fontSize: '26px',
+          border: '1px solid rgba(223,169,45,.25)',
+          background: 'linear-gradient(160deg, rgba(223,169,45,.22), rgba(15,13,17,.9))'
+        },
+        inc: () => {
+          const arr = this.state.items.slice();
+          arr[i] = Object.assign({}, arr[i], { qty: arr[i].qty + 1 });
+          this.setState({ items: arr });
+        },
+        dec: () => {
+          const arr = this.state.items.slice();
+          if (arr[i].qty <= 1) return;
+          arr[i] = Object.assign({}, arr[i], { qty: arr[i].qty - 1 });
+          this.setState({ items: arr });
+        },
+        remove: () => this.setState({ items: this.state.items.filter((_, j) => j !== i) })
+      };
+    });
+
+    const stageIndex = done ? 2 : 0;
+    const steps = t.steps.map((label, i) => ({
+      label, n: String(i + 1),
+      style: {
+        display: 'flex', alignItems: 'center', gap: '9px',
+        fontFamily: body, fontSize: '13px', fontWeight: 700,
+        letterSpacing: ar ? '0' : '1.4px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', color: i <= stageIndex ? '#f2d17a' : '#6f6857'
+      },
+      numStyle: {
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: '22px', height: '22px', borderRadius: '50%', fontSize: '11px',
+        border: '1px solid ' + (i <= stageIndex ? 'rgba(223,169,45,.6)' : 'rgba(223,169,45,.22)'),
+        background: i <= stageIndex ? 'rgba(223,169,45,.16)' : 'transparent'
+      }
+    }));
+
+    const methods = t.methods.map((m, i) => ({
+      name: m[0], note: m[1],
+      select: () => this.setState({ method: i }),
+      style: {
+        display: 'flex', alignItems: 'center', gap: '13px', width: '100%',
+        padding: '14px 15px', borderRadius: '12px', cursor: 'pointer',
+        border: '1px solid ' + (this.state.method === i ? 'rgba(223,169,45,.6)' : 'rgba(223,169,45,.18)'),
+        background: this.state.method === i ? 'rgba(223,169,45,.1)' : 'rgba(11,10,13,.7)',
+        fontFamily: body, transition: 'border-color .2s ease, background .2s ease'
+      },
+      radioStyle: {
+        flex: 'none', width: '16px', height: '16px', borderRadius: '50%',
+        border: '2px solid ' + (this.state.method === i ? '#dfa92d' : 'rgba(223,169,45,.35)'),
+        background: this.state.method === i ? '#dfa92d' : 'transparent',
+        boxShadow: this.state.method === i ? 'inset 0 0 0 3px rgba(11,10,13,.9)' : 'none'
+      }
+    }));
+
+    const rowLabel = { color: '#a9a08d' };
+    const totals = [
+      { label: t.subtotal, value: currency + Math.round(subtotal * 100) / 100, labelStyle: rowLabel, valueStyle: { color: '#f4ecdb', fontWeight: 600 } },
+      { label: this.state.code ? t.discount + ' · ' + this.state.code.code : t.discount,
+        value: discount ? '−' + currency + discount : '—',
+        labelStyle: rowLabel, valueStyle: { color: discount ? '#9be7b8' : '#6f6857', fontWeight: 600 } },
+      { label: t.fee, value: currency + fee, labelStyle: rowLabel, valueStyle: { color: '#f4ecdb', fontWeight: 600 } }
+    ];
+
+    const primary = {
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+      width: '100%', padding: '17px 20px', borderRadius: '12px', border: 0, cursor: 'pointer',
+      background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+      fontFamily: display, fontSize: ar ? '18px' : '17px', fontWeight: ar ? 700 : 400,
+      letterSpacing: ar ? '0' : '2px', textTransform: ar ? 'none' : 'uppercase',
+      boxShadow: '0 16px 40px rgba(223,169,45,.26)'
+    };
+
+    const rank = this.state.rankLabel || (ar ? 'اشتراكك' : 'your plan');
+
+    return {
+      t, dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en',
+      langLabel: ar ? 'EN' : 'العربية',
+      toggleLang: () => this.setLang(ar ? 'en' : 'ar'),
+      pageStyle: {
+        display: 'flex', flexDirection: 'column', minHeight: '100vh',
+        background: '#08070a', color: '#efe7d6', fontFamily: body,
+        textAlign: ar ? 'right' : 'left'
+      },
+      h1Style: {
+        margin: 0, fontFamily: display, fontSize: ar ? '44px' : '52px',
+        lineHeight: 1.06, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, color: '#f4ecdb'
+      },
+      doneTitleStyle: {
+        margin: '14px 0 0', fontFamily: display, fontSize: ar ? '52px' : '60px',
+        lineHeight: 1.06, textTransform: ar ? 'none' : 'uppercase',
+        fontWeight: ar ? 900 : 400, color: '#f4ecdb'
+      },
+      isCart: !done, isDone: done,
+      steps, cart, cartEmpty: this.state.items.length === 0,
+      methods, totals, inputStyle, labelStyle,
+      total: currency + total,
+      email: this.state.email, ign: this.state.ign, discord: this.state.discord,
+      setEmail: (e) => this.setState({ email: e.target.value, payError: '' }),
+      setIgn: (e) => this.setState({ ign: e.target.value, payError: '' }),
+      setDiscord: (e) => this.setState({ discord: e.target.value }),
+      codeInput: this.state.codeInput,
+      setCode: (e) => this.setState({ codeInput: e.target.value }),
+      codeKeyDown: (e) => { if (e.key === 'Enter') this.applyCode(t); },
+      applyCode: () => this.applyCode(t),
+      codeMessage: this.state.codeMessage,
+      codeMessageStyle: {
+        padding: '10px 12px', borderRadius: '10px', fontSize: '13px', lineHeight: 1.5,
+        border: '1px solid ' + (this.state.codeOk ? 'rgba(87,224,138,.4)' : 'rgba(255,107,107,.4)'),
+        background: this.state.codeOk ? 'rgba(87,224,138,.1)' : 'rgba(255,107,107,.1)',
+        color: this.state.codeOk ? '#9be7b8' : '#ffb3b3'
+      },
+      codeInputStyle: Object.assign({}, inputStyle, { fontSize: '14px', letterSpacing: '1.5px' }),
+      applyBtnStyle: {
+        padding: '13px 18px', borderRadius: '11px', cursor: 'pointer',
+        border: '1px solid rgba(223,169,45,.45)', background: 'rgba(223,169,45,.1)',
+        fontFamily: body, fontSize: '12px', fontWeight: 700,
+        letterSpacing: ar ? '0' : '1.4px', textTransform: ar ? 'none' : 'uppercase',
+        whiteSpace: 'nowrap', color: '#f2d17a'
+      },
+      qtyBtnStyle: {
+        width: '30px', height: '30px', borderRadius: '9px', cursor: 'pointer',
+        border: '1px solid rgba(223,169,45,.28)', background: 'rgba(11,10,13,.8)',
+        fontFamily: body, fontSize: '16px', color: '#f2d17a'
+      },
+      payBtnStyle: primary,
+      payLabel: this.state.paying ? t.paying : t.pay + ' ' + currency + total,
+      paying: this.state.paying, payError: this.state.payError,
+      pay: () => this.pay(t),
+      deliveredKey: this.state.deliveredKey,
+      doneBody: t.doneBody
+        .replace('{n}', this.state.ign || (ar ? 'يا بطل' : 'legend'))
+        .replace('{r}', rank)
+        .replace('{e}', this.state.email || 'your email'),
+      copyLabel: this.state.copied ? t.copied : t.copy,
+      copyKey: () => {
+        try { navigator.clipboard.writeText(this.state.deliveredKey); } catch (e) {}
+        this.setState({ copied: true });
+        setTimeout(() => this.setState({ copied: false }), 1800);
+      },
+      copyBtnStyle: {
+        padding: '14px 26px', borderRadius: '11px', border: 0, cursor: 'pointer',
+        background: 'linear-gradient(180deg,#ffe6a0,#dfa92d 55%,#a5741a)', color: '#1a1204',
+        fontFamily: display, fontSize: ar ? '16px' : '15px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+      },
+      ghostBtnStyle: {
+        display: 'inline-block', padding: '14px 26px', borderRadius: '11px',
+        border: '1px solid rgba(223,169,45,.4)', color: '#f2d17a',
+        fontFamily: display, fontSize: ar ? '16px' : '15px', fontWeight: ar ? 700 : 400,
+        letterSpacing: ar ? '0' : '1.8px', textTransform: ar ? 'none' : 'uppercase', whiteSpace: 'nowrap'
+      },
+      nextSteps: t.nextSteps.map(s => ({ n: s[0], title: s[1], body: s[2] })),
+      orderLine: t.orderLine
+        .replace('{id}', this.state.orderId)
+        .replace('{sum}', currency + total)
+        .replace('{e}', this.state.email || '—')
+    };
+  }
+}
+
+</script>
+</body>
+</html>
