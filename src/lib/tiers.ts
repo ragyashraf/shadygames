@@ -9,11 +9,17 @@ export interface Tier {
   priceId: { month: string; year: string };
 }
 
-function requirePublicEnv(name: string): string {
-  const value = process.env[name];
+/**
+ * Static process.env.NEXT_PUBLIC_* access so Next.js inlines them at build time.
+ * Dynamic process.env[name] breaks on Amplify SSR.
+ */
+function requirePublicEnv(
+  name: string,
+  value: string | undefined
+): string {
   if (!value) {
     throw new Error(
-      `Missing required env var ${name}. Set it in .env.local (see .env.example).`
+      `Missing required env var ${name}. Set it in Amplify / .env.local (see .env.example).`
     );
   }
   return value;
@@ -32,8 +38,14 @@ export function getTiers(): Tier[] {
         'Member Discord role',
       ],
       priceId: {
-        month: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_STARTER_MONTH'),
-        year: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_STARTER_YEAR'),
+        month: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_STARTER_MONTH',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_STARTER_MONTH
+        ),
+        year: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_STARTER_YEAR',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_STARTER_YEAR
+        ),
       },
     },
     {
@@ -49,8 +61,14 @@ export function getTiers(): Tier[] {
         'Kingpin Discord role',
       ],
       priceId: {
-        month: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_PRO_MONTH'),
-        year: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_PRO_YEAR'),
+        month: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_PRO_MONTH',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_PRO_MONTH
+        ),
+        year: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_PRO_YEAR',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_PRO_YEAR
+        ),
       },
     },
     {
@@ -66,8 +84,14 @@ export function getTiers(): Tier[] {
         'Direct line to admins',
       ],
       priceId: {
-        month: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_MONTH'),
-        year: requirePublicEnv('NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_YEAR'),
+        month: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_MONTH',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_MONTH
+        ),
+        year: requirePublicEnv(
+          'NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_YEAR',
+          process.env.NEXT_PUBLIC_PADDLE_PRICE_ADVANCED_YEAR
+        ),
       },
     },
   ];
