@@ -22,7 +22,11 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setBusy(true);
     setMessage(null);
     const supabase = createClient();
-    const redirectTo = `${window.location.origin}/auth/callback?next=/dashboard`;
+    // Prefer configured production site URL so Amplify OAuth never falls back to localhost.
+    const origin =
+      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ||
+      window.location.origin;
+    const redirectTo = `${origin}/auth/callback?next=/dashboard`;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',

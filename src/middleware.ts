@@ -2,16 +2,27 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
-  const path = request.nextUrl.pathname;
+  const url = request.nextUrl;
 
-  // Session cookie is refreshed in updateSession; re-check via header is not available.
-  // Route-level redirects handle auth for /dashboard and /staff.
-  if (path.startsWith('/api/paddle/webhook')) {
+  // Supabase sometimes returns the OAuth code to Site URL root (/?code=...).
+  // Forward to the App Router callback so the session can be exchanged.
+  if (
+    url.pathname === '/' &&
+    (url.searchParams.has('code') || url.searchParams.has('error'))
+  ) {
+    const dest = url.clone();
+    dest.pathname = '/auth/callback';
+    if (!dest.searchParams.has('next')) {
+      dest.searchParams.set('next', '/dashboard');
+    }
+    return NextResponse.redirect(dest);
+  }
+
+  if (url.pathname.startsWith('/api/paddle/webhook')) {
     return NextResponse.next();
   }
 
-  return response;
+  return updateSession(request);
 }
 
 export const config = {
