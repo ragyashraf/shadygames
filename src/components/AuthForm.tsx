@@ -8,6 +8,11 @@ import { useLang } from '@/components/LangProvider';
 
 type Mode = 'login' | 'signup';
 
+/** Callback used for OAuth + email confirmation. Must be in Supabase Redirect URLs. */
+function authCallbackUrl() {
+  return `${window.location.origin}/auth/callback`;
+}
+
 export function AuthForm({ mode }: { mode: Mode }) {
   const { t } = useLang();
   const router = useRouter();
@@ -24,7 +29,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setBusy(true);
     setMessage(null);
     const supabase = createClient();
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const redirectTo = authCallbackUrl();
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
@@ -48,18 +53,27 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
+            // Without this, Supabase falls back to Site URL (often still localhost).
+            emailRedirectTo: authCallbackUrl(),
             data: { display_name: displayName || email.split('@')[0] },
           },
         });
         if (error) throw error;
+
+        if (!data.session) {
+          setMessage(
+            'Account created. Check your email and click the confirmation link to finish signing in.'
+          );
+          setBusy(false);
+          return;
+        }
+
         await supabase.rpc('link_my_paddle_customer');
-        setMessage(
-          'Account created. Check your email if confirmation is required, then open the dashboard.'
-        );
+        setMessage('Account created.');
         router.push('/dashboard');
         router.refresh();
         return;
