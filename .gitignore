@@ -24,3 +24,9 @@ Thumbs.db
 .agents/
 skills-lock.json
 
+# Amplify secrets helper (never commit)
+amplify-env.json
+amplify-app.json
+amplify-branches.json
+amplify-jobs.json
+
