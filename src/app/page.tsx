@@ -122,7 +122,9 @@ export default async function HomePage() {
           <nav>
             <Link href="/pricing">Plans</Link>
             <Link href="/games">Games</Link>
-            <Link href="/login">Log in</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/refund">Refunds</Link>
             <Link href="/account">Billing</Link>
           </nav>
         </footer>
