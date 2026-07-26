@@ -6,12 +6,21 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { useLang } from '@/components/LangProvider';
 
+import { getPublicSiteUrl } from '@/lib/site';
+
 type Mode = 'login' | 'signup';
 
-/** Callback used for OAuth + email confirmation. Must be in Supabase Redirect URLs. */
+/**
+ * Callback used for OAuth + email confirmation. Must be in Supabase Redirect URLs.
+ * On production hosts, always use the canonical site URL so Supabase never falls
+ * back to a misconfigured Site URL (often still localhost).
+ */
 function authCallbackUrl() {
-  // Same-origin is required for PKCE cookies. Prefer shadygames.xyz in production.
-  return `${window.location.origin}/auth/callback`;
+  const origin = window.location.origin;
+  if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+    return `${origin}/auth/callback`;
+  }
+  return `${getPublicSiteUrl()}/auth/callback`;
 }
 
 export function AuthForm({ mode }: { mode: Mode }) {
