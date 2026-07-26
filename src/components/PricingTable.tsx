@@ -16,6 +16,8 @@ type Props = {
   /** Prefill when signed in */
   customerEmail?: string | null;
   paddleCustomerId?: string | null;
+  /** When false, Subscribe is disabled (staff closed the store). */
+  storeOpen?: boolean;
 };
 
 type PriceMap = Record<string, string>;
@@ -31,6 +33,7 @@ export function PricingTable({
   countryCode,
   customerEmail,
   paddleCustomerId,
+  storeOpen = true,
 }: Props) {
   const { t } = useLang();
   const [billing, setBilling] = useState<BillingCycle>('month');
@@ -147,6 +150,9 @@ export function PricingTable({
       </div>
 
       {error ? <p className="error">{error}</p> : null}
+      {!storeOpen ? (
+        <p className="error">Checkout is temporarily closed. Check back soon.</p>
+      ) : null}
 
       <div className="tier-grid">
         {tiers.map((tier) => {
@@ -175,7 +181,7 @@ export function PricingTable({
               <button
                 type="button"
                 className="subscribe"
-                disabled={!paddle || loading || !prices[priceId]}
+                disabled={!paddle || loading || !prices[priceId] || !storeOpen}
                 onClick={() => subscribe(tier)}
               >
                 {t.subscribe}

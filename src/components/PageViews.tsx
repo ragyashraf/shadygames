@@ -10,6 +10,7 @@ type Props = {
   countryCode?: string;
   customerEmail?: string | null;
   paddleCustomerId?: string | null;
+  storeOpen?: boolean;
 };
 
 export function PricingView(props: Props) {
@@ -22,24 +23,6 @@ export function PricingView(props: Props) {
         <p className="lede">{t.pricingNote}</p>
       </header>
       <PricingTable {...props} />
-    </main>
-  );
-}
-
-export function GamesView() {
-  const { t } = useLang();
-  return (
-    <main className="page">
-      <header className="hero">
-        <p className="kicker">{t.gamesKicker}</p>
-        <h1>{t.gamesTitle}</h1>
-        <p className="lede">{t.gamesBody}</p>
-        <p>
-          <Link href="/pricing">{t.gamesLinkPlans}</Link>
-          {' · '}
-          <Link href="/dashboard">{t.gamesLinkDash}</Link>
-        </p>
-      </header>
     </main>
   );
 }

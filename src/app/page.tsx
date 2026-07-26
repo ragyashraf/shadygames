@@ -37,6 +37,12 @@ export default async function HomePage() {
     customerEmail = customer?.email ?? customerEmail;
   }
 
+  const { data: settings } = await supabase
+    .from('store_settings')
+    .select('store_open')
+    .eq('id', 1)
+    .maybeSingle();
+
   return (
     <>
       <SiteHeader />
@@ -46,6 +52,7 @@ export default async function HomePage() {
         customerEmail={customerEmail}
         paddleCustomerId={paddleCustomerId}
         signedIn={Boolean(user)}
+        storeOpen={settings?.store_open !== false}
       />
     </>
   );

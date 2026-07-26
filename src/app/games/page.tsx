@@ -1,14 +1,45 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { SiteHeader } from '@/components/SiteHeader';
-import { GamesView } from '@/components/PageViews';
+import { GamesShop, type ShopGame } from '@/components/GamesShop';
+import { createClient } from '@/utils/supabase/server';
+import './games.css';
 
-export const metadata: Metadata = { title: 'TikTok Games — Shady' };
+export const dynamic = 'force-dynamic';
 
-export default function GamesPage() {
+export const metadata: Metadata = {
+  title: 'TikTok Games — Shady',
+  description: 'One-time TikTok games from the Shady shelf.',
+};
+
+export default async function GamesPage() {
+  const jar = await cookies();
+  const supabase = createClient(jar);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [{ data: games }, { data: settings }] = await Promise.all([
+    supabase
+      .from('products')
+      .select(
+        'id, sku, name, description, price_usd, image_urls, video_urls, paddle_price_id_month, stock'
+      )
+      .eq('kind', 'game')
+      .eq('live', true)
+      .order('sort_order'),
+    supabase.from('store_settings').select('store_open').eq('id', 1).maybeSingle(),
+  ]);
+
   return (
     <>
       <SiteHeader />
-      <GamesView />
+      <GamesShop
+        games={(games as ShopGame[]) ?? []}
+        storeOpen={settings?.store_open !== false}
+        customerEmail={user?.email ?? null}
+      />
     </>
   );
 }

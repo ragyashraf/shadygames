@@ -39,6 +39,13 @@ export type Copy = {
   gamesBody: string;
   gamesLinkPlans: string;
   gamesLinkDash: string;
+  gamesEmpty: string;
+  gamesClosed: string;
+  gamesNoPrice: string;
+  gamesPaddleWait: string;
+  gamesNoDesc: string;
+  gamesOnce: string;
+  gamesBuy: string;
   loginKicker: string;
   loginTitle: string;
   loginBody: string;
@@ -159,9 +166,16 @@ export const COPY: Record<Lang, Copy> = {
     gamesKicker: 'Shelf',
     gamesTitle: 'TikTok games',
     gamesBody:
-      'One-time game keys and drops. Catalog is managed in Supabase — ask staff to stock keys, then check out from the shelf.',
+      'One-time games stocked by staff. Live products from the catalog appear here with media — buy opens Paddle checkout when a price ID is set.',
     gamesLinkPlans: 'Unlimited subscriptions',
     gamesLinkDash: 'Dashboard',
+    gamesEmpty: 'No live games yet. Staff can add them from the Products panel.',
+    gamesClosed: 'The store is closed right now — check back soon.',
+    gamesNoPrice: 'This game needs a Paddle price ID before checkout works.',
+    gamesPaddleWait: 'Checkout is still loading — try again in a moment.',
+    gamesNoDesc: 'No description yet.',
+    gamesOnce: 'one-time',
+    gamesBuy: 'Buy now',
     loginKicker: 'Member access',
     loginTitle: 'Log in',
     loginBody:
@@ -318,9 +332,16 @@ export const COPY: Record<Lang, Copy> = {
     gamesKicker: 'الرف',
     gamesTitle: 'ألعاب تيك توك',
     gamesBody:
-      'مفاتيح وألعاب لمرة واحدة. الكتالوج يُدار من Supabase — اطلب من الإدارة تخزين المفاتيح ثم اشترِ من الرف.',
+      'ألعاب لمرة واحدة يضيفها الطاقم. المنتجات المعروضة تظهر هنا مع الوسائط — الشراء يفتح Paddle عند وجود معرّف سعر.',
     gamesLinkPlans: 'اشتراكات أنليميتد',
     gamesLinkDash: 'لوحة التحكم',
+    gamesEmpty: 'لا ألعاب معروضة بعد. يمكن للطاقم إضافتها من لوحة المنتجات.',
+    gamesClosed: 'المتجر مغلق حالياً — عد لاحقاً.',
+    gamesNoPrice: 'هذه اللعبة تحتاج معرّف سعر Paddle قبل إتمام الشراء.',
+    gamesPaddleWait: 'بوابة الدفع لا تزال تُحمّل — حاول بعد لحظات.',
+    gamesNoDesc: 'لا يوجد وصف بعد.',
+    gamesOnce: 'مرة واحدة',
+    gamesBuy: 'اشترِ الآن',
     loginKicker: 'دخول الأعضاء',
     loginTitle: 'تسجيل الدخول',
     loginBody:

@@ -29,6 +29,23 @@ function applyDocumentLang(lang: Lang) {
   document.documentElement.dataset.lang = lang;
 }
 
+function hasExplicitLang(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const fromStorage = parseLang(localStorage.getItem(LANG_STORAGE_KEY));
+    if (fromStorage) return true;
+  } catch {
+    /* ignore */
+  }
+  try {
+    const match = document.cookie.match(/(?:^|; )shady-lang=([^;]*)/);
+    if (parseLang(match ? decodeURIComponent(match[1]) : null)) return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
+
 function readStoredLang(): Lang {
   if (typeof window === 'undefined') return 'en';
   try {
@@ -65,10 +82,41 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const saved = readStoredLang();
-    setLangState(saved);
-    applyDocumentLang(saved);
-    setReady(true);
+    let cancelled = false;
+    (async () => {
+      if (hasExplicitLang()) {
+        const saved = readStoredLang();
+        if (!cancelled) {
+          setLangState(saved);
+          applyDocumentLang(saved);
+          setReady(true);
+        }
+        return;
+      }
+      try {
+        const supabase = (await import('@/utils/supabase/client')).createClient();
+        const { data } = await supabase
+          .from('store_settings')
+          .select('arabic_default')
+          .eq('id', 1)
+          .maybeSingle();
+        const next: Lang = data?.arabic_default ? 'ar' : 'en';
+        if (!cancelled) {
+          setLangState(next);
+          applyDocumentLang(next);
+          setReady(true);
+        }
+      } catch {
+        if (!cancelled) {
+          setLangState('en');
+          applyDocumentLang('en');
+          setReady(true);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const setLang = useCallback((next: Lang) => {

@@ -11,6 +11,7 @@ type Props = {
   customerEmail?: string | null;
   paddleCustomerId?: string | null;
   signedIn: boolean;
+  storeOpen?: boolean;
 };
 
 export function HomeView({
@@ -19,6 +20,7 @@ export function HomeView({
   customerEmail,
   paddleCustomerId,
   signedIn,
+  storeOpen = true,
 }: Props) {
   const { t } = useLang();
 
@@ -62,6 +64,7 @@ export function HomeView({
           countryCode={countryCode}
           customerEmail={customerEmail}
           paddleCustomerId={paddleCustomerId}
+          storeOpen={storeOpen}
         />
       </section>
 

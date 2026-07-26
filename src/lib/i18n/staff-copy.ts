@@ -22,6 +22,19 @@ export type StaffCopy = {
   price: string;
   stock: string;
   addProduct: string;
+  saveProduct: string;
+  cancelEdit: string;
+  edit: string;
+  gameDesc: string;
+  gameDescPh: string;
+  gameImages: string;
+  gameVideos: string;
+  gameUrlsPh: string;
+  gameVideoUrlsPh: string;
+  uploadImages: string;
+  uploadVideos: string;
+  paddlePriceId: string;
+  mediaUploaded: string;
   remove: string;
   productCols: [string, string, string, string, string, string];
   live: string;
@@ -61,9 +74,20 @@ export type StaffCopy = {
   toggles: [string, string][];
   on: string;
   off: string;
-  staff: [string, string, string][];
   noRows: string;
   saved: string;
+  activeSubsShort: string;
+  storeClosedBanner: string;
+  noProductForKeys: string;
+  refundedOk: string;
+  keyAssigned: string;
+  keyAlreadyAssigned: string;
+  noStaffYet: string;
+  staffTag: string;
+  serverSlots: string;
+  planShort: [string, string, string];
+  perMonthLabel: string;
+  perYearLabel: string;
 };
 
 export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
@@ -76,7 +100,7 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     titles: ['Overview', 'Products', 'Discount codes', 'Key inventory', 'Transactions', 'Settings'],
     subs: [
       'Live numbers for the Unlimited GTA V server and the TikTok game shelf.',
-      'Add, remove, re-price and hide anything you sell.',
+      'Add, remove, re-price and hide anything you sell. TikTok games support description, images and videos.',
       'Create codes, cap their uses and pull them when a promo ends.',
       'Paste keys once — buyers get one automatically the moment payment clears.',
       'Every payment, its key delivery, and one-click refunds.',
@@ -96,6 +120,19 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     price: 'Price',
     stock: 'Stock',
     addProduct: 'Add product',
+    saveProduct: 'Save changes',
+    cancelEdit: 'Cancel',
+    edit: 'Edit',
+    gameDesc: 'Description',
+    gameDescPh: 'What buyers get — gameplay, how keys work, delivery notes…',
+    gameImages: 'Image URLs (one per line)',
+    gameVideos: 'Video URLs (YouTube / Vimeo / direct file)',
+    gameUrlsPh: 'https://…/cover.webp',
+    gameVideoUrlsPh: 'https://youtu.be/… or https://…/clip.mp4',
+    uploadImages: 'Upload images',
+    uploadVideos: 'Upload videos',
+    paddlePriceId: 'Paddle price ID (one-time)',
+    mediaUploaded: 'Media uploaded.',
     remove: 'Remove',
     productCols: ['Product', 'Type', 'Price', 'Stock', 'Status', ''],
     live: 'Live',
@@ -151,14 +188,20 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     ],
     on: 'On',
     off: 'Off',
-    staff: [
-      ['Shady', 'Owner · full access', 'All'],
-      ['Rami', 'Admin · products & keys', 'Products'],
-      ['Layla', 'Support · transactions', 'Support'],
-      ['Kais', 'Moderator · read only', 'Read'],
-    ],
     noRows: 'Nothing here yet.',
     saved: 'Saved.',
+    activeSubsShort: 'active',
+    storeClosedBanner: 'Store is closed — checkout is disabled on the site.',
+    noProductForKeys: 'Add a product first, then import keys for its SKU.',
+    refundedOk: 'Refund submitted to Paddle and marked locally.',
+    keyAssigned: 'Key assigned: {key}',
+    keyAlreadyAssigned: 'Key already on this order: {key}',
+    noStaffYet: 'No staff profiles yet. Set is_staff on a profile in Supabase.',
+    staffTag: 'Staff',
+    serverSlots: 'Server slot capacity',
+    planShort: ['Access', 'Kingpin', 'Dragon'],
+    perMonthLabel: 'monthly',
+    perYearLabel: 'yearly',
   },
   ar: {
     staffPanel: 'لوحة الإدارة',
@@ -169,7 +212,7 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     titles: ['نظرة عامة', 'المنتجات', 'أكواد الخصم', 'مخزون المفاتيح', 'المعاملات', 'الإعدادات'],
     subs: [
       'أرقام مباشرة لسيرفر أنليميتد GTA V ورف ألعاب تيك توك.',
-      'أضف أو احذف أو غيّر الأسعار وأخفِ أي منتج.',
+      'أضف أو احذف أو غيّر الأسعار وأخفِ أي منتج. ألعاب تيك توك تدعم الوصف والصور والفيديو.',
       'أنشئ أكواداً وحدد عدد استخداماتها وأوقفها عند انتهاء العرض.',
       'الصق المفاتيح مرة واحدة — والمشتري يستلم مفتاحه تلقائياً بعد الدفع.',
       'كل عملية دفع وتسليم مفتاحها والاسترجاع بضغطة واحدة.',
@@ -189,6 +232,19 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     price: 'السعر',
     stock: 'المخزون',
     addProduct: 'أضف منتجاً',
+    saveProduct: 'حفظ التعديلات',
+    cancelEdit: 'إلغاء',
+    edit: 'تعديل',
+    gameDesc: 'الوصف',
+    gameDescPh: 'ماذا يحصل المشتري — اللعب، المفاتيح، ملاحظات التسليم…',
+    gameImages: 'روابط الصور (سطر لكل رابط)',
+    gameVideos: 'روابط الفيديو (يوتيوب / فيميو / ملف مباشر)',
+    gameUrlsPh: 'https://…/cover.webp',
+    gameVideoUrlsPh: 'https://youtu.be/… أو https://…/clip.mp4',
+    uploadImages: 'رفع صور',
+    uploadVideos: 'رفع فيديو',
+    paddlePriceId: 'معرّف سعر Paddle (مرة واحدة)',
+    mediaUploaded: 'تم رفع الوسائط.',
     remove: 'حذف',
     productCols: ['المنتج', 'النوع', 'السعر', 'المخزون', 'الحالة', ''],
     live: 'معروض',
@@ -244,13 +300,19 @@ export const STAFF_COPY: Record<StaffLang, StaffCopy> = {
     ],
     on: 'مفعّل',
     off: 'موقوف',
-    staff: [
-      ['شادي', 'المالك · صلاحية كاملة', 'الكل'],
-      ['رامي', 'مشرف · المنتجات والمفاتيح', 'منتجات'],
-      ['ليلى', 'دعم · المعاملات', 'دعم'],
-      ['قيس', 'مراقب · قراءة فقط', 'قراءة'],
-    ],
     noRows: 'لا يوجد شيء هنا بعد.',
     saved: 'تم الحفظ.',
+    activeSubsShort: 'نشط',
+    storeClosedBanner: 'المتجر مغلق — الدفع معطّل على الموقع.',
+    noProductForKeys: 'أضف منتجاً أولاً ثم استورد مفاتيح لرمز SKU الخاص به.',
+    refundedOk: 'تم إرسال الاسترجاع إلى Paddle وتحديث الحالة محلياً.',
+    keyAssigned: 'تم تعيين المفتاح: {key}',
+    keyAlreadyAssigned: 'المفتاح مربوط بهذا الطلب: {key}',
+    noStaffYet: 'لا يوجد موظفون بعد. فعّل is_staff لملف في Supabase.',
+    staffTag: 'طاقم',
+    serverSlots: 'سعة مقاعد السيرفر',
+    planShort: ['أكسس', 'كينغ بين', 'دراغون'],
+    perMonthLabel: 'شهري',
+    perYearLabel: 'سنوي',
   },
 };

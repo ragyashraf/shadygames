@@ -37,6 +37,12 @@ export default async function PricingPage() {
     customerEmail = customer?.email ?? customerEmail;
   }
 
+  const { data: settings } = await supabase
+    .from('store_settings')
+    .select('store_open')
+    .eq('id', 1)
+    .maybeSingle();
+
   return (
     <>
       <SiteHeader />
@@ -45,6 +51,7 @@ export default async function PricingPage() {
         countryCode={countryCode}
         customerEmail={customerEmail}
         paddleCustomerId={paddleCustomerId}
+        storeOpen={settings?.store_open !== false}
       />
     </>
   );
