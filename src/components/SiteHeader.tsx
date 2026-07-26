@@ -27,7 +27,7 @@ export async function SiteHeader() {
         <span>SHADY</span>
       </Link>
       <nav>
-        <Link href="/pricing">Plans</Link>
+        <a href="/#plans">Plans</a>
         <Link href="/games">Games</Link>
         {user ? <Link href="/dashboard">Dashboard</Link> : null}
         {user ? <Link href="/account">Billing</Link> : null}
