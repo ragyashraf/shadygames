@@ -22,11 +22,8 @@ export function AuthForm({ mode }: { mode: Mode }) {
     setBusy(true);
     setMessage(null);
     const supabase = createClient();
-    // Prefer configured production site URL so Amplify OAuth never falls back to localhost.
-    const origin =
-      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ||
-      window.location.origin;
-    const redirectTo = `${origin}/auth/callback?next=/dashboard`;
+    // Must match the browser origin (PKCE cookies). Supabase allow-list must include this URL.
+    const redirectTo = `${window.location.origin}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
