@@ -46,6 +46,9 @@ export type Copy = {
   gamesNoDesc: string;
   gamesOnce: string;
   gamesBuy: string;
+  gamesShelf: string;
+  gamesShelfHint: string;
+  gamesWatch: string;
   loginKicker: string;
   loginTitle: string;
   loginBody: string;
@@ -165,8 +168,7 @@ export const COPY: Record<Lang, Copy> = {
       'Country-localized prices from Paddle. Subscribe opens a one-page overlay checkout for the exact price shown.',
     gamesKicker: 'Shelf',
     gamesTitle: 'TikTok games',
-    gamesBody:
-      'One-time games stocked by staff. Live products appear here with media — Buy opens Paddle checkout automatically.',
+    gamesBody: 'Drop in, grab a one-time game, and get playing tonight.',
     gamesLinkPlans: 'Unlimited subscriptions',
     gamesLinkDash: 'Dashboard',
     gamesEmpty: 'No live games yet. Staff can add them from the Products panel.',
@@ -176,6 +178,9 @@ export const COPY: Record<Lang, Copy> = {
     gamesNoDesc: 'No description yet.',
     gamesOnce: 'one-time',
     gamesBuy: 'Buy now',
+    gamesShelf: 'On the shelf',
+    gamesShelfHint: 'Pick a title to preview and check out.',
+    gamesWatch: 'Watch',
     loginKicker: 'Member access',
     loginTitle: 'Log in',
     loginBody:
@@ -331,8 +336,7 @@ export const COPY: Record<Lang, Copy> = {
       'أسعار محلية من Paddle. الاشتراك يفتح صفحة دفع واحدة بالمبلغ الظاهر.',
     gamesKicker: 'الرف',
     gamesTitle: 'ألعاب تيك توك',
-    gamesBody:
-      'ألعاب لمرة واحدة يضيفها الطاقم. المنتجات المعروضة تظهر هنا مع الوسائط — الشراء يفتح Paddle تلقائياً.',
+    gamesBody: 'ادخل، اختر لعبة لمرة واحدة، والعب الليلة.',
     gamesLinkPlans: 'اشتراكات أنليميتد',
     gamesLinkDash: 'لوحة التحكم',
     gamesEmpty: 'لا ألعاب معروضة بعد. يمكن للطاقم إضافتها من لوحة المنتجات.',
@@ -342,6 +346,9 @@ export const COPY: Record<Lang, Copy> = {
     gamesNoDesc: 'لا يوجد وصف بعد.',
     gamesOnce: 'مرة واحدة',
     gamesBuy: 'اشترِ الآن',
+    gamesShelf: 'على الرف',
+    gamesShelfHint: 'اختر عنواناً للمعاينة والشراء.',
+    gamesWatch: 'شاهد',
     loginKicker: 'دخول الأعضاء',
     loginTitle: 'تسجيل الدخول',
     loginBody:

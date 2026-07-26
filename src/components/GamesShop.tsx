@@ -27,12 +27,30 @@ type Props = {
   customerEmail?: string | null;
 };
 
+function formatUsd(n: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: Number.isInteger(n) ? 0 : 2,
+  }).format(n);
+}
+
 export function GamesShop({ games, storeOpen = true, customerEmail }: Props) {
   const { t, ar } = useLang();
   const [paddle, setPaddle] = useState<Paddle | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [active, setActive] = useState<ShopGame | null>(games[0] ?? null);
+  const [shot, setShot] = useState(0);
+
+  useEffect(() => {
+    setActive(games[0] ?? null);
+    setShot(0);
+  }, [games]);
+
+  useEffect(() => {
+    setShot(0);
+  }, [active?.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -83,119 +101,162 @@ export function GamesShop({ games, storeOpen = true, customerEmail }: Props) {
     setBusyId(null);
   }
 
+  const images = active?.image_urls?.filter(Boolean) ?? [];
+  const cover = images[shot] || images[0] || null;
+  const videos = active?.video_urls?.filter(Boolean) ?? [];
+
   return (
-    <main className={`games-shop${ar ? ' rtl' : ''}`}>
-      <header className="games-hero">
-        <p className="kicker">{t.gamesKicker}</p>
-        <h1>{t.gamesTitle}</h1>
-        <p className="lede">{t.gamesBody}</p>
-        <p className="games-links">
-          <Link href="/pricing">{t.gamesLinkPlans}</Link>
-          {' · '}
-          <Link href="/dashboard">{t.gamesLinkDash}</Link>
-        </p>
-      </header>
+    <main className={`games-page${ar ? ' rtl' : ''}`}>
+      <section className="games-stage">
+        <div
+          className="games-stage-bg"
+          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          aria-hidden
+        />
+        <div className="games-stage-shade" aria-hidden />
 
-      {error ? <p className="games-error">{error}</p> : null}
-      {!storeOpen ? <p className="games-error">{t.gamesClosed}</p> : null}
+        <div className="games-stage-inner">
+          <header className="games-intro">
+            <p className="games-brand">SHADY</p>
+            <p className="kicker">{t.gamesKicker}</p>
+            <h1>{t.gamesTitle}</h1>
+            <p className="games-lede">{t.gamesBody}</p>
+          </header>
 
-      {games.length === 0 ? (
-        <p className="games-empty">{t.gamesEmpty}</p>
-      ) : (
-        <div className="games-layout">
-          <div className="games-grid">
+          {error ? <p className="games-error">{error}</p> : null}
+          {!storeOpen ? <p className="games-error">{t.gamesClosed}</p> : null}
+
+          {games.length === 0 ? (
+            <div className="games-empty-panel">
+              <p>{t.gamesEmpty}</p>
+              <div className="games-cta-row">
+                <Link href="/pricing" className="ghost-btn">
+                  {t.gamesLinkPlans}
+                </Link>
+                <Link href="/dashboard" className="ghost-btn">
+                  {t.gamesLinkDash}
+                </Link>
+              </div>
+            </div>
+          ) : active ? (
+            <div className="games-feature" key={active.id}>
+              <div className="games-feature-art">
+                {cover ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={cover} alt={active.name} />
+                ) : (
+                  <div className="games-feature-fallback">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/shady-logo.webp" alt="" />
+                    <span>{active.name}</span>
+                  </div>
+                )}
+                {images.length > 1 ? (
+                  <div className="games-shots" role="tablist" aria-label="Screenshots">
+                    {images.map((url, i) => (
+                      <button
+                        key={url}
+                        type="button"
+                        role="tab"
+                        aria-selected={shot === i}
+                        className={shot === i ? 'on' : ''}
+                        onClick={() => setShot(i)}
+                        style={{ backgroundImage: `url(${url})` }}
+                      />
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="games-feature-copy">
+                <p className="games-sku">{active.sku}</p>
+                <h2>{active.name}</h2>
+                <p className="games-desc">{active.description || t.gamesNoDesc}</p>
+                <div className="games-price-row">
+                  <strong>{formatUsd(Number(active.price_usd))}</strong>
+                  <span>{t.gamesOnce}</span>
+                </div>
+                <div className="games-cta-row">
+                  <button
+                    type="button"
+                    className="gold-btn"
+                    disabled={!storeOpen || busyId === active.id}
+                    onClick={() => buy(active)}
+                  >
+                    {busyId === active.id ? t.pleaseWait : t.gamesBuy}
+                  </button>
+                  <Link href="/pricing" className="ghost-btn">
+                    {t.gamesLinkPlans}
+                  </Link>
+                </div>
+                {!active.paddle_price_id_month ? (
+                  <p className="games-hint">{t.gamesNoPrice}</p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {games.length > 1 ? (
+        <section className="games-shelf">
+          <div className="games-shelf-head">
+            <h3>{t.gamesShelf}</h3>
+            <p>{t.gamesShelfHint}</p>
+          </div>
+          <div className="games-rail">
             {games.map((game) => {
-              const cover = game.image_urls?.[0];
+              const thumb = game.image_urls?.[0];
               const selected = active?.id === game.id;
               return (
                 <button
                   key={game.id}
                   type="button"
-                  className={`game-card${selected ? ' selected' : ''}`}
+                  className={`games-rail-item${selected ? ' selected' : ''}`}
                   onClick={() => setActive(game)}
+                  aria-pressed={selected}
                 >
                   <div
-                    className="game-card-art"
-                    style={
-                      cover
-                        ? { backgroundImage: `url(${cover})` }
-                        : undefined
-                    }
+                    className="games-rail-art"
+                    style={thumb ? { backgroundImage: `url(${thumb})` } : undefined}
                   >
-                    {!cover ? <span>{game.name.slice(0, 2).toUpperCase()}</span> : null}
+                    {!thumb ? (
+                      <span>{game.name.slice(0, 2).toUpperCase()}</span>
+                    ) : null}
                   </div>
-                  <div className="game-card-body">
-                    <h2>{game.name}</h2>
-                    <p>{game.description || t.gamesNoDesc}</p>
-                    <div className="game-card-meta">
-                      <strong>${Number(game.price_usd).toFixed(0)}</strong>
-                      <span>{t.gamesOnce}</span>
-                    </div>
+                  <div className="games-rail-meta">
+                    <strong>{game.name}</strong>
+                    <span>{formatUsd(Number(game.price_usd))}</span>
                   </div>
                 </button>
               );
             })}
           </div>
+        </section>
+      ) : null}
 
-          {active ? (
-            <aside className="game-detail">
-              <div className="game-detail-media">
-                {active.image_urls?.[0] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={active.image_urls[0]} alt={active.name} />
-                ) : (
-                  <div className="game-detail-placeholder">{active.name}</div>
-                )}
-              </div>
-              <h2>{active.name}</h2>
-              <p className="game-detail-desc">{active.description || t.gamesNoDesc}</p>
-              <div className="game-detail-price">
-                <strong>${Number(active.price_usd).toFixed(0)}</strong>
-                <span>{t.gamesOnce}</span>
-              </div>
-
-              {active.image_urls && active.image_urls.length > 1 ? (
-                <div className="game-thumbs">
-                  {active.image_urls.map((url) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img key={url} src={url} alt="" />
-                  ))}
-                </div>
-              ) : null}
-
-              {active.video_urls && active.video_urls.length > 0 ? (
-                <div className="game-videos">
-                  {active.video_urls.map((url) =>
-                    url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com') ? (
-                      <iframe
-                        key={url}
-                        src={embedVideo(url)}
-                        title={active.name}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <video key={url} src={url} controls playsInline />
-                    )
-                  )}
-                </div>
-              ) : null}
-
-              <button
-                type="button"
-                className="gold-btn wide"
-                disabled={!storeOpen || busyId === active.id}
-                onClick={() => buy(active)}
-              >
-                {busyId === active.id ? t.pleaseWait : t.gamesBuy}
-              </button>
-              {!active.paddle_price_id_month ? (
-                <p className="game-hint">{t.gamesNoPrice}</p>
-              ) : null}
-            </aside>
-          ) : null}
-        </div>
-      )}
+      {active && videos.length > 0 ? (
+        <section className="games-media">
+          <h3>{t.gamesWatch}</h3>
+          <div className="games-videos">
+            {videos.map((url) =>
+              url.includes('youtube.com') ||
+              url.includes('youtu.be') ||
+              url.includes('vimeo.com') ? (
+                <iframe
+                  key={url}
+                  src={embedVideo(url)}
+                  title={active.name}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video key={url} src={url} controls playsInline />
+              )
+            )}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }
