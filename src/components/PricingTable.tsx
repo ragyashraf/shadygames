@@ -35,7 +35,7 @@ export function PricingTable({
   paddleCustomerId,
   storeOpen = true,
 }: Props) {
-  const { t } = useLang();
+  const { t, ar } = useLang();
   const [billing, setBilling] = useState<BillingCycle>('month');
   const [paddle, setPaddle] = useState<Paddle | null>(null);
   const [prices, setPrices] = useState<PriceMap>({});
@@ -84,6 +84,7 @@ export function PricingTable({
         } = {
           items: activePriceIds.map((priceId) => ({ priceId, quantity: 1 })),
         };
+        // Only pass a real ISO country. Never send sentinels like OTHERS.
         if (countryCode) {
           request.address = { countryCode };
         }
@@ -93,6 +94,7 @@ export function PricingTable({
 
         const next: PriceMap = {};
         for (const item of result.data.details.lineItems) {
+          // Display Paddle's formatted total only — no frontend price math.
           next[item.price.id] = item.formattedTotals.total;
         }
         setPrices(next);
@@ -111,12 +113,11 @@ export function PricingTable({
   }, [paddle, activePriceIds, countryCode]);
 
   function subscribe(tier: Tier) {
-    if (!paddle) return;
+    if (!paddle || !storeOpen) return;
     const priceId = tier.priceId[billing];
-    const successUrl =
-      typeof window !== 'undefined'
-        ? new URL('/welcome', window.location.origin).toString()
-        : '/welcome';
+    if (!prices[priceId]) return;
+
+    const successUrl = new URL('/welcome', window.location.origin).toString();
 
     paddle.Checkout.open({
       items: [{ priceId, quantity: 1 }],
@@ -159,6 +160,8 @@ export function PricingTable({
           const idx = TIER_INDEX[tier.name];
           const priceId = tier.priceId[billing];
           const label = loading ? '…' : prices[priceId] ?? '—';
+          const description = ar ? t.planPitches[idx] : tier.description;
+          const features = ar ? t.planPerks[idx] : tier.features;
           return (
             <article
               key={tier.name}
@@ -166,7 +169,7 @@ export function PricingTable({
             >
               {tier.featured ? <div className="ribbon">{t.ribbonPopular}</div> : null}
               <h2>{t.planNames[idx]}</h2>
-              <p className="desc">{t.planPitches[idx]}</p>
+              <p className="desc">{description}</p>
               <div className="price">
                 <span className="amount">{label}</span>
                 <span className="per">
@@ -174,7 +177,7 @@ export function PricingTable({
                 </span>
               </div>
               <ul>
-                {t.planPerks[idx].map((f) => (
+                {features.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
               </ul>
