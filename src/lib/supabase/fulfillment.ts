@@ -31,6 +31,16 @@ export async function markEventProcessed(eventId: string, eventType: string) {
   return Boolean(data);
 }
 
+/** Undo mark so Paddle retries can re-run a failed handler. */
+export async function unmarkEventProcessed(eventId: string) {
+  const supabase = createFulfillmentClient();
+  const { error } = await supabase.rpc('fulfill_unmark_event', {
+    p_token: getFulfillmentToken(),
+    p_event_id: eventId,
+  });
+  if (error) throw error;
+}
+
 export async function upsertCustomer(customerId: string, email: string) {
   const supabase = createFulfillmentClient();
   const { error } = await supabase.rpc('fulfill_upsert_customer', {

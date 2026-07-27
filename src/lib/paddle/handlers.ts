@@ -2,6 +2,7 @@ import { EventName, type EventEntity } from '@paddle/paddle-node-sdk';
 import {
   claimAccessKey,
   markEventProcessed,
+  unmarkEventProcessed,
   upsertCustomer,
   upsertSubscription,
   upsertTransaction,
@@ -104,30 +105,40 @@ export async function handlePaddleEvent(event: EventEntity): Promise<{
     return { processed: false };
   }
 
-  switch (eventType) {
-    case EventName.CustomerCreated:
-    case EventName.CustomerUpdated:
-      await handleCustomer(event.data as unknown as CustomerLike);
-      break;
-    case EventName.SubscriptionCreated:
-    case EventName.SubscriptionUpdated:
-    case EventName.SubscriptionCanceled:
-      // Also mirror status-transition events so past_due/paused/etc stay accurate
-      await handleSubscription(event.data as unknown as SubLike);
-      break;
-    case EventName.SubscriptionActivated:
-    case EventName.SubscriptionPastDue:
-    case EventName.SubscriptionPaused:
-    case EventName.SubscriptionResumed:
-    case EventName.SubscriptionTrialing:
-      await handleSubscription(event.data as unknown as SubLike);
-      break;
-    case EventName.TransactionCompleted:
-      await handleTransaction(event.data as unknown as TxLike);
-      break;
-    default:
-      return { processed: true, ignored: true };
-  }
+  try {
+    switch (eventType) {
+      case EventName.CustomerCreated:
+      case EventName.CustomerUpdated:
+        await handleCustomer(event.data as unknown as CustomerLike);
+        break;
+      case EventName.SubscriptionCreated:
+      case EventName.SubscriptionUpdated:
+      case EventName.SubscriptionCanceled:
+        // Also mirror status-transition events so past_due/paused/etc stay accurate
+        await handleSubscription(event.data as unknown as SubLike);
+        break;
+      case EventName.SubscriptionActivated:
+      case EventName.SubscriptionPastDue:
+      case EventName.SubscriptionPaused:
+      case EventName.SubscriptionResumed:
+      case EventName.SubscriptionTrialing:
+        await handleSubscription(event.data as unknown as SubLike);
+        break;
+      case EventName.TransactionCompleted:
+        await handleTransaction(event.data as unknown as TxLike);
+        break;
+      default:
+        return { processed: true, ignored: true };
+    }
 
-  return { processed: true };
+    return { processed: true };
+  } catch (err) {
+    // Allow Paddle to retry — remove the idempotency mark so the next delivery runs.
+    try {
+      await unmarkEventProcessed(eventId);
+    } catch (unmarkErr) {
+      console.error('[paddle] failed to unmark event after handler error', unmarkErr);
+    }
+    throw err;
+  }
 }
